@@ -1,12 +1,31 @@
+"use client";
+
+import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/hooks/useLanguage";
+import translations from "@/lib/translations";
+
 export function Footer() {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   return (
     <footer className="border-t border-white/5 bg-[#0a0a0a] py-8">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 sm:flex-row">
-        <p className="text-xs text-neutral-600">
-          © {new Date().getFullYear()} Luis Jacho
-          <span className="mx-2 text-neutral-800">·</span>
-          Built with Next.js &amp; Tailwind
-        </p>
+
+        <AnimatePresence mode="popLayout">
+          <motion.p
+            key={language}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="text-xs text-neutral-600"
+          >
+            © {new Date().getFullYear()} Luis Jacho
+            <span className="mx-2 text-neutral-800">·</span>
+            {t.footer}
+          </motion.p>
+        </AnimatePresence>
 
         <div className="flex gap-4">
           <a
@@ -35,6 +54,7 @@ export function Footer() {
             <EmailIcon />
           </a>
         </div>
+
       </div>
     </footer>
   );
