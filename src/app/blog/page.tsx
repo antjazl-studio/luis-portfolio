@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { BlogCard, type Article } from "@/components/BlogCard";
 
 const RSS_URL =
-  "https://api.rss2json.com/v1/api.json?rss_url=https://techcrunch.com/feed/";
+  "https://api.rss2json.com/v1/api.json?rss_url=https://dev.to/feed";
 
 function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "");
@@ -16,16 +16,29 @@ function formatDate(raw: string): string {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
+function slugify(title: string): string {
+  return encodeURIComponent(
+    title.toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+      .slice(0, 60),
+  );
+}
+
 function toArticle(item: Record<string, string>): Article {
-  const categories: string[] = (item as unknown as { categories: string[] }).categories ?? [];
+  const categories = (item as unknown as { categories: string[] }).categories ?? [];
+  const title      = item.title ?? "Untitled";
+  const rawSummary = stripHtml(item.description ?? item.content ?? "");
   return {
-    title:     item.title ?? "Untitled",
-    summary:   stripHtml(item.description ?? item.content ?? "").slice(0, 260),
-    category:  categories[0] ?? "Tech",
-    date:      formatDate(item.pubDate ?? ""),
-    source:    "TechCrunch",
-    url:       item.link ?? "#",
-    thumbnail: item.thumbnail || undefined,
+    title,
+    summary:     rawSummary.slice(0, 150) + (rawSummary.length > 150 ? "..." : ""),
+    category:    categories[0] ?? "Dev",
+    date:        formatDate(item.pubDate ?? ""),
+    source:      item.author ?? "Dev.to",
+    url:         item.link ?? "#",
+    thumbnail:   item.thumbnail || undefined,
+    slug:        slugify(title),
+    fullContent: item.content || "",
   };
 }
 
@@ -54,6 +67,7 @@ export default function BlogPage() {
       const items: Article[] = (data.items as Record<string, string>[])
         .slice(0, 6)
         .map(toArticle);
+      localStorage.setItem("blog-articles", JSON.stringify(items));
       setArticles(items);
     } catch {
       setError("Could not load articles. Please try again.");
@@ -72,16 +86,13 @@ export default function BlogPage() {
         <div className="mb-10">
           <p className="text-xs uppercase tracking-widest text-cyan-400 mb-3">Blog</p>
           <h1 className="text-3xl font-semibold text-white mb-2">Latest in Tech</h1>
-          <p className="text-sm text-neutral-500">Latest news from TechCrunch</p>
+          <p className="text-sm text-neutral-500">Latest posts from the Dev.to community</p>
         </div>
 
-        {/* Feed */}
         {loading && <Skeleton />}
 
         {error && (
-          <div className="text-sm text-neutral-500 py-10 text-center">
-            {error}
-          </div>
+          <div className="text-sm text-neutral-500 py-10 text-center">{error}</div>
         )}
 
         {!loading && !error && (
