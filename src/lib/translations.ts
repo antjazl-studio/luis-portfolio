@@ -7,6 +7,7 @@ type Translation = {
     skills:     string;
     projects:   string;
     contact:    string;
+    blog:       string;
   };
   hero: {
     badge:    string;
@@ -64,6 +65,7 @@ const translations: Record<Language, Translation> = {
       skills:     "Skills",
       projects:   "Projects",
       contact:    "Contact",
+      blog:       "Blog",
     },
     hero: {
       badge:    "Available for freelance projects",
@@ -106,7 +108,7 @@ const translations: Record<Language, Translation> = {
       sub:          "I'm currently available for freelance projects and full-time remote positions. Let's talk.",
       button:       "Send me an email",
       availability: "Available for work",
-      open_to:      "Open to: Freelance · Remote Full-time · Consulting",
+      open_to:      "Open to: Freelance · Consulting",
       response:     "Response time: within 24h",
       timezone:     "Timezone: GMT-5 (flexible)",
     },
@@ -120,6 +122,7 @@ const translations: Record<Language, Translation> = {
       skills:     "Habilidades",
       projects:   "Proyectos",
       contact:    "Contacto",
+      blog:       "Blog",
     },
     hero: {
       badge:    "Disponible para proyectos freelance",
@@ -162,7 +165,7 @@ const translations: Record<Language, Translation> = {
       sub:          "Actualmente estoy disponible para proyectos freelance y posiciones remotas a tiempo completo. Hablemos.",
       button:       "Envíame un correo",
       availability: "Disponible para trabajar",
-      open_to:      "Abierto a: Freelance · Remoto a tiempo completo · Consultoría",
+      open_to:      "Abierto a: Freelance · Consultoría",
       response:     "Tiempo de respuesta: dentro de 24h",
       timezone:     "Zona horaria: GMT-5 (flexible)",
     },

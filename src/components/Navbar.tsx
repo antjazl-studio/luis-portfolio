@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
@@ -15,7 +17,9 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const { language, toggleLanguage } = useLanguage();
-  const t = translations[language];
+  const t        = translations[language];
+  const pathname = usePathname();
+  const onBlog   = pathname === "/blog";
 
   const navLinks = NAV_IDS.map((id) => ({
     id,
@@ -77,7 +81,7 @@ export function Navbar() {
         <div className="hidden items-center gap-7 md:flex">
           <nav className="flex items-center gap-7">
             {navLinks.map(({ id, label, href }) => {
-              const isActive = active === id;
+              const isActive = active === id && !onBlog;
               return (
                 <button
                   key={id}
@@ -97,6 +101,23 @@ export function Navbar() {
                 </button>
               );
             })}
+
+            {/* Blog link */}
+            <Link
+              href="/blog"
+              className={`relative text-sm font-medium transition-colors duration-150 ${
+                onBlog ? "text-white" : "text-neutral-400 hover:text-white"
+              }`}
+            >
+              {t.nav.blog}
+              {onBlog && (
+                <motion.span
+                  layoutId="nav-indicator"
+                  className="absolute -bottom-0.5 left-0 right-0 h-px bg-white/50"
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
+            </Link>
           </nav>
 
           {/* Language switcher */}
@@ -147,13 +168,22 @@ export function Navbar() {
                 <button
                   key={id}
                   onClick={() => handleNavClick(href)}
-                  className={`border-b border-white/5 py-3.5 text-left text-sm font-medium transition-colors duration-150 last:border-none ${
-                    active === id ? "text-white" : "text-neutral-400"
+                  className={`border-b border-white/5 py-3.5 text-left text-sm font-medium transition-colors duration-150 ${
+                    active === id && !onBlog ? "text-white" : "text-neutral-400"
                   }`}
                 >
                   {label}
                 </button>
               ))}
+              <Link
+                href="/blog"
+                onClick={() => setMobileOpen(false)}
+                className={`py-3.5 text-left text-sm font-medium transition-colors duration-150 ${
+                  onBlog ? "text-white" : "text-neutral-400"
+                }`}
+              >
+                {t.nav.blog}
+              </Link>
             </nav>
           </motion.div>
         )}
