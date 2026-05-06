@@ -5,7 +5,7 @@ import { motion, useInView } from "framer-motion";
 
 const STATS = [
   { value: "8+",   label: "Years of experience" },
-  { value: "30k+", label: "Users on production platform" },
+  { value: "30k+", label: "Users on production" },
   { value: "1",    label: "Azure certification" },
 ];
 
@@ -24,35 +24,34 @@ export function About() {
       <div className="mx-auto max-w-6xl px-6">
         <div className="grid grid-cols-1 gap-16 md:grid-cols-2 md:items-start">
 
-          {/* Left — text */}
+          {/* Left */}
           <div>
-            <motion.p {...anim(0)} className="mb-3 text-xs font-medium uppercase tracking-widest text-neutral-500">
+            <motion.p {...anim(0)} className="mb-3 text-xs font-medium uppercase tracking-widest text-cyan-400">
               About me
             </motion.p>
             <motion.h2
               {...anim(0.05)}
-              className="mb-8 text-2xl font-semibold leading-snug text-white sm:text-3xl"
+              className="mb-8 bg-gradient-to-b from-white to-white/70 bg-clip-text text-2xl font-semibold text-transparent sm:text-3xl"
             >
               Building scalable systems, leading teams, shipping products.
             </motion.h2>
 
             <div className="space-y-4">
-              <motion.p {...anim(0.1)} className="text-sm leading-relaxed text-neutral-400">
+              <motion.p {...anim(0.1)} className="text-sm leading-relaxed text-zinc-400">
                 I&apos;m a Senior Full Stack Developer based in Quito, Ecuador with 8+ years of experience
                 building enterprise-grade web applications.
               </motion.p>
-              <motion.p {...anim(0.15)} className="text-sm leading-relaxed text-neutral-400">
+              <motion.p {...anim(0.15)} className="text-sm leading-relaxed text-zinc-400">
                 At MyWork, I led the full-stack development of a workforce management platform serving
                 30,000+ active users — owning everything from API architecture and Azure infrastructure
                 to CI/CD pipelines and frontend delivery.
               </motion.p>
-              <motion.p {...anim(0.2)} className="text-sm leading-relaxed text-neutral-400">
+              <motion.p {...anim(0.2)} className="text-sm leading-relaxed text-zinc-400">
                 I specialize in .NET, Angular, and Azure, with a strong focus on system performance,
                 clean architecture, and mentoring engineering teams.
               </motion.p>
             </div>
 
-            {/* Azure badge */}
             <motion.div {...anim(0.25)} className="mt-8">
               <span className="inline-flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-1.5 text-xs text-neutral-400">
                 <AzureIcon />
@@ -62,15 +61,15 @@ export function About() {
           </div>
 
           {/* Right — stat cards */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-1 md:gap-3 lg:grid-cols-3">
+          <div className="flex flex-col gap-4">
             {STATS.map(({ value, label }, i) => (
               <motion.div
                 key={label}
                 {...anim(0.1 + i * 0.08)}
-                className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-5"
+                className="rounded-xl border border-white/10 bg-white/5 p-6"
               >
-                <p className="mb-1 text-3xl font-bold tracking-tight text-white">{value}</p>
-                <p className="text-xs leading-snug text-neutral-500">{label}</p>
+                <p className="mb-1 text-5xl font-bold text-cyan-400">{value}</p>
+                <p className="text-sm uppercase tracking-wider text-zinc-500">{label}</p>
               </motion.div>
             ))}
           </div>

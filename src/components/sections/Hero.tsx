@@ -146,26 +146,26 @@ export function Hero() {
           {...fadeUp(1)}
           className="flex justify-center"
         >
-          <motion.div
-            animate={{ y: [0, -14, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          >
+          <div className="relative">
+            {/* Subtle radial glow behind image */}
             <div
-              className="relative h-72 w-56 rounded-2xl border-2 border-cyan-400 sm:h-80 sm:w-64 md:h-96 md:w-80"
-              style={{
-                boxShadow:
-                  "0 0 20px rgba(34,211,238,0.35), 0 0 60px rgba(59,130,246,0.18)",
-              }}
+              aria-hidden
+              className="pointer-events-none absolute -inset-6 rounded-3xl bg-cyan-400/[0.12] blur-3xl"
+            />
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              className="relative h-72 w-56 overflow-hidden rounded-2xl ring-1 ring-white/[0.07] sm:h-80 sm:w-64 md:h-96 md:w-80"
             >
               <Image
                 src="/pic.png"
                 alt="Luis Antonio Jacho Zambrano"
                 fill
-                className="rounded-2xl object-cover"
+                className="object-cover object-top"
                 priority
               />
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </motion.div>
 
       </div>

@@ -77,8 +77,8 @@ export function Navbar() {
               <button
                 key={href}
                 onClick={() => handleNavClick(href)}
-                className={`relative text-xs font-medium transition-colors duration-150 ${
-                  isActive ? "text-white" : "text-neutral-500 hover:text-neutral-200"
+                className={`relative text-sm font-medium transition-colors duration-150 ${
+                  isActive ? "text-white" : "text-neutral-400 hover:text-white"
                 }`}
               >
                 {label}
@@ -137,7 +137,7 @@ export function Navbar() {
                     key={href}
                     onClick={() => handleNavClick(href)}
                     className={`border-b border-white/5 py-3.5 text-left text-sm font-medium transition-colors duration-150 last:border-none ${
-                      active === id ? "text-white" : "text-neutral-500"
+                      active === id ? "text-white" : "text-neutral-400"
                     }`}
                   >
                     {label}

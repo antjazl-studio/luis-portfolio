@@ -62,12 +62,12 @@ export function Experience() {
     <section id="experience" ref={ref} className="border-t border-white/5 bg-[#0a0a0a] py-24">
       <div className="mx-auto max-w-6xl px-6">
 
-        <motion.p {...anim(0)} className="mb-3 text-xs font-medium uppercase tracking-widest text-neutral-500">
+        <motion.p {...anim(0)} className="mb-3 text-xs font-medium uppercase tracking-widest text-cyan-400">
           Experience
         </motion.p>
         <motion.h2
           {...anim(0.05)}
-          className="mb-14 text-2xl font-semibold text-white sm:text-3xl"
+          className="mb-14 bg-gradient-to-b from-white to-white/70 bg-clip-text text-2xl font-semibold text-transparent sm:text-3xl"
         >
           Where I&apos;ve worked
         </motion.h2>
@@ -76,40 +76,34 @@ export function Experience() {
           {EXPERIENCE.map((entry, i) => (
             <motion.div key={entry.company} {...anim(0.1 + i * 0.07)} className="relative">
 
-              {/* Cyan accent line for current role */}
               {entry.current && (
-                <div className="absolute -left-8 top-0 h-full w-px bg-gradient-to-b from-cyan-400/60 to-transparent" />
+                <div className="absolute -left-8 top-0 h-full w-px bg-gradient-to-b from-cyan-400/50 to-transparent" />
               )}
 
-              {/* Timeline dot */}
               <span
                 className={`absolute -left-[2.0625rem] top-[7px] h-[7px] w-[7px] rounded-full ring-4 ring-[#0a0a0a] ${
-                  entry.current
-                    ? "bg-cyan-400"
-                    : "border border-neutral-700 bg-neutral-900"
+                  entry.current ? "bg-cyan-400" : "border border-neutral-700 bg-neutral-900"
                 }`}
-                style={entry.current ? { boxShadow: "0 0 8px rgba(34,211,238,0.6)" } : undefined}
+                style={entry.current ? { boxShadow: "0 0 8px rgba(34,211,238,0.55)" } : undefined}
               />
 
-              {/* Header row */}
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
                   <p className="text-sm font-medium text-white">{entry.role}</p>
-                  <p className="mt-0.5 text-sm text-neutral-500">{entry.company}</p>
+                  <p className="mt-0.5 text-sm text-cyan-400">{entry.company}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-mono text-xs text-neutral-600">{entry.period}</p>
+                  <p className="font-mono text-xs text-zinc-600">{entry.period}</p>
                   {entry.location && (
                     <p className="mt-0.5 text-xs text-neutral-700">{entry.location}</p>
                   )}
                 </div>
               </div>
 
-              {/* Bullets */}
               <ul className="mt-4 space-y-2">
                 {entry.bullets.map((bullet) => (
-                  <li key={bullet} className="flex gap-2.5 text-sm text-neutral-400">
-                    <span className="mt-px shrink-0 text-xs text-neutral-700">→</span>
+                  <li key={bullet} className="flex gap-2.5 text-sm text-zinc-400">
+                    <span className="mt-px shrink-0 text-xs text-cyan-400/70">→</span>
                     {bullet}
                   </li>
                 ))}
