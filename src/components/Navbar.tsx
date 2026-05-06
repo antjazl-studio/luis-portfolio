@@ -1,14 +1,153 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+const LINKS = [
+  { label: "About",      href: "#about" },
+  { label: "Experience", href: "#experience" },
+  { label: "Skills",     href: "#skills" },
+  { label: "Projects",   href: "#projects" },
+  { label: "Contact",    href: "#contact" },
+];
+
+const SECTION_IDS = LINKS.map((l) => l.href.slice(1));
+
 export function Navbar() {
+  const [scrolled,    setScrolled]    = useState(false);
+  const [active,      setActive]      = useState<string | null>(null);
+  const [mobileOpen,  setMobileOpen]  = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    SECTION_IDS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const observer = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActive(id); },
+        { rootMargin: "-45% 0px -45% 0px", threshold: 0 },
+      );
+      observer.observe(el);
+      observers.push(observer);
+    });
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
+
+  useEffect(() => {
+    const onResize = () => { if (window.innerWidth >= 768) setMobileOpen(false); };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  const handleNavClick = (href: string) => {
+    setMobileOpen(false);
+    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur-sm">
-      <div className="mx-auto max-w-6xl px-6 py-4">
-        <span className="font-mono text-sm text-[var(--muted)]">
-          {/* Navbar placeholder */}
-          navbar · placeholder
-        </span>
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        scrolled ? "bg-black/80 backdrop-blur-md" : "bg-transparent"
+      }`}
+    >
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
+
+        {/* Monogram */}
+        <a
+          href="#"
+          onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+          className="font-mono text-sm font-semibold text-cyan-400 transition-colors duration-150 hover:text-cyan-300"
+        >
+          LJ
+        </a>
+
+        {/* Desktop nav */}
+        <nav className="hidden items-center gap-7 md:flex">
+          {LINKS.map(({ label, href }) => {
+            const id      = href.slice(1);
+            const isActive = active === id;
+            return (
+              <button
+                key={href}
+                onClick={() => handleNavClick(href)}
+                className={`relative text-xs font-medium transition-colors duration-150 ${
+                  isActive ? "text-white" : "text-neutral-500 hover:text-neutral-200"
+                }`}
+              >
+                {label}
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-indicator"
+                    className="absolute -bottom-0.5 left-0 right-0 h-px bg-white/50"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Hamburger */}
+        <button
+          onClick={() => setMobileOpen((v) => !v)}
+          aria-label="Toggle menu"
+          className="flex h-8 w-8 flex-col items-center justify-center gap-[5px] md:hidden"
+        >
+          <motion.span
+            animate={mobileOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
+            transition={{ duration: 0.18 }}
+            className="block h-px w-5 origin-center bg-neutral-400"
+          />
+          <motion.span
+            animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
+            transition={{ duration: 0.12 }}
+            className="block h-px w-5 bg-neutral-400"
+          />
+          <motion.span
+            animate={mobileOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
+            transition={{ duration: 0.18 }}
+            className="block h-px w-5 origin-center bg-neutral-400"
+          />
+        </button>
+
       </div>
-    </nav>
+
+      {/* Mobile drawer */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className="overflow-hidden border-t border-white/5 bg-black/90 backdrop-blur-md md:hidden"
+          >
+            <nav className="flex flex-col px-6 py-3">
+              {LINKS.map(({ label, href }) => {
+                const id = href.slice(1);
+                return (
+                  <button
+                    key={href}
+                    onClick={() => handleNavClick(href)}
+                    className={`border-b border-white/5 py-3.5 text-left text-sm font-medium transition-colors duration-150 last:border-none ${
+                      active === id ? "text-white" : "text-neutral-500"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
   );
 }

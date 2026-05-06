@@ -1,12 +1,109 @@
 "use client";
 
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+
+const STATS = [
+  { value: "8+",   label: "Years of experience" },
+  { value: "30k+", label: "Users on production platform" },
+  { value: "1",    label: "Azure certification" },
+];
+
 export function About() {
+  const ref = useRef<HTMLElement>(null);
+  const isInView = useInView(ref, { once: true, amount: 0.15 });
+
+  const anim = (delay = 0) => ({
+    initial:    { opacity: 0, y: 16 },
+    animate:    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
+    transition: { duration: 0.5, delay },
+  });
+
   return (
-    <section
-      id="about"
-      className="mx-auto max-w-6xl px-6 py-24"
-    >
-      <p className="font-mono text-sm text-[var(--muted)]">section · about</p>
+    <section id="about" ref={ref} className="border-t border-white/5 bg-[#0f0f0f] py-24">
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="grid grid-cols-1 gap-16 md:grid-cols-2 md:items-start">
+
+          {/* Left — text */}
+          <div>
+            <motion.p {...anim(0)} className="mb-3 text-xs font-medium uppercase tracking-widest text-neutral-500">
+              About me
+            </motion.p>
+            <motion.h2
+              {...anim(0.05)}
+              className="mb-8 text-2xl font-semibold leading-snug text-white sm:text-3xl"
+            >
+              Building scalable systems, leading teams, shipping products.
+            </motion.h2>
+
+            <div className="space-y-4">
+              <motion.p {...anim(0.1)} className="text-sm leading-relaxed text-neutral-400">
+                I&apos;m a Senior Full Stack Developer based in Quito, Ecuador with 8+ years of experience
+                building enterprise-grade web applications.
+              </motion.p>
+              <motion.p {...anim(0.15)} className="text-sm leading-relaxed text-neutral-400">
+                At MyWork, I led the full-stack development of a workforce management platform serving
+                30,000+ active users — owning everything from API architecture and Azure infrastructure
+                to CI/CD pipelines and frontend delivery.
+              </motion.p>
+              <motion.p {...anim(0.2)} className="text-sm leading-relaxed text-neutral-400">
+                I specialize in .NET, Angular, and Azure, with a strong focus on system performance,
+                clean architecture, and mentoring engineering teams.
+              </motion.p>
+            </div>
+
+            {/* Azure badge */}
+            <motion.div {...anim(0.25)} className="mt-8">
+              <span className="inline-flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-1.5 text-xs text-neutral-400">
+                <AzureIcon />
+                Azure Developer Associate
+              </span>
+            </motion.div>
+          </div>
+
+          {/* Right — stat cards */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-1 md:gap-3 lg:grid-cols-3">
+            {STATS.map(({ value, label }, i) => (
+              <motion.div
+                key={label}
+                {...anim(0.1 + i * 0.08)}
+                className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-5"
+              >
+                <p className="mb-1 text-3xl font-bold tracking-tight text-white">{value}</p>
+                <p className="text-xs leading-snug text-neutral-500">{label}</p>
+              </motion.div>
+            ))}
+          </div>
+
+        </div>
+      </div>
     </section>
+  );
+}
+
+function AzureIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 96 96" fill="none" aria-hidden>
+      <defs>
+        <linearGradient id="az-a" x1="0.863" y1="53.578" x2="79.582" y2="27.43" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#114a8b" />
+          <stop offset="1" stopColor="#0669bc" />
+        </linearGradient>
+        <linearGradient id="az-b" x1="41.371" y1="47.566" x2="52.503" y2="51.189" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopOpacity=".3" />
+          <stop offset=".071" stopOpacity=".2" />
+          <stop offset=".321" stopOpacity=".1" />
+          <stop offset=".623" stopOpacity=".05" />
+          <stop offset="1" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id="az-c" x1="33.386" y1="21.371" x2="52.942" y2="84.667" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#3ccbf4" />
+          <stop offset="1" stopColor="#2892df" />
+        </linearGradient>
+      </defs>
+      <path d="M33.338 6.544h26.038L31.666 89.456a4.167 4.167 0 0 1-3.946 2.8H8.663a4.167 4.167 0 0 1-3.942-5.533l25-73.56a4.167 4.167 0 0 1 3.617-2.619z" fill="url(#az-a)" />
+      <path d="M71.175 60.226H31.666l-1.4 9.282 30.317 19.948a8.333 8.333 0 0 0 4.633 1.8h15.983z" fill="url(#az-b)" />
+      <path d="M33.338 6.544a4.12 4.12 0 0 0-3.625 2.662L4.748 82.659a4.167 4.167 0 0 0 3.915 5.597H28.8a4.481 4.481 0 0 0 3.44-2.8l4.928-14.514 17.606 16.3a4.267 4.267 0 0 0 2.662.958h23.24L71.175 60.226l-26.38.006L59.376 6.544z" fill="url(#az-c)" />
+    </svg>
   );
 }
