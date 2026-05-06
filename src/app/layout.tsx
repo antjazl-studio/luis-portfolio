@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Navbar }           from "@/components/Navbar";
+import { WhatsAppButton }   from "@/components/WhatsAppButton";
 import { LanguageProvider } from "@/context/LanguageContext";
 
 const geistSans = localFont({
@@ -34,6 +35,7 @@ export default function RootLayout({
         <LanguageProvider>
           <Navbar />
           {children}
+          <WhatsAppButton />
         </LanguageProvider>
       </body>
     </html>
