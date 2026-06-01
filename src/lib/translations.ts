@@ -12,6 +12,7 @@ type Translation = {
   hero: {
     badge:    string;
     subtitle: string;
+    impact:   string;
     bio:      string;
     cta_work: string;
     cta_cv:   string;
@@ -35,14 +36,12 @@ type Translation = {
   skills: {
     label:   string;
     heading: string;
+    also:    string;
   };
   projects: {
-    label:           string;
-    heading:         string;
-    featured:        string;
-    case_study:      string;
-    coming_soon:     string;
-    coming_soon_sub: string;
+    label:    string;
+    heading:  string;
+    featured: string;
   };
   contact: {
     label:        string;
@@ -70,7 +69,8 @@ const translations: Record<Language, Translation> = {
     hero: {
       badge:    "Available for freelance projects",
       subtitle: "Senior Full Stack Developer",
-      bio:      "8+ years building enterprise platforms at scale. Led development of a workforce management system for 30,000+ users.",
+      impact:   "Reduced release downtime ~60% with CI/CD automation · Architected Azure systems for 30,000+ users.",
+      bio:      "8+ years building enterprise platforms at scale. Led development of a workforce management platform serving 30,000+ active users.",
       cta_work: "View My Work",
       cta_cv:   "Download CV",
     },
@@ -93,14 +93,12 @@ const translations: Record<Language, Translation> = {
     skills: {
       label:   "Skills",
       heading: "What I work with",
+      also:    "Also experienced with:",
     },
     projects: {
-      label:           "Projects",
-      heading:         "Selected work",
-      featured:        "Featured",
-      case_study:      "Case Study · coming soon",
-      coming_soon:     "More coming soon",
-      coming_soon_sub: "Additional projects in progress",
+      label:    "Projects",
+      heading:  "Selected work",
+      featured: "Featured",
     },
     contact: {
       label:        "Contact",
@@ -127,7 +125,8 @@ const translations: Record<Language, Translation> = {
     hero: {
       badge:    "Disponible para proyectos freelance",
       subtitle: "Desarrollador Full Stack Senior",
-      bio:      "Más de 8 años construyendo plataformas empresariales a escala. Lideré el desarrollo de un sistema de gestión de personal para más de 30,000+ usuarios.",
+      impact:   "Reduje el downtime en releases ~60% con CI/CD · Arquitecté sistemas Azure para 30,000+ usuarios.",
+      bio:      "Más de 8 años construyendo plataformas empresariales a escala. Lideré el desarrollo de una plataforma de gestión de personal con más de 30,000 usuarios activos.",
       cta_work: "Ver mi trabajo",
       cta_cv:   "Descargar CV",
     },
@@ -150,14 +149,12 @@ const translations: Record<Language, Translation> = {
     skills: {
       label:   "Habilidades",
       heading: "Con qué trabajo",
+      also:    "También con experiencia en:",
     },
     projects: {
-      label:           "Proyectos",
-      heading:         "Trabajo seleccionado",
-      featured:        "Destacado",
-      case_study:      "Caso de estudio · próximamente",
-      coming_soon:     "Más próximamente",
-      coming_soon_sub: "Proyectos adicionales en progreso",
+      label:    "Proyectos",
+      heading:  "Trabajo seleccionado",
+      featured: "Destacado",
     },
     contact: {
       label:        "Contacto",

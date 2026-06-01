@@ -5,13 +5,15 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
 
-const SKILLS = [
-  { category: "Backend",        items: ["C#", ".NET Core", ".NET Framework", "REST APIs", "Microservices", "Azure Functions", "Node.js"] },
-  { category: "Frontend",       items: ["Angular", "TypeScript", "JavaScript", "React", "Tailwind CSS"] },
+const PRIMARY_SKILLS = [
+  { category: "Backend",        items: ["C#", ".NET Core", ".NET Framework", "REST APIs", "Microservices", "Azure Functions"] },
+  { category: "Frontend",       items: ["Angular", "TypeScript", "JavaScript"] },
   { category: "Cloud & DevOps", items: ["Microsoft Azure", "Azure DevOps", "Docker", "CI/CD", "App Services"] },
-  { category: "Databases",      items: ["SQL Server", "PostgreSQL", "MySQL", "MongoDB"] },
-  { category: "Tools & Methods",items: ["Git", "Agile/Scrum", "Power BI", "Layered Architecture"] },
+  { category: "Databases",      items: ["SQL Server", "PostgreSQL"] },
+  { category: "Tools & Methods",items: ["Git", "Agile/Scrum", "Layered Architecture"] },
 ];
+
+const SECONDARY_SKILLS = ["React", "Node.js", "MongoDB", "MySQL", "Power BI"];
 
 export function Skills() {
   const ref = useRef<HTMLElement>(null);
@@ -55,7 +57,7 @@ export function Skills() {
             </motion.h2>
 
             <div className="space-y-10">
-              {SKILLS.map((group, i) => (
+              {PRIMARY_SKILLS.map((group, i) => (
                 <motion.div key={group.category} {...anim(0.1 + i * 0.06)}>
                   <p className="mb-3 text-xs font-bold uppercase tracking-widest text-cyan-400">
                     {group.category}
@@ -72,6 +74,22 @@ export function Skills() {
                   </div>
                 </motion.div>
               ))}
+
+              <motion.div {...anim(0.1 + PRIMARY_SKILLS.length * 0.06)}>
+                <p className="mb-3 text-xs font-medium uppercase tracking-widest text-neutral-600">
+                  {t.skills.also}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {SECONDARY_SKILLS.map((skill) => (
+                    <span
+                      key={skill}
+                      className="cursor-default rounded border border-neutral-800/60 bg-neutral-900/50 px-2.5 py-1 text-xs text-neutral-600 transition-all duration-150 hover:text-neutral-400"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         </AnimatePresence>

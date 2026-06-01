@@ -6,11 +6,10 @@ import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
 
 type Project = {
-  title:       string;
+  title:     string;
   description: string;
-  tech:        string[];
-  featured?:   boolean;
-  comingSoon?: boolean;
+  tech:      string[];
+  featured?: boolean;
 };
 
 const PROJECTS: Project[] = [
@@ -95,34 +94,19 @@ export function Projects() {
                     {project.description}
                   </p>
 
-                  <div className="flex flex-col gap-4">
-                    <div className="flex flex-wrap gap-1.5">
-                      {project.tech.map((tech) => (
-                        <span
-                          key={tech}
-                          className="rounded border border-neutral-800 bg-neutral-900 px-2 py-0.5 text-xs text-neutral-500"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                    {project.featured && (
-                      <p className="text-xs text-neutral-700">{t.projects.case_study}</p>
-                    )}
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.tech.map((tech) => (
+                      <span
+                        key={tech}
+                        className="rounded border border-neutral-800 bg-neutral-900 px-2 py-0.5 text-xs text-neutral-500"
+                      >
+                        {tech}
+                      </span>
+                    ))}
                   </div>
                 </motion.div>
               ))}
 
-              {/* Placeholder */}
-              <motion.div
-                {...anim(0.1 + PROJECTS.length * 0.07)}
-                className="flex min-h-[200px] items-center justify-center rounded-xl border border-dashed border-neutral-800 p-6 text-center"
-              >
-                <div>
-                  <p className="text-sm text-neutral-600">{t.projects.coming_soon}</p>
-                  <p className="mt-1 text-xs text-neutral-700">{t.projects.coming_soon_sub}</p>
-                </div>
-              </motion.div>
             </div>
           </motion.div>
         </AnimatePresence>
