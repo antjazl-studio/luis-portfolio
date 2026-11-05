@@ -62,6 +62,9 @@ type Translation = {
     notFoundTitle: string;
     notFoundBody:  string;
     notFoundLink:  string;
+    pageNotFoundTitle: string;
+    pageNotFoundBody:  string;
+    pageNotFoundLink:  string;
     dateLocale:    string;
   };
   footer: string;
@@ -130,6 +133,9 @@ const translations: Record<Language, Translation> = {
       notFoundTitle: "Post not found",
       notFoundBody:  "This post does not exist or is not published.",
       notFoundLink:  "Back to blog",
+      pageNotFoundTitle: "Page not found",
+      pageNotFoundBody:  "This page does not exist.",
+      pageNotFoundLink:  "Back to home",
       dateLocale:    "en-US",
     },
     footer: "Built with Next.js & Tailwind",
@@ -197,6 +203,9 @@ const translations: Record<Language, Translation> = {
       notFoundTitle: "Publicación no encontrada",
       notFoundBody:  "Esta publicación no existe o no está publicada.",
       notFoundLink:  "Volver al blog",
+      pageNotFoundTitle: "Página no encontrada",
+      pageNotFoundBody:  "Esta página no existe.",
+      pageNotFoundLink:  "Volver al inicio",
       dateLocale:    "es-EC",
     },
     footer: "Construido con Next.js & Tailwind",
