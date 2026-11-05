@@ -50,7 +50,7 @@ first, since every other story renders loader output), then priority.
 
 **Independent Test**: quickstart.md section 3 fixtures each fail the build with the listed message; a valid pair builds.
 
-- [ ] T007 [US4] In `src/lib/blog.ts`, enforce pairing/identity rules and throw with the exact message shapes from data-model.md: slug regex `^[a-z0-9]+(?:-[a-z0-9]+)*$` (`post "<slug>": directory name must be lowercase letters, digits and hyphens`); `post "<slug>": missing <lang>.md`; `post "<slug>": unexpected file <name>`; `post "<slug>": duplicate identifier` (case-insensitive comparison of directory names, FR-022); `post "<slug>": draft differs between en and es` (FR-011a); field errors formatted `post "<slug>" [<lang>] <field>: <reason>` built from zod issues (FR-021)
+- [X] T007 [US4] In `src/lib/blog.ts`, enforce pairing/identity rules and throw with the exact message shapes from data-model.md: slug regex `^[a-z0-9]+(?:-[a-z0-9]+)*$` (`post "<slug>": directory name must be lowercase letters, digits and hyphens`); `post "<slug>": missing <lang>.md`; `post "<slug>": unexpected file <name>`; `post "<slug>": duplicate identifier` (case-insensitive comparison of directory names, FR-022); `post "<slug>": draft differs between en and es` (FR-011a); field errors formatted `post "<slug>" [<lang>] <field>: <reason>` built from zod issues (FR-021)
 **Checkpoint**: US4 rules implemented; the fixture run (T008) happens in Phase 5, once pages call the loader during `npm run build`.
 
 ---
