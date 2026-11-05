@@ -53,6 +53,20 @@ type Translation = {
     response:     string;
     timezone:     string;
   };
+  blog: {
+    title:         string;
+    intro:         string;
+    empty:         string;
+    readingTime:   string;
+    back:          string;
+    notFoundTitle: string;
+    notFoundBody:  string;
+    notFoundLink:  string;
+    pageNotFoundTitle: string;
+    pageNotFoundBody:  string;
+    pageNotFoundLink:  string;
+    dateLocale:    string;
+  };
   footer: string;
 };
 
@@ -110,6 +124,20 @@ const translations: Record<Language, Translation> = {
       response:     "Response time: within 24h",
       timezone:     "Timezone: GMT-5 (flexible)",
     },
+    blog: {
+      title:         "Blog",
+      intro:         "Notes on how I build and ship software.",
+      empty:         "No posts published yet.",
+      readingTime:   "{n} min read",
+      back:          "Back to blog",
+      notFoundTitle: "Post not found",
+      notFoundBody:  "This post does not exist or is not published.",
+      notFoundLink:  "Back to blog",
+      pageNotFoundTitle: "Page not found",
+      pageNotFoundBody:  "This page does not exist.",
+      pageNotFoundLink:  "Back to home",
+      dateLocale:    "en-US",
+    },
     footer: "Built with Next.js & Tailwind",
   },
 
@@ -165,6 +193,20 @@ const translations: Record<Language, Translation> = {
       open_to:      "Abierto a: Freelance · Consultoría",
       response:     "Tiempo de respuesta: dentro de 24h",
       timezone:     "Zona horaria: GMT-5 (flexible)",
+    },
+    blog: {
+      title:         "Blog",
+      intro:         "Notas sobre cómo construyo y publico software.",
+      empty:         "Aún no hay publicaciones.",
+      readingTime:   "{n} min de lectura",
+      back:          "Volver al blog",
+      notFoundTitle: "Publicación no encontrada",
+      notFoundBody:  "Esta publicación no existe o no está publicada.",
+      notFoundLink:  "Volver al blog",
+      pageNotFoundTitle: "Página no encontrada",
+      pageNotFoundBody:  "Esta página no existe.",
+      pageNotFoundLink:  "Volver al inicio",
+      dateLocale:    "es-EC",
     },
     footer: "Construido con Next.js & Tailwind",
   },

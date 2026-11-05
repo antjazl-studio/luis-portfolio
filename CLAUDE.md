@@ -27,14 +27,19 @@ src/
     layout.tsx      # Root layout, metadata, fonts
     page.tsx        # Entry point — composes all sections
     globals.css     # CSS variables (dark theme), Tailwind base
+    not-found.tsx   # Localized 404 (post-not-found wording under /blog/)
     blog/
-      page.tsx          # Blog index (Dev.to via rss2json)
-      [slug]/page.tsx   # Blog post
+      page.tsx          # Blog index (server, static; reads content/blog)
+      [slug]/page.tsx   # Blog post (static, dynamicParams = false)
   components/
     Navbar.tsx                  # Fixed top navigation
     Footer.tsx                  # Site footer
     WhatsAppButton.tsx          # Floating WhatsApp contact button
-    BlogCard.tsx                # Blog post card
+    BlogCard.tsx                # Blog post card (presentational)
+    BlogIndex.tsx               # Client: picks language, lists cards / empty state
+    LocalizedPost.tsx           # Client: shows the active language version of a post
+    BlogNotFound.tsx            # Client: localized not-found
+    MarkdownBody.tsx            # Server: react-markdown render (no raw HTML)
     sections/
       Hero.tsx        # Full-screen intro + CV download (public/Luis_Jacho_Resume.pdf)
       About.tsx       # Bio / summary
@@ -48,7 +53,12 @@ src/
     useLanguage.ts
   lib/
     translations.ts       # All EN/ES strings
+    blog.ts               # Loads/validates content/blog (build fails on errors)
 ```
+
+Contenido del blog: `content/blog/<slug>/en.md` y `es.md` (Markdown + frontmatter
+`title`, `summary`, `date`, `draft`). Los borradores se excluyen solo cuando
+`VERCEL_ENV=production`.
 
 Reglas de gobierno completas en `.specify/memory/constitution.md`.
 

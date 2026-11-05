@@ -1,13 +1,11 @@
 <!--
 Sync Impact Report
-- Version change: 1.0.0 → 1.0.0 (amended before first commit, per owner instruction)
-- Modified principles: I (Next.js 14 → Next.js (App Router)); II (use client rule, verified
-  structure); V (--accent restricted to links and focus rings)
-- Added sections: Principle VI Bilingual Parity; Principle VII Resilient External Integrations
+- Version change: 1.0.0 -> 1.0.1 (PATCH: clarifications for feature 002-native-blog)
+- Modified principles: II (structure list updated for the native blog); VII (removed the
+  retired feed-service example; rule unchanged)
+- Added sections: none
 - Removed sections: none
 - Deferred TODOs: none
-- Known deviations from the new rules (existing code, not fixed here): see Next Actions in the
-  command summary (blog pages are "use client"; blog fetch happens client-side on mount).
 -->
 # Luis Portfolio Constitution
 
@@ -29,14 +27,17 @@ Motion); pages and layouts MUST stay server components. Code MUST be TypeScript 
 
 Structure (`src/`), verified against the repository:
 - `app/`: `layout.tsx` (root layout, metadata, fonts, providers), `page.tsx` (composes
-  sections only), `globals.css`, `blog/page.tsx` (blog index), `blog/[slug]/page.tsx` (post).
+  sections only), `globals.css`, `not-found.tsx` (localized 404), `blog/page.tsx` (blog index,
+  server), `blog/[slug]/page.tsx` (post, statically generated).
 - `components/`: `Navbar.tsx`, `Footer.tsx`, `WhatsAppButton.tsx` (floating contact button),
-  `BlogCard.tsx`.
+  `BlogCard.tsx` (presentational card), `BlogIndex.tsx`, `LocalizedPost.tsx`,
+  `BlogNotFound.tsx`, `MarkdownBody.tsx`.
 - `components/sections/`: `Hero.tsx` (includes the CV download of
   `public/Luis_Jacho_Resume.pdf`), `About.tsx`, `Experience.tsx`, `Skills.tsx`,
   `Projects.tsx`, `Contact.tsx`.
 - `context/LanguageContext.tsx` and `hooks/useLanguage.ts`: language state.
-- `lib/translations.ts`: all EN/ES strings.
+- `lib/translations.ts`: all EN/ES strings; `lib/blog.ts`: blog content loader and validation.
+- `content/blog/<slug>/{en,es}.md`: blog post content (Markdown with frontmatter), outside `src/`.
 
 New files MUST follow this layout; structural changes MUST update this list and `CLAUDE.md`.
 
@@ -71,8 +72,7 @@ both languages are complete. Rationale: the audience spans Ecuador and internati
 recruiters; a half-translated page reads as unfinished.
 
 ### VII. Resilient External Integrations
-The site MUST remain fully functional when any external API (agent API, Dev.to via rss2json) is
-down. Initial render MUST NOT block on external calls, and a failure MUST show a visible,
+The site MUST remain fully functional when any external API (e.g. the agent API) is down. Initial render MUST NOT block on external calls, and a failure MUST show a visible,
 graceful fallback (message or empty state), never a blank or broken section. Secrets MUST NOT
 exist in the frontend (no API keys, tokens, or private endpoints in source, `NEXT_PUBLIC_*`
 variables, or bundles); the frontend MUST call only public endpoints. Rationale: a portfolio is
@@ -110,4 +110,4 @@ review MUST verify compliance with the principles above; deviations MUST be just
 plan's complexity/constitution-check section. `CLAUDE.md` provides runtime guidance and MUST
 stay consistent with this document.
 
-**Version**: 1.0.0 | **Ratified**: 2026-11-05 | **Last Amended**: 2026-11-05
+**Version**: 1.0.1 | **Ratified**: 2026-11-05 | **Last Amended**: 2026-11-05
