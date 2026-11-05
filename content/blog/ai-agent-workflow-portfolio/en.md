@@ -2,7 +2,6 @@
 title: "How I built an AI-agent workflow for my portfolio"
 summary: "How this portfolio is changed through Spec Kit, a constitution, a least-privilege bot account, pull requests, CI and human review."
 date: 2026-11-05
-draft: true
 ---
 
 This portfolio is maintained with the help of an AI coding agent. I did not want that to mean

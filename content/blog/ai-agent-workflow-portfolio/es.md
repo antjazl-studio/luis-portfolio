@@ -2,7 +2,6 @@
 title: "Cómo construí un flujo de trabajo con agentes de IA para mi portafolio"
 summary: "Cómo se modifica este portafolio mediante Spec Kit, una constitución, una cuenta bot con permisos mínimos, pull requests, CI y revisión humana."
 date: 2026-11-05
-draft: true
 ---
 
 Este portafolio se mantiene con la ayuda de un agente de programación con IA. No quería que eso
