@@ -35,7 +35,7 @@ first, since every other story renders loader output), then priority.
 
 **Purpose**: loader, Markdown rendering and shared strings that every story uses.
 
-- [ ] T003 Create `src/lib/blog.ts` with types `Lang`, `PostVersion`, `Post` per contracts/blog-module.md; read each `content/blog/<slug>/{en,es}.md` with gray-matter; zod schema for frontmatter: `title` non-empty string, `summary` non-empty string, `date` ISO `YYYY-MM-DD` or full ISO that parses to a valid date (accept YAML `Date` and normalise to ISO string), `draft` boolean defaulting to `false`; body must be non-empty; compute `readingTime = Math.max(1, Math.ceil(words / 200))` with words = whitespace tokens of the body after removing HTML comments; export `loadPosts(rootDir?, opts?)` (throws on any error, memoised), `getVisiblePosts()` (sorted by EN `date` descending, ties by `slug` ascending), `getPost(slug)` (visible only), `isProductionBuild()` (`process.env.VERCEL_ENV === "production"`); drafts are always validated, then filtered out only when `isProductionBuild()`
+- [ ] T003 Create `src/lib/blog.ts` with types `Lang`, `PostVersion`, `Post` per contracts/blog-module.md; read each `content/blog/<slug>/{en,es}.md` with gray-matter; zod schema for frontmatter: `title` non-empty string, `summary` non-empty string, `date` ISO `YYYY-MM-DD` or full ISO that parses to a valid date (accept YAML `Date` and normalise to ISO string), `draft` boolean defaulting to `false`; body must be non-empty; compute `readingTime = Math.max(1, Math.ceil(words / 200))` with words = whitespace tokens of the body after removing HTML comments; export `loadPosts(rootDir?, opts?)` (throws on any error, memoised), `getVisiblePosts()` (sorted by EN `date` descending, ties by `slug` ascending), `getPost(slug)` (visible only), `isProductionBuild()` (`process.env.VERCEL_ENV === "production"`); drafts are always validated, then filtered out only when `isProductionBuild()`; ignore non-directory entries (e.g. `.gitkeep`) directly under `content/blog/`, and return `[]` when `content/blog/` is empty or absent
 - [ ] T004 [P] Add a `blog` group (EN and ES) to the `Translation` type and both language objects in `src/lib/translations.ts`: `title`, `intro`, `empty`, `readingTime` (with `{n}` placeholder: "{n} min read" / "{n} min de lectura"), `back`, `notFoundTitle`, `notFoundBody`, `notFoundLink`, `dateLocale` (`en-US` / `es-EC`)
 - [ ] T005 [P] Create `src/components/MarkdownBody.tsx` (server component, named export): `<ReactMarkdown remarkPlugins={[remarkGfm]} skipHtml>` with component overrides — `img` renders `next/image` (`width={0} height={0} sizes="100vw"`, class `h-auto w-full`) only when `src` starts with `/`, otherwise renders just the alt text; `a` adds `target="_blank" rel="noopener noreferrer"` for external URLs; `pre` and `table` wrapped/classed with `overflow-x-auto`; keep default URL sanitising; no `dangerouslySetInnerHTML`; prose classes `prose prose-invert max-w-none` with neutral overrides only (white headings, neutral body text, `--accent` for links, neutral code/pre styling) per Principle IV/V — no cyan, glows or gradients
 - [ ] T006 [P] Set `metadataBase` in `src/app/layout.tsx` metadata: `new URL(process.env.VERCEL_PROJECT_PRODUCTION_URL ? \`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}\` : "http://localhost:3000")`
@@ -51,9 +51,7 @@ first, since every other story renders loader output), then priority.
 **Independent Test**: quickstart.md section 3 fixtures each fail the build with the listed message; a valid pair builds.
 
 - [ ] T007 [US4] In `src/lib/blog.ts`, enforce pairing/identity rules and throw with the exact message shapes from data-model.md: slug regex `^[a-z0-9]+(?:-[a-z0-9]+)*$` (`post "<slug>": directory name must be lowercase letters, digits and hyphens`); `post "<slug>": missing <lang>.md`; `post "<slug>": unexpected file <name>`; `post "<slug>": duplicate identifier` (case-insensitive comparison of directory names, FR-022); `post "<slug>": draft differs between en and es` (FR-011a); field errors formatted `post "<slug>" [<lang>] <field>: <reason>` built from zod issues (FR-021)
-- [ ] T008 [US4] Run the quickstart.md section 3 fixture table against a temporary post in `content/blog/` (each case, plus the draft-with-missing-language case under `VERCEL_ENV=production`); confirm each `npm run build` fails with the expected message, then delete the fixture
-
-**Checkpoint**: US4 done; loader is the single validation point.
+**Checkpoint**: US4 rules implemented; the fixture run (T008) happens in Phase 5, once pages call the loader during `npm run build`.
 
 ---
 
@@ -63,7 +61,7 @@ first, since every other story renders loader output), then priority.
 
 **Independent Test**: quickstart.md section 1 steps 1, 2 and 5 (needs at least one post — use a temporary valid fixture or T018).
 
-- [ ] T009 [P] [US1] Rewrite `src/components/BlogCard.tsx` as a presentational named-export component (no data source, no Dev.to types): title, formatted date (`Intl.DateTimeFormat(dateLocale, { dateStyle: "medium", timeZone: "UTC" })`), summary, reading time via `t.blog.readingTime`, whole card links to `/blog/<slug>` via `next/link`; neutral styling per Principle IV (no pill badges, no cyan, no draft notice); any image via `next/image`
+- [ ] T009 [P] [US1] Rewrite `src/components/BlogCard.tsx` as a presentational named-export component (no data source, no Dev.to types); it is rendered inside client `BlogIndex` and calls `useLanguage()` itself for `t.blog` strings and `dateLocale`; do T009, T011 and T015 together before running lint/build, because the old pages import the old `Article` type: title, formatted date (`Intl.DateTimeFormat(dateLocale, { dateStyle: "medium", timeZone: "UTC" })`), summary, reading time via `t.blog.readingTime`, whole card links to `/blog/<slug>` via `next/link`; neutral styling per Principle IV (no pill badges, no cyan, no draft notice); any image via `next/image`
 - [ ] T010 [US1] Create `src/components/BlogIndex.tsx` (`"use client"`, named export): receives serialisable `{ slug; en: Card; es: Card }[]`, reads `useLanguage()`, renders heading/intro from `t.blog`, a list of `BlogCard`, and the localized `t.blog.empty` message when the list is empty (FR-032, FR-033, FR-093)
 - [ ] T011 [US1] Replace `src/app/blog/page.tsx` with a server component (no `"use client"`): calls `getVisiblePosts()`, maps to card data for both languages, renders `BlogIndex`; export static `metadata` (index title + description, EN) (FR-051)
 - [ ] T012 [US1] Verify at 360px and desktop: no horizontal overflow, language switch updates without reload, ordering newest first with two temporary fixtures (then remove them)
@@ -82,6 +80,7 @@ first, since every other story renders loader output), then priority.
 - [ ] T014 [P] [US2] Create `src/components/BlogNotFound.tsx` (`"use client"`, named export) and `src/app/blog/not-found.tsx` rendering it: localized title/body and a link to `/blog` (FR-042)
 - [ ] T015 [US2] Replace `src/app/blog/[slug]/page.tsx` with a server component: `export const dynamicParams = false`; `generateStaticParams` from `getVisiblePosts()`; page calls `getPost(params.slug)` → `notFound()` when undefined; renders `MarkdownBody` for EN and ES bodies and passes both to `LocalizedPost` (FR-041, FR-043)
 - [ ] T016 [US2] Verify direct-URL load in a private window, unknown slug → localized not-found, code block scrolls inside its container at 360px
+- [ ] T008 [US4] Run the quickstart.md section 3 fixture table against a temporary post in `content/blog/` (each case, plus the draft-with-missing-language case under `VERCEL_ENV=production`); confirm each `npm run build` fails with the expected message, then delete the fixture
 
 **Checkpoint**: US1 + US2 work together.
 
@@ -93,7 +92,7 @@ first, since every other story renders loader output), then priority.
 
 **Independent Test**: quickstart.md section 2.
 
-- [ ] T017 [US5] Confirm `getVisiblePosts()`/`getPost()` in `src/lib/blog.ts` exclude drafts only when `isProductionBuild()`, so index, static params and metadata all derive from the filtered list (FR-090/091/093); no draft badge anywhere in the UI (FR-030)
+- [ ] T017 [US5] Check only (logic is implemented in T003): confirm `getVisiblePosts()`/`getPost()` in `src/lib/blog.ts` exclude drafts only when `isProductionBuild()`, so index, static params and metadata all derive from the filtered list (FR-090/091/093); no draft badge anywhere in the UI (FR-030)
 - [ ] T018 [P] [US5] Write `content/blog/ai-agent-workflow-portfolio/en.md` with frontmatter `title: "How I built an AI-agent workflow for my portfolio"`, a `summary`, `date: 2026-11-05`, `draft: true`; body covers ONLY: Spec Kit and the constitution; the least-privilege bot account contributing via fork and pull request; CI (lint and build — `.github/workflows`); branch protection; Vercel previews; human review of every change. No metrics, dates, versions, outcomes or quotes. Branch-protection and Vercel-preview statements stay generic and each is preceded by `<!-- REVIEW: owner to confirm … -->` (FR-070–072)
 - [ ] T019 [P] [US5] Write `content/blog/ai-agent-workflow-portfolio/es.md`: Spanish equivalent with identical `date`, `draft: true`, same structure and the same `REVIEW` comments; remove the `.gitkeep` from T002
 - [ ] T020 [US5] Run quickstart.md section 2: `VERCEL_ENV=production npm run build` + `npm start` → empty state in EN/ES and post URL not found; remove `draft` in a scratch copy and rebuild → post listed; restore `draft: true`; confirm `grep -r "REVIEW:" content/` lists the review points in both files
@@ -108,7 +107,7 @@ first, since every other story renders loader output), then priority.
 
 **Independent Test**: view source of `/blog/<slug>` and check head tags.
 
-- [ ] T021 [US3] Add `generateMetadata` to `src/app/blog/[slug]/page.tsx` using the EN version: `title`, `description` (summary), `openGraph: { type: "article", title, description, url: "/blog/<slug>", publishedTime: <date> }` (FR-050, FR-052; resolved against `metadataBase` from T006)
+- [ ] T021 [US3] Add `generateMetadata` to `src/app/blog/[slug]/page.tsx` (return `{}` when `getPost` is undefined; the page itself calls `notFound()`) using the EN version: `title`, `description` (summary), `openGraph: { type: "article", title, description, url: "/blog/<slug>", publishedTime: <date> }` (FR-050, FR-052; resolved against `metadataBase` from T006)
 - [ ] T022 [US3] Verify with `curl localhost:3000/blog/ai-agent-workflow-portfolio` (or view-source) that `<title>`, `og:title`, `og:description`, `og:type=article`, `og:url` (absolute, localhost fallback) and the article body are present in the initial HTML; verify that under `VERCEL_ENV=production` the draft URL yields none of this (SC-011)
 
 ---
@@ -121,7 +120,7 @@ first, since every other story renders loader output), then priority.
 
 - [ ] T023 [US6] Confirm no leftovers in `src/`: old fetch/RSS/`localStorage`/`stripHtml`/`slugify` code and the old `Article` type are gone (they lived in the old `src/app/blog/page.tsx`, `[slug]/page.tsx`, `src/components/BlogCard.tsx`, rewritten in T009/T011/T015); delete any unused env usage or types; `grep -rniE "dev\.to|rss2json" src package.json` returns nothing
 - [ ] T024 [P] [US6] Update `CLAUDE.md`: remove Dev.to/rss2json mentions; update the structure tree (add `content/blog/`, `BlogIndex.tsx`, `LocalizedPost.tsx`, `MarkdownBody.tsx`, `BlogNotFound.tsx`, `lib/blog.ts`, `blog/not-found.tsx`; describe `BlogCard.tsx` as presentational)
-- [ ] T025 [P] [US6] Amend `.specify/memory/constitution.md`: Principle VII remove the "Dev.to via rss2json" example; Principle II structure list updated to match T024; add Sync Impact Report and bump version (PATCH 1.0.1) with Last Amended date
+- [ ] T025 [P] [US6] Run `/speckit-constitution` (do not hand-edit `.specify/memory/constitution.md`) with these changes: Principle VII remove the "Dev.to via rss2json" example; Principle II structure list updated to match T024; PATCH bump to 1.0.1 with Sync Impact Report and Last Amended date
 - [ ] T026 [US6] Verify the blog works with network blocked to third parties (DevTools offline after first load) and `grep -rn "dangerouslySetInnerHTML" src` returns nothing
 
 ---
@@ -131,14 +130,14 @@ first, since every other story renders loader output), then priority.
 - [ ] T027 Run `npm run lint` and `npm run build`; fix errors; confirm the `@next/next/no-img-element` warnings are gone
 - [ ] T028 [P] Principle IV review of `/blog` and the post page in the browser at 360px and desktop (no cyan, glows, gradients, pill badges; white headings; neutral secondary text; visible focus states; alt text)
 - [ ] T029 [P] Lighthouse on `/` and `/blog`: Performance and Accessibility ≥ 90 (FR-082, SC-010)
-- [ ] T030 Run the full quickstart.md end to end and record results in the PR description
+- [ ] T030 Run the full quickstart.md end to end, plus manual checks: SC-001 (home → Blog → post in ≤ 2 clicks), SC-004 (language switch on index and post updates all text within 1 second, no reload), SC-005 (a new temporary post added by content files alone appears in index and gets a page with zero code changes; then remove it); record results in the PR description
 
 ---
 
 ## Dependencies & Execution Order
 
 - Phase 1 → Phase 2 (blocks everything). T003 first; T004, T005, T006 parallel after T001.
-- US4 (T007–T008) depends on T003 only; US1 needs T003, T004; US2 needs T003–T005 and US1's BlogCard link target; US5 content (T018/T019) can be written any time after T001 but is verified after US1/US2; US3 depends on T015 and T006; US6 cleanup (T023) depends on T011/T015 and T009; docs T024/T025 are independent.
+- US4 (T007) depends on T003 only; its fixture run T008 depends on T011 and T015 (pages must call the loader at build); US1 needs T003, T004; US2 needs T003–T005 and US1's BlogCard link target; US5 content (T018/T019) can be written any time after T001 but is verified after US1/US2; US3 depends on T015 and T006; US6 cleanup (T023) depends on T011/T015 and T009; docs T024/T025 are independent.
 - Polish depends on all stories.
 - Same-file sequencing: `src/lib/blog.ts` (T003 → T007 → T017), `src/app/blog/[slug]/page.tsx` (T015 → T021).
 

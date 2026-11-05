@@ -139,6 +139,7 @@ src/
 ├── components/
 │   ├── BlogCard.tsx               # rewritten: presentational, named export
 │   ├── BlogIndex.tsx              # "use client": picks language, renders cards/empty state
+│   ├── BlogNotFound.tsx           # "use client": localized not-found content
 │   ├── LocalizedPost.tsx          # "use client": picks language version
 │   └── MarkdownBody.tsx           # server: react-markdown config
 └── lib/
@@ -162,4 +163,4 @@ components keep the flat `components/` layout used today; constitution Principle
 ## Complexity Tracking
 
 No unjustified constitution violations. The only governance edits are amendments listed under
-Principles II and VII (constitution PATCH/MINOR bump with Sync Impact Report, done as a task).
+Principles II and VII (constitution PATCH bump to 1.0.1 with Sync Impact Report, done via `/speckit-constitution` as a task).

@@ -129,8 +129,8 @@ found. Remove the draft flag, redeploy to production: the post appears.
    production is built, **Then** the post is listed and readable in both languages.
 5. **Given** the launch post content, **When** reviewed, **Then** it covers: Spec Kit and the
    project constitution; a least-privilege bot account contributing via fork and pull request;
-   continuous integration (lint and build); branch protection; and preview deployments on
-   Vercel — and makes no other factual claims (no metrics, dates, tool versions, outcomes or
+   continuous integration (lint and build); branch protection; preview deployments on
+   Vercel; and human review of every change — and makes no other factual claims (no metrics, dates, tool versions, outcomes or
    quotes beyond what the repository itself shows).
 6. **Given** statements the owner has not yet confirmed (for example how branch protection and
    previews are configured), **When** they appear in the post, **Then** each is phrased
@@ -330,6 +330,8 @@ references; none remain. The blog works with the network offline.
 - Vercel preview deployments are distinguishable from production by the hosting environment
   (the plan phase decides how); the draft flag is the only content-level control.
 - A cover image for Open Graph is optional; none is required for launch.
+- Post images must be stored in the repository (`public/blog/<slug>/`); remote images are not
+  displayed (only their alt text).
 - Replacing the blog also removes baseline deviations D-001, D-040, D-050–D-053, D-056 and the
   blog-related parts of D-004 and D-005, and the blog parts of D-014 and D-062 where styling is
   rewritten; other baseline deviations remain out of scope.
