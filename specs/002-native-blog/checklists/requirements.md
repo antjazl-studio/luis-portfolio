@@ -40,3 +40,5 @@
    metadata.
 3. Open item for the owner (not a spec ambiguity): the launch post's statements about branch
    protection and Vercel previews must be confirmed by Luis before the draft flag is removed.
+4. Revised 2026-11-05: visible draft notice replaced by a draft flag (visible in local dev and
+   Vercel previews, excluded from production). All items re-checked and still pass.

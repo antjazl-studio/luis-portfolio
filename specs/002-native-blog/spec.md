@@ -18,8 +18,9 @@ date, summary and reading time, in the language currently selected.
 **Why this priority**: Replaces the existing blog entry point; without it the blog has no content
 of the owner's own.
 
-**Independent Test**: Open `/blog` in EN, then switch to ES; the same single post is listed in
-each language with translated title, summary and date format.
+**Independent Test**: In local development or a preview deployment (or in production once a
+post is published), open `/blog` in EN, then switch to ES; the same post is listed in each
+language with translated title, summary and date format.
 
 **Acceptance Scenarios**:
 
@@ -100,33 +101,43 @@ names the post and the missing language. Add the Spanish file; the build succeed
 
 ---
 
-### User Story 5 - Launch post is clearly a draft (Priority: P1)
+### User Story 5 - Draft posts are hidden from production (Priority: P1)
 
-The blog launches with one post, "How I built an AI-agent workflow for my portfolio", visibly
-marked as a draft so the owner reviews and edits it before treating it as final.
+Posts carry a draft flag. Draft posts are visible while the owner works locally and in Vercel
+preview deployments, but never appear in the production site. The blog launches with one post,
+"How I built an AI-agent workflow for my portfolio", flagged as a draft; the owner reviews and
+edits it, then removes the flag to publish it.
 
 **Why this priority**: The post describes real working practices; the owner must confirm every
-statement before it is presented as fact.
+statement before it is public, and must be able to review it in a realistic preview first.
 
-**Independent Test**: Open the launch post in EN and ES; a visible "Draft" / "Borrador" notice
-appears on the index entry and the post page.
+**Independent Test**: Run the site locally and open a preview deployment: the launch post is
+listed and readable. Open the production site: the blog shows no posts and the post URL is not
+found. Remove the draft flag, redeploy to production: the post appears.
 
 **Acceptance Scenarios**:
 
-1. **Given** the launch post, **When** it appears in the index, **Then** it carries a visible
-   draft marker in the active language.
-2. **Given** the launch post is open, **When** the visitor reads the top of the page, **Then** a
-   notice states that the content is a draft pending the owner's review.
-3. **Given** the launch post content, **When** reviewed, **Then** it covers: Spec Kit and the
+1. **Given** a post flagged as draft, **When** the site runs in local development or as a Vercel
+   preview deployment, **Then** the post appears in the index and its page renders, exactly as a
+   published post would (no extra visible draft notice).
+2. **Given** a post flagged as draft, **When** the site is built for production, **Then** the
+   post is absent from the index, has no post page (its URL shows "post not found"), and
+   contributes no page metadata.
+3. **Given** the launch post is still flagged as draft, **When** production is built, **Then**
+   the blog index shows the friendly empty message and the build still succeeds.
+4. **Given** the owner removes the draft flag from both language versions after review, **When**
+   production is built, **Then** the post is listed and readable in both languages.
+5. **Given** the launch post content, **When** reviewed, **Then** it covers: Spec Kit and the
    project constitution; a least-privilege bot account contributing via fork and pull request;
    continuous integration (lint and build); branch protection; and preview deployments on
    Vercel — and makes no other factual claims (no metrics, dates, tool versions, outcomes or
    quotes beyond what the repository itself shows).
-4. **Given** statements the owner has not yet confirmed (for example how branch protection and
+6. **Given** statements the owner has not yet confirmed (for example how branch protection and
    previews are configured), **When** they appear in the post, **Then** each is phrased
-   generically and flagged for review rather than asserted with specifics.
-5. **Given** exactly one post at launch, **When** the index renders, **Then** it lists exactly
-   one entry.
+   generically and marked for review in the content file in a way that is never shown to
+   visitors.
+7. **Given** exactly one post exists, **When** the index renders in local development or
+   preview, **Then** it lists exactly one entry.
 
 ---
 
@@ -163,8 +174,13 @@ references; none remain. The blog works with the network offline.
   overflow, including code blocks (which scroll inside their own container).
 - The visitor switches language while on a post whose translation exists: the post stays open
   in the other language (same URL).
-- Zero posts: the index shows a friendly empty message in both languages (not expected at
-  launch).
+- Zero published posts (including production while the launch post is still a draft): the index
+  shows a friendly empty message in both languages.
+- A post's draft flag differs between its language versions: the build fails, naming the post.
+- A draft post's URL is opened on production: it shows the same "post not found" page as any
+  unknown URL (its existence is not revealed).
+- Draft posts still count for validation: a draft missing a language fails the build in every
+  environment.
 
 ## Requirements *(mandatory)*
 
@@ -181,7 +197,9 @@ references; none remain. The blog works with the network offline.
 - **FR-010**: Each post MUST consist of one content file per supported language (EN and ES),
   grouped under a shared post identifier that forms its URL.
 - **FR-011**: Each language file MUST provide: title, publication date, summary, and body; and
-  MAY provide a draft flag.
+  MAY provide a draft flag. A post is a draft when its draft flag is set.
+- **FR-011a**: The draft flag MUST have the same value in both language versions of a post; the
+  build MUST fail otherwise, naming the post.
 - **FR-012**: Reading time MUST be derived automatically from the body of the displayed
   language, rounded up to whole minutes, at a fixed reading speed of 200 words per minute.
 - **FR-013**: The post body MUST support headings, paragraphs, emphasis, ordered/unordered
@@ -195,15 +213,16 @@ references; none remain. The blog works with the network offline.
 - **FR-022**: The build MUST fail if two posts resolve to the same URL identifier.
 
 **Index**
-- **FR-030**: The blog index MUST list all posts newest first, showing title, publication date,
-  summary and reading time in the active language, plus a draft marker when applicable.
+- **FR-030**: The blog index MUST list all visible posts newest first (see FR-090), showing
+  title, publication date, summary and reading time in the active language. No draft badge or
+  notice is shown.
 - **FR-031**: Selecting an entry MUST open that post's page.
 - **FR-032**: The index MUST update when the language changes, without reload.
 - **FR-033**: The index MUST not show a loading or error state (content is available at once).
 
 **Post page**
-- **FR-040**: The post page MUST show title, date, reading time, optional draft notice, body
-  and a link back to the blog, in the active language.
+- **FR-040**: The post page MUST show title, date, reading time, body and a link back to the
+  blog, in the active language.
 - **FR-041**: Post pages MUST be available at stable URLs and be pre-generated when the site is
   built, with content present in the delivered page.
 - **FR-042**: Unknown post URLs MUST show a localized "post not found" page with a link to the
@@ -220,23 +239,38 @@ references; none remain. The blog works with the network offline.
 
 **Language**
 - **FR-060**: All fixed interface text on the blog (header, labels, empty state, not-found,
-  back link, draft marker/notice, reading-time wording, date format) MUST exist in EN and ES via
-  the existing language switcher (Principle VI).
+  back link, reading-time wording, date format) MUST exist in EN and ES via the existing
+  language switcher (Principle VI).
+
+**Draft visibility**
+- **FR-090**: Draft posts MUST be visible (index and post page, with metadata) in local
+  development and in Vercel preview deployments, and MUST be excluded from the production
+  deployment: absent from the index, no post page generated, no metadata, and their URL shows
+  the standard "post not found" page.
+- **FR-091**: Production vs. non-production MUST be determined by the deployment environment,
+  not by an editable content setting, so a draft cannot be published by mistake from content
+  alone other than by removing its flag.
+- **FR-092**: Publishing a draft MUST require only removing the draft flag from both language
+  versions of the post (no code change).
+- **FR-093**: With no visible posts, the index MUST show a localized empty message and the build
+  MUST still succeed.
 
 **Launch content**
 - **FR-070**: The blog MUST launch with exactly one post titled "How I built an AI-agent
-  workflow for my portfolio" (ES equivalent provided), flagged as a draft.
+  workflow for my portfolio" (ES equivalent provided), flagged as a draft until the owner
+  removes the flag after review.
 - **FR-071**: The launch post MUST cover only: Spec Kit and the constitution; the least-privilege
   bot account with fork-and-pull contributions; CI; branch protection; Vercel previews; and
   human review of every change. It MUST NOT include invented facts, numbers, dates, quotes or
   outcomes.
-- **FR-072**: The launch post MUST carry visible markers (in both languages) telling the owner
-  which passages need confirmation.
+- **FR-072**: Passages in the launch post that need the owner's confirmation MUST be marked in
+  the content files in both languages in a way that is never rendered to visitors, so the owner
+  can find them during review.
 
 **Styling & quality**
 - **FR-080**: The blog styling MUST follow constitution Principle IV: no gradient text, glows,
   frosted cards, tinted pill badges or cyan/emerald accent borders; white headings; neutral
-  secondary text. The draft marker MUST be plain text, not a tinted pill.
+  secondary text.
 - **FR-081**: Pages MUST be mobile-first and free of horizontal overflow at 360px.
 - **FR-082**: Home-page Lighthouse Performance and Accessibility MUST stay at or above 90, and
   the blog pages SHOULD meet the same bar.
@@ -269,6 +303,9 @@ references; none remain. The blog works with the network offline.
   application and its delivered pages.
 - **SC-008**: The launch post contains zero claims beyond the listed setup, and the owner can
   find every passage marked for confirmation.
+- **SC-011**: While a post is flagged as draft, 0 of its pages, index entries or metadata are
+  present in the production site, and 100% are present in local development and preview.
+- **SC-012**: A draft can be published by removing its flag alone, with no other change.
 - **SC-009**: Blog pages show no horizontal scroll at 360px width.
 - **SC-010**: Home page Lighthouse Performance and Accessibility scores stay at or above 90.
 
@@ -288,6 +325,10 @@ references; none remain. The blog works with the network offline.
   in this repository (constitution, CI workflow, fork-and-pull PRs, human review); descriptions
   of branch protection settings and Vercel previews are kept generic until the owner confirms
   them.
+- Because the launch post starts as a draft, the production blog shows the empty state until the
+  owner reviews the post and removes the flag.
+- Vercel preview deployments are distinguishable from production by the hosting environment
+  (the plan phase decides how); the draft flag is the only content-level control.
 - A cover image for Open Graph is optional; none is required for launch.
 - Replacing the blog also removes baseline deviations D-001, D-040, D-050–D-053, D-056 and the
   blog-related parts of D-004 and D-005, and the blog parts of D-014 and D-062 where styling is
