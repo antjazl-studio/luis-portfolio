@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "PowerShell(Get-ChildItem *)",
-      "PowerShell(Copy-Item *)",
-      "Bash(npm run *)"
-    ]
-  }
-}
