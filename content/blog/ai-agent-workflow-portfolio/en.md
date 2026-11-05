@@ -22,33 +22,32 @@ and change must respect. It covers things such as the technology stack, componen
 the visual style, and the requirement that every visible string exists in both English and
 Spanish. When a plan conflicts with the constitution, the plan has to change, not the rule.
 
-## A bot account with minimal permissions
+## A bot account with no access to the main repository
 
-The agent does not push to the main repository. It uses a separate bot account with the least
-privileges needed. The bot works on its own fork of the repository and proposes changes through
-pull requests, the same way an outside contributor would.
-
-<!-- REVIEW: owner to confirm the exact permissions the bot account has -->
+The agent does not push to the main repository. It uses a separate bot account that has no
+access to it at all. Because the repository is public, the bot forks it, pushes its work to its
+own fork and opens a pull request, the same way any outside contributor would.
 
 ## Continuous integration
 
-<!-- REVIEW: owner to confirm that passing lint and build is required before merging -->
-Every pull request runs a workflow that installs the dependencies, runs the linter and builds
-the site. A change that does not lint or build does not get merged.
+Every pull request runs a GitHub Actions workflow that installs the dependencies with `npm ci`,
+runs the linter and builds the site. It has to pass before a pull request can be merged.
 
 ## Branch protection
 
-<!-- REVIEW: owner to confirm how branch protection is configured on the main branch -->
-The main branch is protected, so changes arrive through pull requests rather than direct pushes.
+A GitHub ruleset on the main branch requires a pull request with one approving review and
+requires the build check to pass. It also blocks force pushes and branch deletions, and its
+bypass list is empty, so the rules apply to everyone, including me.
 
 ## Preview deployments
 
-<!-- REVIEW: owner to confirm how Vercel preview deployments are set up for pull requests -->
-Pull requests can be previewed on Vercel before anything reaches production. This is also how
-draft content, like this post, can be reviewed in a realistic environment without being public.
+Every pull request gets a preview deployment on Vercel. Because the bot's pull requests come
+from a fork, I have to authorize each deployment first; that is Vercel's fork protection at
+work. Draft content, like this post, is visible only in previews and never in production, so I
+can review it in a realistic environment before it is public.
 
 ## A human reviews every change
 
-None of this removes the human from the loop. I read every pull request, and I decide what gets
-merged. The agent speeds up the work; the specs, the constitution, the checks and the review are
-what keep it under control.
+None of this removes the human from the loop. Only I approve and merge pull requests, and
+merging to the main branch is what triggers the production deploy. The agent speeds up the
+work; the specs, the constitution, the checks and the review are what keep it under control.

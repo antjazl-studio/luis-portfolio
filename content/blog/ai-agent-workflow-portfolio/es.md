@@ -25,35 +25,33 @@ convenciones de componentes, el estilo visual y el requisito de que todo texto v
 inglés y en español. Cuando un plan entra en conflicto con la constitución, cambia el plan, no
 la regla.
 
-## Una cuenta bot con permisos mínimos
+## Una cuenta bot sin acceso al repositorio principal
 
-El agente no hace push al repositorio principal. Usa una cuenta bot separada con los menores
-privilegios necesarios. El bot trabaja en su propio fork del repositorio y propone los cambios
-mediante pull requests, igual que lo haría un colaborador externo.
-
-<!-- REVIEW: owner to confirm the exact permissions the bot account has -->
+El agente no hace push al repositorio principal. Usa una cuenta bot separada que no tiene ningún
+acceso a él. Como el repositorio es público, el bot lo bifurca (fork), sube su trabajo a su propio
+fork y abre un pull request, igual que cualquier colaborador externo.
 
 ## Integración continua
 
-<!-- REVIEW: owner to confirm that passing lint and build is required before merging -->
-Cada pull request ejecuta un flujo de trabajo que instala las dependencias, ejecuta el linter y
-compila el sitio. Un cambio que no pasa el lint o la compilación no se fusiona.
+Cada pull request ejecuta un flujo de GitHub Actions que instala las dependencias con `npm ci`,
+ejecuta el linter y compila el sitio. Debe pasar para que el pull request pueda fusionarse.
 
 ## Protección de ramas
 
-<!-- REVIEW: owner to confirm how branch protection is configured on the main branch -->
-La rama principal está protegida, por lo que los cambios llegan mediante pull requests y no con
-pushes directos.
+Un ruleset de GitHub en la rama principal exige un pull request con una aprobación y exige que
+pase la verificación de compilación. También bloquea los force push y la eliminación de la rama,
+y su lista de excepciones está vacía, así que las reglas aplican a todos, incluido yo.
 
 ## Despliegues de vista previa
 
-<!-- REVIEW: owner to confirm how Vercel preview deployments are set up for pull requests -->
-Los pull requests se pueden previsualizar en Vercel antes de que algo llegue a producción. Así
-también se puede revisar contenido en borrador, como esta publicación, en un entorno realista sin
-que sea público.
+Cada pull request recibe un despliegue de vista previa en Vercel. Como los pull requests del bot
+vienen de un fork, yo debo autorizar cada despliegue primero; es la protección de forks de Vercel.
+El contenido en borrador, como esta publicación, solo es visible en las vistas previas y nunca en
+producción, así que puedo revisarlo en un entorno realista antes de que sea público.
 
 ## Una persona revisa cada cambio
 
-Nada de esto saca a la persona del proceso. Leo cada pull request y decido qué se fusiona. El
-agente acelera el trabajo; las especificaciones, la constitución, las verificaciones y la
-revisión son lo que lo mantiene bajo control.
+Nada de esto saca a la persona del proceso. Solo yo apruebo y fusiono los pull requests, y
+fusionar a la rama principal es lo que dispara el despliegue a producción. El agente acelera el
+trabajo; las especificaciones, la constitución, las verificaciones y la revisión son lo que lo
+mantiene bajo control.
