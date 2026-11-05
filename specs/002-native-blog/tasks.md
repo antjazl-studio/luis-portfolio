@@ -118,9 +118,9 @@ first, since every other story renders loader output), then priority.
 
 **Independent Test**: quickstart.md section 4 greps.
 
-- [ ] T023 [US6] Confirm no leftovers in `src/`: old fetch/RSS/`localStorage`/`stripHtml`/`slugify` code and the old `Article` type are gone (they lived in the old `src/app/blog/page.tsx`, `[slug]/page.tsx`, `src/components/BlogCard.tsx`, rewritten in T009/T011/T015); delete any unused env usage or types; `grep -rniE "dev\.to|rss2json" src package.json` returns nothing
-- [ ] T024 [P] [US6] Update `CLAUDE.md`: remove Dev.to/rss2json mentions; update the structure tree (add `content/blog/`, `BlogIndex.tsx`, `LocalizedPost.tsx`, `MarkdownBody.tsx`, `BlogNotFound.tsx`, `lib/blog.ts`, `blog/not-found.tsx`; describe `BlogCard.tsx` as presentational)
-- [ ] T025 [P] [US6] Run `/speckit-constitution` (do not hand-edit `.specify/memory/constitution.md`) with these changes: Principle VII remove the "Dev.to via rss2json" example; Principle II structure list updated to match T024; PATCH bump to 1.0.1 with Sync Impact Report and Last Amended date
+- [X] T023 [US6] Confirm no leftovers in `src/`: old fetch/RSS/`localStorage`/`stripHtml`/`slugify` code and the old `Article` type are gone (they lived in the old `src/app/blog/page.tsx`, `[slug]/page.tsx`, `src/components/BlogCard.tsx`, rewritten in T009/T011/T015); delete any unused env usage or types; `grep -rniE "dev\.to|rss2json" src package.json` returns nothing
+- [X] T024 [P] [US6] Update `CLAUDE.md`: remove Dev.to/rss2json mentions; update the structure tree (add `content/blog/`, `BlogIndex.tsx`, `LocalizedPost.tsx`, `MarkdownBody.tsx`, `BlogNotFound.tsx`, `lib/blog.ts`, `blog/not-found.tsx`; describe `BlogCard.tsx` as presentational)
+- [X] T025 [P] [US6] Run `/speckit-constitution` (do not hand-edit `.specify/memory/constitution.md`) with these changes: Principle VII remove the "Dev.to via rss2json" example; Principle II structure list updated to match T024; PATCH bump to 1.0.1 with Sync Impact Report and Last Amended date
 - [ ] T026 [US6] Verify the blog works with network blocked to third parties (DevTools offline after first load) and `grep -rn "dangerouslySetInnerHTML" src` returns nothing
 
 ---
