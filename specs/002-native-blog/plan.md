@@ -96,7 +96,7 @@ D-004, D-005, D-014, D-062.
 10. **Metadata**: `generateMetadata` (EN title/summary): `title`, `description`, Open Graph
     `type: "article"`, `url: /blog/<slug>`, `publishedTime`. `metadataBase` is set in the root
     layout (see Open items). Index has static metadata.
-11. **Not found**: `src/app/blog/not-found.tsx` (client, localized, link to `/blog`) handles
+11. **Not found**: root `src/app/not-found.tsx` rendering the client `BlogNotFound` (localized; "post not found" + link to `/blog` for `/blog/*` paths, generic page-not-found otherwise). With `dynamicParams = false` Next routes unknown slugs to the root not-found, so a segment-level file would never be used. It handles
     unknown slugs and drafts on production.
 12. **Removal**: delete `src/app/blog/page.tsx` and `[slug]/page.tsx` (rewritten), old
     `BlogCard.tsx` (rewritten as a presentational card with no data source), Dev.to types,
@@ -132,9 +132,9 @@ public/
 src/
 ├── app/
 │   ├── layout.tsx                 # + metadataBase
+│   ├── not-found.tsx              # renders BlogNotFound
 │   └── blog/
 │       ├── page.tsx               # server: index (static)
-│       ├── not-found.tsx          # localized not-found
 │       └── [slug]/page.tsx        # server: generateStaticParams, generateMetadata
 ├── components/
 │   ├── BlogCard.tsx               # rewritten: presentational, named export

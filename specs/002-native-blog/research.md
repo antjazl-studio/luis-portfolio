@@ -37,7 +37,8 @@ technical brief.
 ## R5. Static generation
 - **Decision**: Server components, `generateStaticParams` over visible posts,
   `export const dynamicParams = false`. Unknown/draft-in-production slugs → `notFound()` →
-  `src/app/blog/not-found.tsx`.
+  the root `src/app/not-found.tsx` (verified: with `dynamicParams = false` a segment-level
+  `blog/not-found.tsx` is not used; the root one is, and branches on the `/blog/` path).
 - **Rationale**: FR-041/042/090; a draft's existence is not revealed in production.
 
 ## R6. Language handling

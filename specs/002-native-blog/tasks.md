@@ -61,9 +61,9 @@ first, since every other story renders loader output), then priority.
 
 **Independent Test**: quickstart.md section 1 steps 1, 2 and 5 (needs at least one post — use a temporary valid fixture or T018).
 
-- [ ] T009 [P] [US1] Rewrite `src/components/BlogCard.tsx` as a presentational named-export component (no data source, no Dev.to types); it is rendered inside client `BlogIndex` and calls `useLanguage()` itself for `t.blog` strings and `dateLocale`; do T009, T011 and T015 together before running lint/build, because the old pages import the old `Article` type: title, formatted date (`Intl.DateTimeFormat(dateLocale, { dateStyle: "medium", timeZone: "UTC" })`), summary, reading time via `t.blog.readingTime`, whole card links to `/blog/<slug>` via `next/link`; neutral styling per Principle IV (no pill badges, no cyan, no draft notice); any image via `next/image`
-- [ ] T010 [US1] Create `src/components/BlogIndex.tsx` (`"use client"`, named export): receives serialisable `{ slug; en: Card; es: Card }[]`, reads `useLanguage()`, renders heading/intro from `t.blog`, a list of `BlogCard`, and the localized `t.blog.empty` message when the list is empty (FR-032, FR-033, FR-093)
-- [ ] T011 [US1] Replace `src/app/blog/page.tsx` with a server component (no `"use client"`): calls `getVisiblePosts()`, maps to card data for both languages, renders `BlogIndex`; export static `metadata` (index title + description, EN) (FR-051)
+- [X] T009 [P] [US1] Rewrite `src/components/BlogCard.tsx` as a presentational named-export component (no data source, no Dev.to types); it is rendered inside client `BlogIndex` and calls `useLanguage()` itself for `t.blog` strings and `dateLocale`; do T009, T011 and T015 together before running lint/build, because the old pages import the old `Article` type: title, formatted date (`Intl.DateTimeFormat(dateLocale, { dateStyle: "medium", timeZone: "UTC" })`), summary, reading time via `t.blog.readingTime`, whole card links to `/blog/<slug>` via `next/link`; neutral styling per Principle IV (no pill badges, no cyan, no draft notice); any image via `next/image`
+- [X] T010 [US1] Create `src/components/BlogIndex.tsx` (`"use client"`, named export): receives serialisable `{ slug; en: Card; es: Card }[]`, reads `useLanguage()`, renders heading/intro from `t.blog`, a list of `BlogCard`, and the localized `t.blog.empty` message when the list is empty (FR-032, FR-033, FR-093)
+- [X] T011 [US1] Replace `src/app/blog/page.tsx` with a server component (no `"use client"`): calls `getVisiblePosts()`, maps to card data for both languages, renders `BlogIndex`; export static `metadata` (index title + description, EN) (FR-051)
 - [ ] T012 [US1] Verify at 360px and desktop: no horizontal overflow, language switch updates without reload, ordering newest first with two temporary fixtures (then remove them)
 
 **Checkpoint**: US1 independently functional.
@@ -76,11 +76,11 @@ first, since every other story renders loader output), then priority.
 
 **Independent Test**: quickstart.md section 1 steps 3 and 4.
 
-- [ ] T013 [P] [US2] Create `src/components/LocalizedPost.tsx` (`"use client"`, named export): props `{ slug; en: { title; date; readingTime; content: ReactNode }; es: { … } }`; picks by `useLanguage()`; renders back link (`t.blog.back` → `/blog`), title, localized date, reading time, and `content`
-- [ ] T014 [P] [US2] Create `src/components/BlogNotFound.tsx` (`"use client"`, named export) and `src/app/blog/not-found.tsx` rendering it: localized title/body and a link to `/blog` (FR-042)
-- [ ] T015 [US2] Replace `src/app/blog/[slug]/page.tsx` with a server component: `export const dynamicParams = false`; `generateStaticParams` from `getVisiblePosts()`; page calls `getPost(params.slug)` → `notFound()` when undefined; renders `MarkdownBody` for EN and ES bodies and passes both to `LocalizedPost` (FR-041, FR-043)
+- [X] T013 [P] [US2] Create `src/components/LocalizedPost.tsx` (`"use client"`, named export): props `{ slug; en: { title; date; readingTime; content: ReactNode }; es: { … } }`; picks by `useLanguage()`; renders back link (`t.blog.back` → `/blog`), title, localized date, reading time, and `content`
+- [X] T014 [P] [US2] Create `src/components/BlogNotFound.tsx` (`"use client"`, named export) and a root `src/app/not-found.tsx` rendering it (with `dynamicParams = false`, unknown slugs fall through to the root not-found, not a segment one): localized "post not found" wording and a link to `/blog` for `/blog/*` paths, generic localized page-not-found with a link home otherwise (FR-042)
+- [X] T015 [US2] Replace `src/app/blog/[slug]/page.tsx` with a server component: `export const dynamicParams = false`; `generateStaticParams` from `getVisiblePosts()`; page calls `getPost(params.slug)` → `notFound()` when undefined; renders `MarkdownBody` for EN and ES bodies and passes both to `LocalizedPost` (FR-041, FR-043)
 - [ ] T016 [US2] Verify direct-URL load in a private window, unknown slug → localized not-found, code block scrolls inside its container at 360px
-- [ ] T008 [US4] Run the quickstart.md section 3 fixture table against a temporary post in `content/blog/` (each case, plus the draft-with-missing-language case under `VERCEL_ENV=production`); confirm each `npm run build` fails with the expected message, then delete the fixture
+- [X] T008 [US4] Run the quickstart.md section 3 fixture table against a temporary post in `content/blog/` (each case, plus the draft-with-missing-language case under `VERCEL_ENV=production`); confirm each `npm run build` fails with the expected message, then delete the fixture
 
 **Checkpoint**: US1 + US2 work together.
 
@@ -92,10 +92,10 @@ first, since every other story renders loader output), then priority.
 
 **Independent Test**: quickstart.md section 2.
 
-- [ ] T017 [US5] Check only (logic is implemented in T003): confirm `getVisiblePosts()`/`getPost()` in `src/lib/blog.ts` exclude drafts only when `isProductionBuild()`, so index, static params and metadata all derive from the filtered list (FR-090/091/093); no draft badge anywhere in the UI (FR-030)
-- [ ] T018 [P] [US5] Write `content/blog/ai-agent-workflow-portfolio/en.md` with frontmatter `title: "How I built an AI-agent workflow for my portfolio"`, a `summary`, `date: 2026-11-05`, `draft: true`; body covers ONLY: Spec Kit and the constitution; the least-privilege bot account contributing via fork and pull request; CI (lint and build — `.github/workflows`); branch protection; Vercel previews; human review of every change. No metrics, dates, versions, outcomes or quotes. Branch-protection and Vercel-preview statements stay generic and each is preceded by `<!-- REVIEW: owner to confirm … -->` (FR-070–072)
-- [ ] T019 [P] [US5] Write `content/blog/ai-agent-workflow-portfolio/es.md`: Spanish equivalent with identical `date`, `draft: true`, same structure and the same `REVIEW` comments; remove the `.gitkeep` from T002
-- [ ] T020 [US5] Run quickstart.md section 2: `VERCEL_ENV=production npm run build` + `npm start` → empty state in EN/ES and post URL not found; remove `draft` in a scratch copy and rebuild → post listed; restore `draft: true`; confirm `grep -r "REVIEW:" content/` lists the review points in both files
+- [X] T017 [US5] Check only (logic is implemented in T003): confirm `getVisiblePosts()`/`getPost()` in `src/lib/blog.ts` exclude drafts only when `isProductionBuild()`, so index, static params and metadata all derive from the filtered list (FR-090/091/093); no draft badge anywhere in the UI (FR-030)
+- [X] T018 [P] [US5] Write `content/blog/ai-agent-workflow-portfolio/en.md` with frontmatter `title: "How I built an AI-agent workflow for my portfolio"`, a `summary`, `date: 2026-11-05`, `draft: true`; body covers ONLY: Spec Kit and the constitution; the least-privilege bot account contributing via fork and pull request; CI (lint and build — `.github/workflows`); branch protection; Vercel previews; human review of every change. No metrics, dates, versions, outcomes or quotes. Branch-protection and Vercel-preview statements stay generic and each is preceded by `<!-- REVIEW: owner to confirm … -->` (FR-070–072)
+- [X] T019 [P] [US5] Write `content/blog/ai-agent-workflow-portfolio/es.md`: Spanish equivalent with identical `date`, `draft: true`, same structure and the same `REVIEW` comments; remove the `.gitkeep` from T002
+- [X] T020 [US5] Run quickstart.md section 2: `VERCEL_ENV=production npm run build` + `npm start` → empty state in EN/ES and post URL not found; remove `draft` in a scratch copy and rebuild → post listed; restore `draft: true`; confirm `grep -r "REVIEW:" content/` lists the review points in both files
 
 **Checkpoint**: launch content in place, draft-gated.
 
@@ -107,8 +107,8 @@ first, since every other story renders loader output), then priority.
 
 **Independent Test**: view source of `/blog/<slug>` and check head tags.
 
-- [ ] T021 [US3] Add `generateMetadata` to `src/app/blog/[slug]/page.tsx` (return `{}` when `getPost` is undefined; the page itself calls `notFound()`) using the EN version: `title`, `description` (summary), `openGraph: { type: "article", title, description, url: "/blog/<slug>", publishedTime: <date> }` (FR-050, FR-052; resolved against `metadataBase` from T006)
-- [ ] T022 [US3] Verify with `curl localhost:3000/blog/ai-agent-workflow-portfolio` (or view-source) that `<title>`, `og:title`, `og:description`, `og:type=article`, `og:url` (absolute, localhost fallback) and the article body are present in the initial HTML; verify that under `VERCEL_ENV=production` the draft URL yields none of this (SC-011)
+- [X] T021 [US3] Add `generateMetadata` to `src/app/blog/[slug]/page.tsx` (return `{}` when `getPost` is undefined; the page itself calls `notFound()`) using the EN version: `title`, `description` (summary), `openGraph: { type: "article", title, description, url: "/blog/<slug>", publishedTime: <date> }` (FR-050, FR-052; resolved against `metadataBase` from T006)
+- [X] T022 [US3] Verify with `curl localhost:3000/blog/ai-agent-workflow-portfolio` (or view-source) that `<title>`, `og:title`, `og:description`, `og:type=article`, `og:url` (absolute, localhost fallback) and the article body are present in the initial HTML; verify that under `VERCEL_ENV=production` the draft URL yields none of this (SC-011)
 
 ---
 

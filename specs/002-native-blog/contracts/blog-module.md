@@ -24,7 +24,7 @@ export function isProductionBuild(): boolean;      // VERCEL_ENV === "production
 | Route | Type | Behaviour |
 |-------|------|-----------|
 | `/blog` | static server page | `BlogIndex` with visible posts; empty state if none |
-| `/blog/[slug]` | static, `dynamicParams = false` | one page per visible post; others → `not-found.tsx` |
+| `/blog/[slug]` | static, `dynamicParams = false` | one page per visible post; others → root `not-found.tsx` (post-not-found wording) |
 
 ## Metadata
 
