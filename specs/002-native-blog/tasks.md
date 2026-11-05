@@ -26,8 +26,8 @@ first, since every other story renders loader output), then priority.
 
 ## Phase 1: Setup
 
-- [ ] T001 Add runtime dependencies `gray-matter`, `zod`, `react-markdown`, `remark-gfm` (and no others) via `npm install` in package.json / package-lock.json
-- [ ] T002 [P] Create empty content directory `content/blog/` with a `.gitkeep` (removed in T019 once the launch post exists); `public/blog/` is created only if a post needs an image
+- [X] T001 Add runtime dependencies `gray-matter`, `zod`, `react-markdown`, `remark-gfm` (and no others) via `npm install` in package.json / package-lock.json
+- [X] T002 [P] Create empty content directory `content/blog/` with a `.gitkeep` (removed in T019 once the launch post exists); `public/blog/` is created only if a post needs an image
 
 ---
 
