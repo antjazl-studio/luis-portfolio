@@ -64,7 +64,7 @@ first, since every other story renders loader output), then priority.
 - [X] T009 [P] [US1] Rewrite `src/components/BlogCard.tsx` as a presentational named-export component (no data source, no Dev.to types); it is rendered inside client `BlogIndex` and calls `useLanguage()` itself for `t.blog` strings and `dateLocale`; do T009, T011 and T015 together before running lint/build, because the old pages import the old `Article` type: title, formatted date (`Intl.DateTimeFormat(dateLocale, { dateStyle: "medium", timeZone: "UTC" })`), summary, reading time via `t.blog.readingTime`, whole card links to `/blog/<slug>` via `next/link`; neutral styling per Principle IV (no pill badges, no cyan, no draft notice); any image via `next/image`
 - [X] T010 [US1] Create `src/components/BlogIndex.tsx` (`"use client"`, named export): receives serialisable `{ slug; en: Card; es: Card }[]`, reads `useLanguage()`, renders heading/intro from `t.blog`, a list of `BlogCard`, and the localized `t.blog.empty` message when the list is empty (FR-032, FR-033, FR-093)
 - [X] T011 [US1] Replace `src/app/blog/page.tsx` with a server component (no `"use client"`): calls `getVisiblePosts()`, maps to card data for both languages, renders `BlogIndex`; export static `metadata` (index title + description, EN) (FR-051)
-- [ ] T012 [US1] Verify at 360px and desktop: no horizontal overflow, language switch updates without reload, ordering newest first with two temporary fixtures (then remove them)
+- [X] T012 [US1] Verify at 360px and desktop: no horizontal overflow, language switch updates without reload, ordering newest first with two temporary fixtures (then remove them)
 
 **Checkpoint**: US1 independently functional.
 
@@ -79,7 +79,7 @@ first, since every other story renders loader output), then priority.
 - [X] T013 [P] [US2] Create `src/components/LocalizedPost.tsx` (`"use client"`, named export): props `{ slug; en: { title; date; readingTime; content: ReactNode }; es: { … } }`; picks by `useLanguage()`; renders back link (`t.blog.back` → `/blog`), title, localized date, reading time, and `content`
 - [X] T014 [P] [US2] Create `src/components/BlogNotFound.tsx` (`"use client"`, named export) and a root `src/app/not-found.tsx` rendering it (with `dynamicParams = false`, unknown slugs fall through to the root not-found, not a segment one): localized "post not found" wording and a link to `/blog` for `/blog/*` paths, generic localized page-not-found with a link home otherwise (FR-042)
 - [X] T015 [US2] Replace `src/app/blog/[slug]/page.tsx` with a server component: `export const dynamicParams = false`; `generateStaticParams` from `getVisiblePosts()`; page calls `getPost(params.slug)` → `notFound()` when undefined; renders `MarkdownBody` for EN and ES bodies and passes both to `LocalizedPost` (FR-041, FR-043)
-- [ ] T016 [US2] Verify direct-URL load in a private window, unknown slug → localized not-found, code block scrolls inside its container at 360px
+- [X] T016 [US2] Verify direct-URL load in a private window, unknown slug → localized not-found, code block scrolls inside its container at 360px
 - [X] T008 [US4] Run the quickstart.md section 3 fixture table against a temporary post in `content/blog/` (each case, plus the draft-with-missing-language case under `VERCEL_ENV=production`); confirm each `npm run build` fails with the expected message, then delete the fixture
 
 **Checkpoint**: US1 + US2 work together.
@@ -121,16 +121,16 @@ first, since every other story renders loader output), then priority.
 - [X] T023 [US6] Confirm no leftovers in `src/`: old fetch/RSS/`localStorage`/`stripHtml`/`slugify` code and the old `Article` type are gone (they lived in the old `src/app/blog/page.tsx`, `[slug]/page.tsx`, `src/components/BlogCard.tsx`, rewritten in T009/T011/T015); delete any unused env usage or types; `grep -rniE "dev\.to|rss2json" src package.json` returns nothing
 - [X] T024 [P] [US6] Update `CLAUDE.md`: remove Dev.to/rss2json mentions; update the structure tree (add `content/blog/`, `BlogIndex.tsx`, `LocalizedPost.tsx`, `MarkdownBody.tsx`, `BlogNotFound.tsx`, `lib/blog.ts`, `blog/not-found.tsx`; describe `BlogCard.tsx` as presentational)
 - [X] T025 [P] [US6] Run `/speckit-constitution` (do not hand-edit `.specify/memory/constitution.md`) with these changes: Principle VII remove the "Dev.to via rss2json" example; Principle II structure list updated to match T024; PATCH bump to 1.0.1 with Sync Impact Report and Last Amended date
-- [ ] T026 [US6] Verify the blog works with network blocked to third parties (DevTools offline after first load) and `grep -rn "dangerouslySetInnerHTML" src` returns nothing
+- [X] T026 [US6] Verify the blog works with network blocked to third parties (DevTools offline after first load) and `grep -rn "dangerouslySetInnerHTML" src` returns nothing
 
 ---
 
 ## Phase 9: Polish & Cross-Cutting
 
-- [ ] T027 Run `npm run lint` and `npm run build`; fix errors; confirm the `@next/next/no-img-element` warnings are gone
-- [ ] T028 [P] Principle IV review of `/blog` and the post page in the browser at 360px and desktop (no cyan, glows, gradients, pill badges; white headings; neutral secondary text; visible focus states; alt text)
-- [ ] T029 [P] Lighthouse on `/` and `/blog`: Performance and Accessibility ≥ 90 (FR-082, SC-010)
-- [ ] T030 Run the full quickstart.md end to end, plus manual checks: SC-001 (home → Blog → post in ≤ 2 clicks), SC-004 (language switch on index and post updates all text within 1 second, no reload), SC-005 (a new temporary post added by content files alone appears in index and gets a page with zero code changes; then remove it); record results in the PR description
+- [X] T027 Run `npm run lint` and `npm run build`; fix errors; confirm the `@next/next/no-img-element` warnings are gone
+- [X] T028 [P] Principle IV review of `/blog` and the post page in the browser at 360px and desktop (no cyan, glows, gradients, pill badges; white headings; neutral secondary text; visible focus states; alt text)
+- [X] T029 [P] Lighthouse on `/` and `/blog`: Performance and Accessibility ≥ 90 (FR-082, SC-010)
+- [X] T030 Run the full quickstart.md end to end, plus manual checks: SC-001 (home → Blog → post in ≤ 2 clicks), SC-004 (language switch on index and post updates all text within 1 second, no reload), SC-005 (a new temporary post added by content files alone appears in index and gets a page with zero code changes; then remove it); record results in the PR description
 
 ---
 
