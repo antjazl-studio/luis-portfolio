@@ -16,7 +16,12 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Luis Jacho Zambrano — Senior Full Stack Developer",
   description:
     "Senior Full Stack Developer with 8+ years of experience in .NET, Angular, and Azure. Azure Developer Associate certified.",
