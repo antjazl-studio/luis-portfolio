@@ -76,10 +76,8 @@ Reglas de gobierno completas en `.specify/memory/constitution.md`.
 
 ## Design skills — precedence
 - The constitution (.specify/memory/constitution.md, Principle IV) overrides every design skill.
-- design-taste-frontend dials for this repo: DESIGN_VARIANCE=3, MOTION_INTENSITY=3,
-  VISUAL_DENSITY=4 (minimal, calm, Linear/rauno-like). Never exceed these.
 - Roles: impeccable = critique/audit/polish; emil-design-eng = motion and
-  micro-interactions; design-taste-frontend = only when generating new UI.
+  micro-interactions.
 
 ## Propietario
 **Luis Antonio Jacho Zambrano**  
