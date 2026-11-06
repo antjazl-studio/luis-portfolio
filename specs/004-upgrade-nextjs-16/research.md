@@ -1,0 +1,101 @@
+# Research: Upgrade Next.js 14.2 → 16 with React 19
+
+Planning date 2026-11-05. Registry facts below were read with `npm view` on that date; guide
+items come from the official Next.js 15 and 16 upgrade guides and must be re-checked against the
+guides at implementation time (the codemod output is the source of truth for what changed).
+
+## R-01 Target versions
+
+- **Decision**: `next@16` (latest 16.4.5; engines `node >=20.9.0`), `react` / `react-dom` ^19, `@types/react` / `@types/react-dom` ^19, `eslint-config-next` pinned to the same version as `next`.
+- **Rationale**: Spec FR-001; the 14.2.x line has no fix for the critical advisory (R-04 of 003 confirmed 14.2.35 is the last 14.2).
+- **Alternatives**: Stop at Next 15 — rejected, user asked for 16 and 15 would need another jump soon.
+
+## R-02 Async request APIs (Next 15)
+
+- **Applies to**: `src/app/blog/[slug]/page.tsx` — `Props = { params: { slug: string } }` is used in both `generateMetadata` and the page. In 15+ `params` is a `Promise`.
+- **Not applicable**: `cookies()`, `headers()`, `draftMode()`, `searchParams` — a grep of `src/` finds none. `generateStaticParams` is unchanged (it takes no params). `layout.tsx` has no params.
+- **Decision**: Run the `next-async-request-api` codemod (part of `upgrade`), then review: `type Props = { params: Promise<{ slug: string }> }`; `generateMetadata` becomes `async` and does `const { slug } = await params`; `PostPage` becomes `async` likewise. Both stay server components. `dynamicParams = false` and `notFound()` keep unknown slugs returning 404 (FR-006).
+- **Alternatives**: Use the generated `PageProps<'/blog/[slug]'>` helper (Next 15.5+/16) — optional; keep the explicit `Props` type for a minimal diff.
+
+## R-03 `next lint` removal and ESLint flat config (Next 16)
+
+- **Facts**: `next lint` is removed in 16 and `next build` no longer runs lint. `eslint-config-next@16` has peer `eslint >=9`; it ships flat-config entries (`eslint-config-next/core-web-vitals`, `eslint-config-next/typescript`). Current repo: ESLint ^8 with `.eslintrc.json` extending `next/core-web-vitals` and `next/typescript`. Latest ESLint is 10.14; eslint-config-next@16 is documented against 9.
+- **Decision**: ESLint **^9** (not 10, to stay inside what `eslint-config-next@16` is tested against). Replace `.eslintrc.json` with `eslint.config.mjs` that imports the two flat entries from `eslint-config-next` directly (via `defineConfig` from `eslint/config`, plus `globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"])`). Script: `"lint": "eslint ."`. The official codemod `next-lint-to-eslint-cli` can generate this; its output is reviewed, not trusted.
+- **CI**: `.github/workflows/ci.yml` already runs `npm run lint` then `npm run build`, so it picks up the new script with no edit. Order stays lint → build because build no longer lints.
+- **No new dependency**: `@eslint/eslintrc` (FlatCompat) is not needed because the package exports native flat entries.
+- **Risk**: Newer `eslint-plugin-react-hooks` rules in 16's config (React Compiler-era rules, e.g. set-state-in-effect) may flag existing client components (`LanguageContext`, `Navbar`, etc.). Handling: fix when trivial and behavior-neutral; otherwise disable that single rule with a comment and record it here. Lint must end green (FR-007).
+
+## R-04 Turbopack default bundler (Next 16)
+
+- **Facts**: `next dev` and `next build` use Turbopack by default. A project with a custom `webpack` config fails the build unless `--webpack` is passed. `next.config.mjs` is empty; there are no webpack customizations, no babel config.
+- **Decision**: Use Turbopack for both dev and build. No flags. Verify the Tailwind 3 PostCSS pipeline (`postcss.config.mjs` with `tailwindcss`, and `require("@tailwindcss/typography")` in `tailwind.config.ts`) produces the same CSS: compare rendered pages and prose styling on the blog post; check `.next` CSS contains the `prose` rules.
+- **Fallback**: If Turbopack output differs and cannot be fixed, build with `next build --webpack` and record why (visual parity beats bundler choice).
+- **Local fonts**: `next/font/local` (`GeistVF.woff`) is supported; confirm fonts load in dev and build.
+- Dev output dir moves to `.next/dev`; `.next` is already gitignored.
+
+## R-05 React 19 compatibility
+
+| Package | Installed | Declared support | Decision |
+|---------|-----------|------------------|----------|
+| framer-motion | 12.38.0 | peer `react ^18 \|\| ^19` | Compatible, no bump needed |
+| react-markdown | 10.1.0 | peer `@types/react >=18`, `react >=18` | Compatible, no bump needed |
+| @tailwindcss/typography | 0.5.19 | peer `tailwindcss >=3` (no React dependency) | Not a React concern; works with Tailwind 3 under Turbopack, verify in R-04 |
+| remark-gfm | 4.0.1 | no React dependency | n/a |
+
+Source scan for React 19 removals: no `forwardRef`, `propTypes`, `useRef()` without arg, `JSX.` global namespace, `ReactDOM.render`, `findDOMNode`. Ref-as-prop and `useFormState` renames not used. `@types/react@19` may surface stricter typing; fix in place.
+Hydration: `LanguageContext` must not read browser storage during first render (a React 19 stricter hydration-error reporting would surface it as a warning); verify no console hydration errors in EN and ES.
+
+## R-06 Node version vs CI
+
+- **Facts**: Next 16 requires Node >= 20.9.0. CI used `actions/setup-node@v4` with `node-version: 20`. Node 20 reached end of life in April 2026. Local Node is 24.22.2. `@types/node` was `^20`.
+- **Decision (owner request)**: Move the whole toolchain to Node 24 (current LTS) as part of this feature:
+  - `.github/workflows/ci.yml`: `node-version: 24`.
+  - `package.json`: `"engines": { "node": ">=24" }` (not a dependency; makes a mismatch fail early).
+  - `@types/node`: `^20` → `^24` so types match the runtime.
+  - **Owner task (manual, cannot be done from the repo)**: in Vercel → Settings → Build and Deployment → Node.js Version, select 24.x. Do this before merging, otherwise the Vercel build runs on an older Node and `engines` may fail or warn it. Record the date done in this file.
+- **Verification**: Local Node is already 24, so local runs match CI. `npm ci` on Node 24 must succeed with the new lockfile; confirm the Vercel preview deployment of the PR builds on Node 24 (build log shows the Node version).
+- **Supersedes**: the earlier plan to keep CI on Node 20. Node 20 remains compatible with Next 16 but is no longer a target.
+
+## R-07 `next/image` defaults
+
+Changes in 15/16: `images.minimumCacheTTL` default 60s → 4h; `imageSizes` drops `16`; `qualities` default now `[75]` (other `quality` values are coerced); local `src` with query strings requires `images.localPatterns`; `images.domains` deprecated; `dangerouslyAllowLocalIP` and `maximumRedirects` tightened.
+Usage here: `Hero.tsx` `src="/pic.png"` with `fill` and `priority`, no `quality` prop, no query string; `MarkdownBody.tsx` accepts only `/`-rooted local srcs with `width={0} height={0} sizes="100vw"`. No remote images, no `images` config.
+- **Decision**: No config needed. Not applicable except the default-value changes, which affect only caching headers and the generated `srcset` (no `16`-px size; the smallest rendered image here is far larger). Verify the hero image looks identical and Lighthouse "image" audits do not regress. Blog authors must not add `?query` to local image paths (note in quickstart).
+- `priority` is deprecated in 16 in favor of `preload`; it still works. **Decision**: keep `priority` (zero behavior risk); if the build warns, switch to `preload` and record it.
+
+## R-08 Caching and rendering defaults
+
+- Next 15: `fetch` and GET Route Handlers are no longer cached by default; client router cache `staleTimes` defaults to 0. Next 16: `cacheComponents` / `use cache` is opt-in (off by default); `experimental.ppr` removed.
+- Usage here: no `fetch`, no route handlers, no `revalidate` exports, no middleware. All routes are static via `generateStaticParams` + `dynamicParams = false`.
+- **Decision**: Not applicable; do not enable `cacheComponents`. Confirm in the `next build` route table that `/`, `/blog`, `/blog/[slug]` and `/_not-found` remain static (`○` / `●`), matching the baseline.
+
+## R-09 Draft gating with `VERCEL_ENV=production`
+
+- **Facts**: `isProductionBuild()` in `src/lib/blog.ts` reads `process.env.VERCEL_ENV` at build time; `getVisiblePosts` caches the loaded list in module scope outside dev. `generateStaticParams` and the page both go through it. Turbopack workers may evaluate the module in several processes, but each reads the same env, so results agree.
+- **Decision**: No code change expected. Verify by temporarily adding a draft post (`draft: true` in both `en.md` and `es.md`) in a scratch copy / uncommitted change and building twice: `VERCEL_ENV=production npm run build` (draft absent from `/blog` HTML and from the route list; `/blog/<draft-slug>` → 404) and a plain build (draft present). Also confirm an invalid post still fails the build (FR-005). Remove the draft afterwards.
+- On Windows use `$env:VERCEL_ENV="production"; npm run build` in PowerShell.
+
+## R-10 Other items from the guides checked
+
+| Item | Applies? | Handling |
+|------|----------|----------|
+| `middleware` → `proxy` rename (16) | No: no middleware file | none |
+| AMP support removal | No | none |
+| `next/legacy/image`, `images.domains`, `next/config` runtime config | No | none |
+| `experimental.turbo` / `serverComponentsExternalPackages` renames | No: config is empty | none |
+| `next.config` `eslint` / `typescript.ignoreBuildErrors` options | No | none |
+| `tsconfig` auto-changes (`jsx: react-jsx`, `.next/dev/types` include) | Likely | Accept Next's automatic edit on first build/dev; review the diff; `tsconfig.tsbuildinfo` is regenerated |
+| `next/font/google` import | No: only `next/font/local` | none |
+| Route Handler / page param type generation (`next typegen`) | Optional | skip |
+| Min TypeScript 5.1 | Satisfied (^5) | verify installed version |
+| Min browsers (Chrome 111, Safari 16.4) | Informational | no polyfill work |
+| `unstable_` cache APIs, `revalidateTag` signature | No | none |
+| Parallel routes need `default.js` | No parallel routes | none |
+
+## R-11 Audit outcome expectation
+
+Target after upgrade: 0 critical, 0 high (spec SC-001). Expected to be resolved by `next@16` bringing a patched `postcss` and by `eslint@9` / `eslint-config-next@16` replacing the old dev-tool chain (the dev-only highs from R-04: glob, minimatch / brace-expansion chain via `eslint-config-next` 14). Anything left is recorded in data-model.md's finding table with reason and mitigation. `npm audit fix --force` is **not** used; versions are chosen explicitly.
+
+## R-12 Rollback
+
+Work is on branch `004-upgrade-nextjs-16`; `master` is untouched until the PR merges. If a blocker appears (e.g., Turbopack/Tailwind difference without a workaround), fall back to `--webpack` first; if the upgrade as a whole is blocked, stop and report rather than pin back (the critical advisory stays open on 14.2).

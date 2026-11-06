@@ -98,6 +98,7 @@ As the maintainer, I want a record of each breaking change from the official upg
 - **FR-010**: The project constitution's stack principle MUST be updated only if the stack description itself must change (its version-agnostic wording means none is expected).
 - **FR-011**: Project documentation that states the framework version (e.g. CLAUDE.md, README) MUST be updated to match.
 - **FR-012**: No new runtime dependency that duplicates the existing stack may be introduced.
+- **FR-013**: Local development, CI and the hosting platform MUST all use the current LTS Node.js release (24), and the project MUST declare that minimum so a mismatch fails early. Setting the hosting platform's Node version is a manual owner task.
 
 ### Key Entities
 
