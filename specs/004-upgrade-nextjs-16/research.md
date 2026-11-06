@@ -149,3 +149,40 @@ Method: headless Chrome through DevTools, 5 pages x 390px/1280px x EN/ES (20 scr
 - Same build without `VERCEL_ENV`: draft listed, `/blog/zz-draft-check` returns 200, appears in `/blog`.
 - Removing `title` from `en.md`: build fails with `post "zz-draft-check" [en] title: required`.
 - Throwaway post deleted afterwards; `git status` shows no content change.
+
+## R-16 Reconciliation against the official guides (T030, 2026-11-06)
+
+Read in full: https://nextjs.org/docs/app/guides/upgrading/version-15 and .../version-16 (both last updated 2026-10-15). Every heading of both guides and both "Review migration checklist" lists was compared with the repository.
+
+| Guide item | Applies? | Handling |
+|------------|----------|----------|
+| 16: Node >= 20.9, TypeScript >= 5.1, modern browsers | Met | Node 24 (CI, `engines`); TypeScript 5.9.3 installed |
+| 16: Turbopack default; fail on custom `webpack` config | Yes, default | No webpack config exists; build passes (R-04/R-15) |
+| 16: `experimental.turbopack` -> `turbopack`, `resolveAlias`, Sass `~` imports | No | `next.config.mjs` is empty; no Sass |
+| 16: Turbopack filesystem cache on by default | Informational | Stored under `.next/`, ignored by git; no action |
+| 16 + 15: Async Request APIs (`params`, `searchParams`, `cookies`, `headers`, `draftMode`) | Yes, `params` only | `blog/[slug]/page.tsx` (page + `generateMetadata`) by codemod; others unused |
+| 16: async `params`/`id` for `opengraph-image`, `icon`, `apple-icon`, `sitemap` | No | Only a static `favicon.ico` exists; no such functions |
+| 16: React 19.2 / React Compiler | Informational | React 19.3.1 installed; compiler not enabled (opt-in) |
+| 16: `revalidateTag`, `updateTag`, `refresh`, `cacheLife`/`cacheTag` | No | No cache APIs used |
+| 16: Enhanced routing/prefetching | Informational | No code change; behavior verified in R-14 |
+| 16: PPR removal / `cacheComponents` | No | Not used and not enabled |
+| 16: `middleware` -> `proxy` | No | No middleware file |
+| 16: `next/image` (query strings, `minimumCacheTTL`, `imageSizes`, `qualities`, local IP, redirects, legacy image, `domains`) | Defaults only | `Hero.tsx` and `MarkdownBody.tsx` use plain local paths, no `quality`; no config needed (R-07) |
+| 16: concurrent dev/build (`.next/dev`) | Informational | tsconfig `include` updated automatically |
+| 16: parallel routes need `default.js` | No | No parallel routes |
+| 16: ESLint flat config | Yes | `eslint.config.mjs` (R-03/R-15) |
+| 16: **Scroll behavior override** | **Yes (missed at planning)** | `globals.css` sets `html { scroll-behavior: smooth }`. Next 16 no longer forces instant scroll on route changes unless `<html data-scroll-behavior="smooth">`. Added the attribute in `src/app/layout.tsx` to keep the old behavior (navigation jumps instantly to top) |
+| 16: `size` and `First Load JS` columns removed from `next build` output | Yes, cosmetic | Explains the shorter route table; Lighthouse used for sizes instead |
+| 16: dev config loaded once (`process.argv`) | No | Config has no side effects |
+| 16: Build Adapters API, Modern Sass API | No | Not used |
+| 16 removals: AMP, `next lint`, runtime config, `devIndicators` options, `experimental.dynamicIO`/`useCache`, `unstable_rootParams` | `next lint` only | Replaced by `eslint .` (R-03); the rest are not used (grep of `src/` and config) |
+| 16 troubleshooting: ESLint peer conflicts | No | `eslint-config-next@16.4.5` with ESLint 9.39.5 installed cleanly; ESLint 10 not adopted |
+| 15: React 19, `useFormState` -> `useActionState` | Yes / No | React 19 applied; `useFormState` unused (codemod: 0 changes) |
+| 15: `runtime = 'experimental-edge'` | No | No runtime exports |
+| 15: `fetch`, Route Handler, client router caching defaults | No effect | No `fetch`, no handlers; `staleTimes` unset; routes stay static (R-08) |
+| 15: `@next/font` -> `next/font` | No | Already `next/font/local` |
+| 15: `bundlePagesExternals`, `serverExternalPackages` renames | No | Not configured |
+| 15: Speed Insights auto-instrumentation removed | Not in repo | No `@vercel/speed-insights` in `package.json`; if the owner relied on the Vercel dashboard feature, it needs the package (owner check) |
+| 15: `NextRequest` `geo`/`ip` removed | No | No middleware |
+
+Result: 1 item missed at planning time (scroll behavior), fixed and verified (lint, build and the `data-scroll-behavior` attribute present in the prerendered HTML). SC-005 satisfied.

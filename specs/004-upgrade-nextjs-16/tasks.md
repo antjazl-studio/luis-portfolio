@@ -109,7 +109,7 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 **Independent Test**: Read `research.md`; each R-02..R-10 row says what actually happened.
 
 - [X] T029 [US4] Reconcile `specs/004-upgrade-nextjs-16/research.md` R-02..R-10 with reality: for each item write "applied by <codemod or manual edit, file>" or "not applicable: <evidence>", replacing any planning-time "expected/likely" wording; add any breaking change that surfaced and was not predicted
-- [ ] T030 [US4] Re-read the official Next.js 15 and 16 upgrade guides once and tick off every listed breaking change against R-10's table; add missing rows so SC-005 (100% coverage) holds
+- [X] T030 [US4] Re-read the official Next.js 15 and 16 upgrade guides once and tick off every listed breaking change against R-10's table; add missing rows so SC-005 (100% coverage) holds — _done 2026-11-06: both guides read in full, see research.md R-16_
 - [X] T031 [P] [US4] Add a short pointer to this feature in `specs/003-quick-fixes/research.md` R-04: "Residual findings resolved by feature 004 (see specs/004-upgrade-nextjs-16/research.md R-13)"
 
 **Checkpoint**: Breaking-change record complete and audited.
@@ -125,7 +125,7 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 - [X] T034 Check `.specify/memory/constitution.md` Principle I: it says the version lives in `package.json`, so no edit is expected; if any sentence names Next 14 or Node 20, correct it and add a Sync Impact Report entry (FR-010)
 - [X] T035 **OWNER (manual, cannot be done from the repo)**: In Vercel → project `luis-jacho` → Settings → Build and Deployment → Node.js Version, select **24.x** and save. Do this before merging the PR (FR-013) — _confirmed by owner 2026-11-06: Vercel Node.js Version was already 24.x_
 - [ ] T036 After T035, redeploy the PR preview and confirm in the Vercel build log that Node 24 is used and the build succeeds; note the date in `research.md` R-06
-- [ ] T037 Run the full `quickstart.md` section 3 once more on the final branch state (lint, build, audit, `node -v`) and tick the "Done" list in `quickstart.md` section 4
+- [X] T037 Run the full `quickstart.md` section 3 once more on the final branch state (lint, build, audit, `node -v`) and tick the "Done" list in `quickstart.md` section 4 — _done 2026-11-06: lint 0, build 0 (Turbopack), audit 10 moderate / 0 high / 0 critical, next 16.4.5 + react 19.3.1 single copies, package.json diff only planned changes_
 - [X] T038 FR-012 check: run `git diff master -- package.json` and confirm the only changes are: versions of `next`, `react`, `react-dom`, `eslint`, `eslint-config-next`, `@types/react`, `@types/react-dom`, `@types/node`; the `lint` script; the new `engines` field. Any added or removed dependency name is a failure; fix or justify it in `research.md` R-03
 - [ ] T039 Merge the PR after CI and the Vercel preview are green; delete the local throwaway artifacts (`specs/004-upgrade-nextjs-16/screenshots/` stays untracked)
 
