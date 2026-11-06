@@ -6,13 +6,14 @@ import { getPost, getVisiblePosts } from "@/lib/blog";
 
 export const dynamicParams = false;
 
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
   return getVisiblePosts().map((p) => ({ slug: p.slug }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const post = getPost(params.slug);
   if (!post) return {};
   return {
@@ -28,7 +29,8 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
-export default function PostPage({ params }: Props) {
+export default async function PostPage(props: Props) {
+  const params = await props.params;
   const post = getPost(params.slug);
   if (!post) notFound();
 

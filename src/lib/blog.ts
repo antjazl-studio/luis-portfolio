@@ -94,9 +94,9 @@ export function loadPosts(
   opts: { includeDrafts?: boolean } = {},
 ): Post[] {
   const includeDrafts = opts.includeDrafts ?? !isProductionBuild();
-  if (!fs.existsSync(rootDir)) return [];
+  if (!fs.existsSync(/*turbopackIgnore: true*/ rootDir)) return [];
   const slugs = fs
-    .readdirSync(rootDir, { withFileTypes: true })
+    .readdirSync(/*turbopackIgnore: true*/ rootDir, { withFileTypes: true })
     .filter((e) => e.isDirectory())
     .map((e) => e.name)
     .sort();

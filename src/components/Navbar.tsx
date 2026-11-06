@@ -58,10 +58,7 @@ export function Navbar() {
 
   useEffect(() => {
     // Section elements exist only on the home page; re-subscribe on route change.
-    if (pathname !== "/") {
-      setActive(null);
-      return;
-    }
+    if (pathname !== "/") return;
     const observers: IntersectionObserver[] = [];
     NAV_IDS.forEach((id) => {
       const el = document.getElementById(id);
@@ -73,7 +70,10 @@ export function Navbar() {
       observer.observe(el);
       observers.push(observer);
     });
-    return () => observers.forEach((o) => o.disconnect());
+    return () => {
+      observers.forEach((o) => o.disconnect());
+      setActive(null); // clear the highlight when leaving the home page
+    };
   }, [pathname]);
 
   useEffect(() => {

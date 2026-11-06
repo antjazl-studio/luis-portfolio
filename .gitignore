@@ -37,3 +37,6 @@ next-env.d.ts
 
 .vercel
 .claude/settings.local.json
+
+# feature 004 comparison screenshots
+specs/004-upgrade-nextjs-16/screenshots/

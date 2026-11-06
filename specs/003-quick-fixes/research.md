@@ -107,3 +107,5 @@ major upgrade:
 - **Alternatives considered**: keeping the entry hard-coded in `Experience.tsx` (matches the
   other two entries but adds to deviation D-041); moving all three entries to translations
   (broader than the "quick fix" scope).
+
+> Update 2026-11-05: the critical and high residuals above were resolved by feature 004 (Next.js 16, see `specs/004-upgrade-nextjs-16/research.md` R-13).
