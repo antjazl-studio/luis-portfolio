@@ -74,6 +74,11 @@ Reglas de gobierno completas en `.specify/memory/constitution.md`.
 | --muted         | #8b949e   | Texto secundario           |
 | --border        | #30363d   | Bordes y divisores         |
 
+## Design skills — precedence
+- The constitution (.specify/memory/constitution.md, Principle IV) overrides every design skill.
+- Roles: impeccable = critique/audit/polish; emil-design-eng = motion and
+  micro-interactions.
+
 ## Propietario
 **Luis Antonio Jacho Zambrano**  
 Senior Full Stack Developer · .NET | Angular | Azure  
