@@ -21,17 +21,17 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 
 ---
 
-## Phase 1: Setup — Baseline capture (on `master`)
+## Phase 1: Setup — Baseline capture (on the feature branch, before any code change)
 
-**Purpose**: Record the "before" state so every later comparison has a reference (data-model.md "Baseline").
+**Purpose**: Record the "before" state so every later comparison has a reference (data-model.md "Baseline"). The feature branch has only `specs/` changes at this point, so its code is identical to `master` (checked in T005).
 
-- [ ] T001 Run `git switch master; npm ci; npm audit` and save the summary (counts per severity, package names of every critical/high) to `specs/004-upgrade-nextjs-16/baseline.md`
-- [ ] T002 Run `npm run build` on `master` and paste the route table (static/dynamic markers for `/`, `/blog`, `/blog/[slug]`, `/_not-found`) into `specs/004-upgrade-nextjs-16/baseline.md`
-- [ ] T003 With `npm start` on the `master` build, run Lighthouse (mobile) on `/` and `/blog/ai-agent-workflow-portfolio` and record the four category scores per page in `specs/004-upgrade-nextjs-16/baseline.md`
+- [ ] T001 On branch `004-upgrade-nextjs-16`, run `npm ci; npm audit` and save the summary (counts per severity, package names of every critical/high) to `specs/004-upgrade-nextjs-16/baseline.md`
+- [ ] T002 Run `npm run build` (before any dependency change) and paste the route table (static/dynamic markers for `/`, `/blog`, `/blog/[slug]`, `/_not-found`) into `specs/004-upgrade-nextjs-16/baseline.md`
+- [ ] T003 With `npm start` on this build, run Lighthouse (mobile) on `/` and `/blog/ai-agent-workflow-portfolio` three times each and record the best of 3 for the four category scores per page in `specs/004-upgrade-nextjs-16/baseline.md`
 - [ ] T004 [P] Capture screenshots (EN and ES; 390px and 1280px) of `/`, `/blog`, `/blog/ai-agent-workflow-portfolio`, `/nope`, `/blog/nope` into an untracked folder `specs/004-upgrade-nextjs-16/screenshots/baseline/` and add `specs/004-upgrade-nextjs-16/screenshots/` to `.gitignore`
-- [ ] T005 Return to the feature branch: `git switch 004-upgrade-nextjs-16`
+- [ ] T005 Confirm the baseline was taken on unchanged code: `git diff master --stat -- . ":!specs" ":!.gitignore"` prints nothing (the only allowed non-spec change is the `.gitignore` line from T004)
 
-**Checkpoint**: `baseline.md` contains audit, route table and Lighthouse numbers; baseline screenshots exist.
+**Checkpoint**: `baseline.md` contains audit, route table and best-of-3 Lighthouse numbers; baseline screenshots exist; T005 passed.
 
 ---
 
@@ -61,8 +61,8 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 
 **Independent Test**: `npm audit` after the upgrade compared with `baseline.md`.
 
-- [ ] T015 [US1] Run `npm audit` and write the before/after comparison into `specs/004-upgrade-nextjs-16/research.md` as a new section "R-13 Audit result": one row per former critical/high finding with status fixed / residual (data-model.md "Audit finding")
-- [ ] T016 [US1] For any critical or high finding still present, add package, scope (runtime/dev-only), reason it cannot be fixed and mitigation to R-13; do not use `npm audit fix --force`. If a fix needs a version change, change it explicitly in `package.json` and rerun T009 and T013..T014
+- [ ] T015 [US1] Run `npm audit` and write the before/after comparison into `specs/004-upgrade-nextjs-16/research.md` by creating a new section "R-13 Audit result": one row per former critical/high finding with status fixed / residual (data-model.md "Audit finding")
+- [ ] T016 [US1] For any critical or high finding still present, add package, scope (runtime/dev-only), reason it cannot be fixed and mitigation to R-13; do not use `npm audit fix --force`. A residual high in a **dev-only** package does not block the merge by itself but needs an explicit owner decision recorded in R-13 before merging; a residual critical or runtime high blocks the merge. If a fix needs a version change, change it explicitly in `package.json` and rerun T009 and T013..T014
 - [ ] T017 [US1] Confirm `npm ls next react react-dom` shows Next 16.x and React 19.x (spec acceptance scenario 3 of US1) and paste the output into R-13
 
 **Checkpoint**: R-13 shows SC-001 satisfied or fully justified.
@@ -75,8 +75,8 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 
 **Independent Test**: Screenshot comparison, interaction walkthrough, draft-gating builds.
 
-- [ ] T018 [US2] Run `npm run build; npm start` and capture the same screenshot set as T004 into `specs/004-upgrade-nextjs-16/screenshots/after/`; compare each pair at both widths and both languages and list any difference in `specs/004-upgrade-nextjs-16/research.md` R-14 (expected: none). Pay attention to prose styling on the blog post (typography plugin) and the hero image
-- [ ] T019 [US2] In the running site, check EN/ES switching, Navbar links, CV download of `/Luis_Jacho_Resume.pdf`, WhatsApp button, Contact links, and that the browser console shows no hydration errors or React 19 warnings; note results in R-14
+- [ ] T018 [US2] Run `npm run build; npm start` and capture the same screenshot set as T004 into `specs/004-upgrade-nextjs-16/screenshots/after/`; compare each pair at both widths and both languages and list any difference in `specs/004-upgrade-nextjs-16/research.md` (create section R-14); accept differences no larger than anti-aliasing noise, anything else is a failure (expected: none). Pay attention to prose styling on the blog post (typography plugin) and the hero image
+- [ ] T019 [US2] In the running site, check EN/ES switching, Navbar links, CV download of `/Luis_Jacho_Resume.pdf`, WhatsApp button, Contact links, and that the browser console shows no hydration errors or React 19 warnings; tab through the page to confirm focus rings are still visible, and toggle `prefers-reduced-motion` once to confirm animations still calm down (constitution accessibility rules); note results in R-14
 - [ ] T020 [US2] Confirm the `next build` route table matches the baseline from T002: `/`, `/blog` static, `/blog/[slug]` statically generated with only existing slugs, no route turned dynamic (R-08)
 - [ ] T021 [US2] Confirm `/nope` shows the general localized 404 and `/blog/nope` the post-not-found wording, in EN and ES
 - [ ] T022 [US2] Draft gating, production: create an uncommitted throwaway post `content/blog/zz-draft-check/en.md` and `es.md` (valid frontmatter, `draft: true` in both), run `$env:VERCEL_ENV="production"; npm run build`, and confirm the draft is absent from the route table and from `/blog`, and `/blog/zz-draft-check` returns 404 (FR-005, SC-006)
@@ -94,9 +94,9 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 
 **Independent Test**: CI run on the PR plus Lighthouse comparison.
 
-- [ ] T026 [US3] With the production build running (`npm start`), run Lighthouse (mobile) on `/` and `/blog/ai-agent-workflow-portfolio` and add an "after" table next to the baseline in `specs/004-upgrade-nextjs-16/baseline.md`; every category must be >= baseline (FR-008). If any category dropped, investigate (image `srcset`/caching defaults in R-07, CSS output in R-04) and fix or rerun to rule out noise (take the best of 3 for both baseline-style comparisons)
+- [ ] T026 [US3] With the production build running (`npm start`), run Lighthouse (mobile) on `/` and `/blog/ai-agent-workflow-portfolio` three times each and add the best-of-3 "after" table next to the baseline in `specs/004-upgrade-nextjs-16/baseline.md`; every category must be >= baseline (FR-008), and on `/` Performance and Accessibility must also be >= 90 (constitution, Development Workflow). If any category dropped, investigate (image `srcset`/caching defaults in R-07, CSS output in R-04) and fix. If the baseline itself was under 90, stop and report it to the owner instead of passing silently
 - [ ] T027 [US3] Verify the hero image (`src/components/sections/Hero.tsx`) and a markdown image path still load through `next/image` without warnings; if the build warns that `priority` is deprecated, replace it with `preload` and record it in `research.md` R-07
-- [ ] T028 [US3] Commit the work in logical commits on `004-upgrade-nextjs-16`, push, and open a PR to `master`; confirm the CI workflow passes on Node 24 (SC-003)
+- [ ] T028 [US3] Commit the work in logical commits using Conventional Commit prefixes (`chore:` for dependency/CI/config, `fix:` for code changes, `docs:` for docs) on `004-upgrade-nextjs-16`, push, and open a PR to `master`; confirm the CI workflow passes on Node 24 (SC-003)
 
 **Checkpoint**: CI green; Lighthouse table shows no regression.
 
@@ -118,7 +118,7 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 
 ## Phase 7: Polish & Owner Tasks
 
-**Purpose**: Documentation consistency and the manual Vercel step.
+**Purpose**: Documentation consistency, the dependency-diff check and the manual Vercel step.
 
 - [ ] T032 [P] Update `CLAUDE.md`: "Framework: Next.js 14 (App Router)" → "Next.js 16 (App Router)"; mention React 19 and Node 24 only if the file lists runtime versions
 - [ ] T033 [P] Update `README.md` where it states the Next.js version or Node requirement (it lists "Next.js (App Router)"; add Node 24 to any prerequisites list)
@@ -126,13 +126,14 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 - [ ] T035 **OWNER (manual, cannot be done from the repo)**: In Vercel → project `luis-jacho` → Settings → Build and Deployment → Node.js Version, select **24.x** and save. Do this before merging the PR (FR-013)
 - [ ] T036 After T035, redeploy the PR preview and confirm in the Vercel build log that Node 24 is used and the build succeeds; note the date in `research.md` R-06
 - [ ] T037 Run the full `quickstart.md` section 3 once more on the final branch state (lint, build, audit, `node -v`) and tick the "Done" list in `quickstart.md` section 4
-- [ ] T038 Merge the PR after CI and the Vercel preview are green; delete the local throwaway artifacts (`specs/004-upgrade-nextjs-16/screenshots/` stays untracked)
+- [ ] T038 FR-012 check: run `git diff master -- package.json` and confirm the only changes are: versions of `next`, `react`, `react-dom`, `eslint`, `eslint-config-next`, `@types/react`, `@types/react-dom`, `@types/node`; the `lint` script; the new `engines` field. Any added or removed dependency name is a failure; fix or justify it in `research.md` R-03
+- [ ] T039 Merge the PR after CI and the Vercel preview are green; delete the local throwaway artifacts (`specs/004-upgrade-nextjs-16/screenshots/` stays untracked)
 
 ---
 
 ## Dependencies & Execution Order
 
-- Phase 1 (baseline) → Phase 2 (upgrade) → Phases 3, 4, 5, 6 → Phase 7.
+- Phase 1 (baseline, on the feature branch) → Phase 2 (upgrade) → Phases 3, 4, 5, 6 → Phase 7.
 - Inside Phase 2: T006 → T007 → T008 → T009; then T010, T011, T012 in parallel (different files); then T013 → T014.
 - Phases 3 and 4 are independent of each other once Phase 2 is done (both P1). Phase 5 needs a production build from Phase 2 and the commits from Phases 3-4 (T028 pushes everything). Phase 6 can run alongside Phases 3-5.
 - T035 (owner) has no code dependency and can be done any time before T036; do it early to avoid blocking the merge.

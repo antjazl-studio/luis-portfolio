@@ -2,10 +2,10 @@
 
 Prerequisites: Node 24 (matches CI and Vercel), npm, Chrome (for Lighthouse). Commands in PowerShell.
 
-## 1. Baseline (on `master`, before changes)
+## 1. Baseline (on the feature branch, before any code change)
 
 ```powershell
-git switch master
+git switch 004-upgrade-nextjs-16   # code is identical to master at this point
 npm ci
 npm audit            # save summary
 npm run build        # save the route table

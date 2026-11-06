@@ -93,7 +93,7 @@ As the maintainer, I want a record of each breaking change from the official upg
 - **FR-005**: Draft posts MUST remain excluded only in production-environment builds and visible otherwise; invalid blog content MUST still fail the build.
 - **FR-006**: Unknown blog post URLs MUST still return the localized not-found page.
 - **FR-007**: Lint and the production build MUST complete without errors, and CI MUST pass.
-- **FR-008**: Lighthouse scores for the home page and a blog post MUST be equal to or better than the pre-upgrade baseline in every category.
+- **FR-008**: Lighthouse scores for the home page and a blog post MUST be equal to or better than the pre-upgrade baseline in every category, and the home page Performance and Accessibility scores MUST be at least 90 (project constitution).
 - **FR-009**: The official automated migration tools and upgrade guides MUST be used, and each applicable breaking change MUST be recorded with how it was handled.
 - **FR-010**: The project constitution's stack principle MUST be updated only if the stack description itself must change (its version-agnostic wording means none is expected).
 - **FR-011**: Project documentation that states the framework version (e.g. CLAUDE.md, README) MUST be updated to match.
@@ -113,9 +113,10 @@ As the maintainer, I want a record of each breaking change from the official upg
 - **SC-001**: The audit reports 0 critical and 0 high findings, or every remaining one is documented with justification.
 - **SC-002**: 100% of the pages checked (home, blog index, a published post, general 404, blog 404) show no visible difference from baseline in EN and ES at mobile and desktop widths.
 - **SC-003**: Lint, production build and CI all pass on the first run of the final branch state.
-- **SC-004**: No Lighthouse category (Performance, Accessibility, Best Practices, SEO) scores lower than baseline on the home page and a blog post.
+- **SC-004**: No Lighthouse category (Performance, Accessibility, Best Practices, SEO) scores lower than baseline on the home page and a blog post, and the home page scores at least 90 in Performance and Accessibility.
 - **SC-005**: 100% of breaking changes in the official guides have an applicable / not-applicable entry, with a resolution for each applicable one.
 - **SC-006**: Draft gating verified in both modes: a draft is absent in a production-environment build and present in a non-production one.
+- **SC-007**: The local environment, CI and the hosting platform's build log all report the same current LTS Node.js release (24).
 
 ## Assumptions
 

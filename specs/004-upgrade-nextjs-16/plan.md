@@ -99,8 +99,8 @@ and [quickstart.md](quickstart.md).
 
 ### Implementation order (input for /speckit-tasks)
 
-1. **Baseline** on `master` build: `npm audit` output, Lighthouse (home + post, mobile), screenshots EN/ES, draft-gating check, `next build` route table.
-2. **Next 15 step** (guide order): `npx @next/codemod@canary upgrade 15` is skipped in favor of going straight to 16 — the `upgrade` codemod runs the 15 transforms (`next-async-request-api`, etc.) as part of the jump. Run `npx @next/codemod@latest upgrade latest`, review the diff.
+1. **Baseline** on the feature branch before any code change (its code equals `master`): `npm audit` output, Lighthouse (home + post, mobile), screenshots EN/ES, draft-gating check, `next build` route table.
+2. **Codemods**: run `npx @next/codemod@latest upgrade latest` (it applies the Next 15 and 16 transforms, including `next-async-request-api`) and review the diff.
 3. **Hand fixes**: confirm `params` is `Promise` in `[slug]/page.tsx`; create `eslint.config.mjs`, delete `.eslintrc.json`, set `"lint": "eslint ."`; bump `eslint` to ^9 and `@types/react*` to ^19.
 4. `npm install`, `npm run lint`, `npm run build` (Turbopack), fix findings.
 5. **Verify**: draft gating (production-like and not), 404 paths, EN/ES walkthrough, Lighthouse, `npm audit`.
