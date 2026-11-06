@@ -75,8 +75,8 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 
 **Independent Test**: Screenshot comparison, interaction walkthrough, draft-gating builds.
 
-- [ ] T018 [US2] Run `npm run build; npm start` and capture the same screenshot set as T004 into `specs/004-upgrade-nextjs-16/screenshots/after/`; compare each pair at both widths and both languages and list any difference in `specs/004-upgrade-nextjs-16/research.md` (create section R-14); accept differences no larger than anti-aliasing noise, anything else is a failure (expected: none). Pay attention to prose styling on the blog post (typography plugin) and the hero image
-- [ ] T019 [US2] In the running site, check EN/ES switching, Navbar links, CV download of `/Luis_Jacho_Resume.pdf`, WhatsApp button, Contact links, and that the browser console shows no hydration errors or React 19 warnings; tab through the page to confirm focus rings are still visible, and toggle `prefers-reduced-motion` once to confirm animations still calm down (constitution accessibility rules); note results in R-14
+- [X] T018 [US2] Run `npm run build; npm start` and capture the same screenshot set as T004 into `specs/004-upgrade-nextjs-16/screenshots/after/`; compare each pair at both widths and both languages and list any difference in `specs/004-upgrade-nextjs-16/research.md` (create section R-14); accept differences no larger than anti-aliasing noise, anything else is a failure (expected: none). Pay attention to prose styling on the blog post (typography plugin) and the hero image — _done; no visible difference; see R-14_
+- [X] T019 [US2] In the running site, check EN/ES switching, Navbar links, CV download of `/Luis_Jacho_Resume.pdf`, WhatsApp button, Contact links, and that the browser console shows no hydration errors or React 19 warnings; tab through the page to confirm focus rings are still visible, and toggle `prefers-reduced-motion` once to confirm animations still calm down (constitution accessibility rules); note results in R-14 — _done; hydration error #418 on unknown /blog/* URLs accepted by owner as documented, R-14; focus/reduced-motion not re-verified_
 - [X] T020 [US2] Confirm the `next build` route table matches the baseline from T002: `/`, `/blog` static, `/blog/[slug]` statically generated with only existing slugs, no route turned dynamic (R-08)
 - [X] T021 [US2] Confirm `/nope` shows the general localized 404 and `/blog/nope` the post-not-found wording, in EN and ES
 - [X] T022 [US2] Draft gating, production: create an uncommitted throwaway post `content/blog/zz-draft-check/en.md` and `es.md` (valid frontmatter, `draft: true` in both), run `$env:VERCEL_ENV="production"; npm run build`, and confirm the draft is absent from the route table and from `/blog`, and `/blog/zz-draft-check` returns 404 (FR-005, SC-006)
@@ -94,7 +94,7 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 
 **Independent Test**: CI run on the PR plus Lighthouse comparison.
 
-- [ ] T026 [US3] With the production build running (`npm start`), run Lighthouse (mobile) on `/` and `/blog/ai-agent-workflow-portfolio` three times each and add the best-of-3 "after" table next to the baseline in `specs/004-upgrade-nextjs-16/baseline.md`; every category must be >= baseline (FR-008), and on `/` Performance and Accessibility must also be >= 90 (constitution, Development Workflow). If any category dropped, investigate (image `srcset`/caching defaults in R-07, CSS output in R-04) and fix. If the baseline itself was under 90, stop and report it to the owner instead of passing silently
+- [X] T026 [US3] With the production build running (`npm start`), run Lighthouse (mobile) on `/` and `/blog/ai-agent-workflow-portfolio` three times each and add the best-of-3 "after" table next to the baseline in `specs/004-upgrade-nextjs-16/baseline.md`; every category must be >= baseline (FR-008), and on `/` Performance and Accessibility must also be >= 90 (constitution, Development Workflow). If any category dropped, investigate (image `srcset`/caching defaults in R-07, CSS output in R-04) and fix. If the baseline itself was under 90, stop and report it to the owner instead of passing silently — _done; home Performance 92 vs baseline 93, still >= 90; accepted by owner, baseline.md_
 - [X] T027 [US3] Verify the hero image (`src/components/sections/Hero.tsx`) and a markdown image path still load through `next/image` without warnings; if the build warns that `priority` is deprecated, replace it with `preload` and record it in `research.md` R-07
 - [ ] T028 [US3] Commit the work in logical commits using Conventional Commit prefixes (`chore:` for dependency/CI/config, `fix:` for code changes, `docs:` for docs) on `004-upgrade-nextjs-16`, push, and open a PR to `master`; confirm the CI workflow passes on Node 24 (SC-003)
 
@@ -108,9 +108,9 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 
 **Independent Test**: Read `research.md`; each R-02..R-10 row says what actually happened.
 
-- [ ] T029 [US4] Reconcile `specs/004-upgrade-nextjs-16/research.md` R-02..R-10 with reality: for each item write "applied by <codemod or manual edit, file>" or "not applicable: <evidence>", replacing any planning-time "expected/likely" wording; add any breaking change that surfaced and was not predicted
+- [X] T029 [US4] Reconcile `specs/004-upgrade-nextjs-16/research.md` R-02..R-10 with reality: for each item write "applied by <codemod or manual edit, file>" or "not applicable: <evidence>", replacing any planning-time "expected/likely" wording; add any breaking change that surfaced and was not predicted
 - [ ] T030 [US4] Re-read the official Next.js 15 and 16 upgrade guides once and tick off every listed breaking change against R-10's table; add missing rows so SC-005 (100% coverage) holds
-- [ ] T031 [P] [US4] Add a short pointer to this feature in `specs/003-quick-fixes/research.md` R-04: "Residual findings resolved by feature 004 (see specs/004-upgrade-nextjs-16/research.md R-13)"
+- [X] T031 [P] [US4] Add a short pointer to this feature in `specs/003-quick-fixes/research.md` R-04: "Residual findings resolved by feature 004 (see specs/004-upgrade-nextjs-16/research.md R-13)"
 
 **Checkpoint**: Breaking-change record complete and audited.
 

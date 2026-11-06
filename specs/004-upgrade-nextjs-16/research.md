@@ -84,7 +84,7 @@ Usage here: `Hero.tsx` `src="/pic.png"` with `fill` and `priority`, no `quality`
 | `next/legacy/image`, `images.domains`, `next/config` runtime config | No | none |
 | `experimental.turbo` / `serverComponentsExternalPackages` renames | No: config is empty | none |
 | `next.config` `eslint` / `typescript.ignoreBuildErrors` options | No | none |
-| `tsconfig` auto-changes (`jsx: react-jsx`, `.next/dev/types` include) | Likely | Accept Next's automatic edit on first build/dev; review the diff; `tsconfig.tsbuildinfo` is regenerated |
+| `tsconfig` auto-changes (`jsx: react-jsx`, `.next/dev/types` include) | Yes, applied | Next rewrote `tsconfig.json` on first build (`jsx: react-jsx`, `target: ES2017`, `.next/dev/types` in `include`); accepted, see R-15 |
 | `next/font/google` import | No: only `next/font/local` | none |
 | Route Handler / page param type generation (`next typegen`) | Optional | skip |
 | Min TypeScript 5.1 | Satisfied (^5) | verify installed version |
