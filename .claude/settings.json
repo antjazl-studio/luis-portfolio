@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm ci)",
+      "Bash(npm install)",
+      "Bash(npm run lint)",
+      "Bash(npm run build)",
+      "Bash(npm audit:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git fetch:*)",
+      "Bash(git checkout -b:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push origin:*)",
+      "Bash(git push -u origin:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr edit:*)"
+    ],
+    "deny": [
+      "Bash(git push upstream:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(gh auth switch:*)",
+      "Bash(gh repo delete:*)"
+    ],
+    "ask": [
+      "Edit(.specify/memory/constitution.md)",
+      "Write(.specify/memory/constitution.md)"
+    ]
+  }
+}
