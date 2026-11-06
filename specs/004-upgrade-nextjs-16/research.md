@@ -115,3 +115,21 @@ Run: `npx @next/codemod@latest upgrade latest --yes --skip-adoption --verbose` (
 | Manual: CI | `.github/workflows/ci.yml` `node-version: 20` -> `24`. |
 | Turbopack build | Default. First build passed with 2 warnings ("dynamic filesystem access causes tracing of the whole project") from `src/lib/blog.ts` (`rootDir` parameter). Fixed with the `/*turbopackIgnore: true*/` markers Next suggests on `existsSync` / `readdirSync`; no behavior change. Build is now warning-free. Tailwind 3 + typography under Turbopack: verified in the US2 visual comparison. |
 | `tsconfig.json` | Next rewrote it automatically: `jsx: react-jsx`, `target: ES2017`, `.next/dev/types/**/*.ts` in `include`, arrays reformatted. Accepted. |
+
+## R-13 Audit result
+
+`npm audit` after the upgrade (2026-11-05): **10 moderate, 0 high, 0 critical** (before: 8 moderate, 4 high, 1 critical; the 003 R-04 count of 17 had additionally included findings that `npm audit fix` in 003 already cleared). `npm audit --omit=dev`: 2 moderate.
+
+| Former critical / high | Package | Result |
+|------------------------|---------|--------|
+| critical | next 14.2.35 | fixed: next 16.4.5 |
+| high | postcss (nested in next) | fixed: next 16.4.5 bundles a patched copy |
+| high | eslint-config-next | fixed: 16.4.5 |
+| high | @next/eslint-plugin-next | fixed: 16.4.5 |
+| high | glob | fixed: dropped from the dependency tree by eslint-config-next 16 |
+
+Remaining moderates (not a goal of this feature, no critical/high residual):
+- `@typescript-eslint/*`, `typescript-eslint`, `minimatch` via `eslint-config-next@16.4.5`: dev-only (lint tooling); nothing ships to visitors. Mitigation: wait for a newer `eslint-config-next`.
+- `postcss-selector-parser` via `@tailwindcss/typography`: build-time only (CSS generation from the repo's own config); `npm audit fix --force` would downgrade the plugin to 0.5.4, which is worse, so it is not applied.
+
+Installed: `next@16.4.5`, `react@19.3.1`, `react-dom@19.3.1` (`npm ls next react react-dom`, single copy each).

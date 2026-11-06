@@ -61,9 +61,9 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 
 **Independent Test**: `npm audit` after the upgrade compared with `baseline.md`.
 
-- [ ] T015 [US1] Run `npm audit` and write the before/after comparison into `specs/004-upgrade-nextjs-16/research.md` by creating a new section "R-13 Audit result": one row per former critical/high finding with status fixed / residual (data-model.md "Audit finding")
-- [ ] T016 [US1] For any critical or high finding still present, add package, scope (runtime/dev-only), reason it cannot be fixed and mitigation to R-13; do not use `npm audit fix --force`. A residual high in a **dev-only** package does not block the merge by itself but needs an explicit owner decision recorded in R-13 before merging; a residual critical or runtime high blocks the merge. If a fix needs a version change, change it explicitly in `package.json` and rerun T009 and T013..T014
-- [ ] T017 [US1] Confirm `npm ls next react react-dom` shows Next 16.x and React 19.x (spec acceptance scenario 3 of US1) and paste the output into R-13
+- [X] T015 [US1] Run `npm audit` and write the before/after comparison into `specs/004-upgrade-nextjs-16/research.md` by creating a new section "R-13 Audit result": one row per former critical/high finding with status fixed / residual (data-model.md "Audit finding")
+- [X] T016 [US1] For any critical or high finding still present, add package, scope (runtime/dev-only), reason it cannot be fixed and mitigation to R-13; do not use `npm audit fix --force`. A residual high in a **dev-only** package does not block the merge by itself but needs an explicit owner decision recorded in R-13 before merging; a residual critical or runtime high blocks the merge. If a fix needs a version change, change it explicitly in `package.json` and rerun T009 and T013..T014
+- [X] T017 [US1] Confirm `npm ls next react react-dom` shows Next 16.x and React 19.x (spec acceptance scenario 3 of US1) and paste the output into R-13
 
 **Checkpoint**: R-13 shows SC-001 satisfied or fully justified.
 
