@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Hero mock, dark: Luis Jacho Zambrano</title>
+<!-- ES for the availability line (to add to translations.ts when built): "Disponible para puestos remotos senior y consultoría". -->
+<!-- Mock only. Draft tokens from DESIGN.md (dark set). Real content from PRODUCT.md and src/lib/translations.ts. Not wired to src/. -->
+<style>
+@font-face {
+  font-family: "Geist";
+  src: url("../../../src/app/fonts/GeistVF.woff") format("woff");
+  font-weight: 100 900;
+  font-display: swap;
+}
+:root {
+  color-scheme: dark;
+  --background: #050505;
+  --surface: #0E0E10;
+  --surface-2: #18181B;
+  --text: #FFFFFF;
+  --muted: #A1A1AA;
+  --border: #27272A;
+  --border-strong: #71717A;
+  --accent: #548CFF;
+  --accent-hover: #7DA8FF;
+  --focus: #548CFF;
+  --btn-bg: #FFFFFF;
+  --btn-fg: #050505;
+  --btn-hover: #E4E4E7;
+  --ring: rgba(255,255,255,.07);
+  --dot: #34D399;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Geist", system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  caret-color: var(--accent);
+  scrollbar-color: var(--border-strong) var(--background);
+}
+::selection { background: rgba(84,140,255,.35); color: var(--text); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+
+.header {
+  position: fixed; inset: 0 0 auto 0; z-index: 10;
+  height: 64px; background: var(--background);
+  border-bottom: 1px solid var(--border);
+}
+.header-inner {
+  max-width: 72rem; height: 100%; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.wordmark { font-weight: 600; font-size: .9375rem; letter-spacing: -.01em; text-decoration: none; }
+.nav { display: flex; align-items: center; gap: 28px; font-size: .875rem; font-weight: 500; }
+.nav a { color: var(--muted); text-decoration: none; padding: 10px 0; }
+.nav a:hover { color: var(--text); }
+.nav .links { display: flex; gap: 28px; }
+.lang { display: flex; gap: 12px; padding-left: 20px; border-left: 1px solid var(--border); }
+.lang button {
+  all: unset; cursor: pointer; font-size: .875rem; font-weight: 500; color: var(--muted);
+  min-width: 28px; min-height: 28px; text-align: center; line-height: 28px;
+}
+.lang button[aria-pressed="true"] { color: var(--text); }
+.lang button:hover { color: var(--text); }
+.lang button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+
+.hero { min-height: 100svh; padding: 112px 24px 64px; display: flex; align-items: center; }
+.hero-inner {
+  max-width: 72rem; width: 100%; margin: 0 auto;
+  display: grid; gap: 48px; align-items: center;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+}
+.copy { max-width: 40rem; animation: rise .5s cubic-bezier(.16,1,.3,1) both; }
+h1 {
+  margin: 0 0 16px; font-weight: 600; letter-spacing: -.025em; line-height: 1.06;
+  font-size: clamp(2.5rem, 5.4vw, 4rem); text-wrap: balance;
+}
+.subline { margin: 0 0 32px; color: var(--muted); font-size: clamp(1.125rem, 1.9vw, 1.375rem); line-height: 1.4; text-wrap: pretty; }
+.who { margin: 0 0 12px; font-weight: 500; font-size: 1.125rem; line-height: 1.4; }
+.proof { margin: 0 0 24px; color: var(--muted); font-size: 1.0625rem; max-width: 34rem; }
+.stack { margin: 0 0 32px; color: var(--muted); font-size: .9375rem; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+.btn {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px;
+  border-radius: 10px; font-size: .9375rem; font-weight: 500; text-decoration: none;
+  transition: background-color .15s ease-out, border-color .15s ease-out;
+}
+.btn-primary { background: var(--btn-bg); color: var(--btn-fg); }
+.btn-primary:hover { background: var(--btn-hover); }
+.btn-secondary { border: 1px solid var(--border-strong); color: var(--text); }
+.btn-secondary:hover { background: var(--surface); }
+.contact { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 0 0 28px; font-size: .9375rem; }
+.contact a { color: var(--accent); text-underline-offset: 3px; }
+.contact a:hover { color: var(--accent-hover); }
+.meta { margin: 0; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: .875rem; display: grid; gap: 6px; }
+.status { display: inline-flex; align-items: center; gap: 8px; color: var(--text); }
+.status i { width: 6px; height: 6px; border-radius: 50%; background: var(--dot); display: inline-block; }
+
+.portrait {
+  margin: 0; justify-self: end; width: 100%; max-width: 20rem; aspect-ratio: 4 / 5;
+  border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 1px var(--ring); /* ring-1 ring-white/[0.07] */
+  background: var(--surface); animation: rise .5s .08s cubic-bezier(.16,1,.3,1) both;
+}
+.portrait img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .copy, .portrait { animation: none; }
+  .btn { transition: none; }
+}
+@media (max-width: 800px) {
+  .nav .links { display: none; }
+  .lang { border-left: 0; padding-left: 0; }
+  .hero { padding-top: 96px; align-items: flex-start; }
+  .hero-inner { grid-template-columns: 1fr; gap: 32px; }
+  .portrait { justify-self: start; max-width: 14rem; }
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-inner">
+    <a class="wordmark" href="#hero">Luis Jacho Zambrano</a>
+    <nav class="nav" aria-label="Primary">
+      <div class="links">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+        <a href="#blog">Blog</a>
+      </div>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" aria-pressed="true">EN</button>
+        <button type="button" aria-pressed="false">ES</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="hero" aria-labelledby="hero-title">
+    <div class="hero-inner">
+      <div class="copy">
+        <h1 id="hero-title">Senior .NET &amp; Azure engineer.</h1>
+        <p class="subline">Nine years shipping for US teams. Now building AI agents.</p>
+        <p class="who">Luis Antonio Jacho Zambrano &middot; Quito, Ecuador</p>
+        <p class="proof">Reduced release downtime ~60% with CI/CD automation. Architected Azure systems for 30,000+ users.</p>
+        <p class="stack">.NET &middot; Angular &middot; Azure &middot; TypeScript &middot; Node.js</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="../../../public/Luis_Jacho_Resume.pdf" download="Luis_Jacho_Resume.pdf">Download CV</a>
+          <a class="btn btn-secondary" href="#projects">View My Work</a>
+        </div>
+        <p class="contact">
+          <a href="mailto:antjazl@gmail.com">antjazl@gmail.com</a>
+          <a href="https://linkedin.com/in/luis-jacho-zambrano-843558139" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </p>
+        <div class="meta">
+          <span class="status"><i aria-hidden="true"></i>Open to senior remote roles and consulting</span>
+          <span>Quito, UTC&minus;5 year-round: fully overlapping US Eastern and Central business hours.</span>
+        </div>
+      </div>
+      <figure class="portrait">
+        <img src="../../../public/pic.png" alt="Luis Antonio Jacho Zambrano" width="640" height="800">
+      </figure>
+    </div>
+  </section>
+</main>
+</body>
+</html>
