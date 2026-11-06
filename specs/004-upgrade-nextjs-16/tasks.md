@@ -25,11 +25,11 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 
 **Purpose**: Record the "before" state so every later comparison has a reference (data-model.md "Baseline"). The feature branch has only `specs/` changes at this point, so its code is identical to `master` (checked in T005).
 
-- [ ] T001 On branch `004-upgrade-nextjs-16`, run `npm ci; npm audit` and save the summary (counts per severity, package names of every critical/high) to `specs/004-upgrade-nextjs-16/baseline.md`
-- [ ] T002 Run `npm run build` (before any dependency change) and paste the route table (static/dynamic markers for `/`, `/blog`, `/blog/[slug]`, `/_not-found`) into `specs/004-upgrade-nextjs-16/baseline.md`
-- [ ] T003 With `npm start` on this build, run Lighthouse (mobile) on `/` and `/blog/ai-agent-workflow-portfolio` three times each and record the best of 3 for the four category scores per page in `specs/004-upgrade-nextjs-16/baseline.md`
-- [ ] T004 [P] Capture screenshots (EN and ES; 390px and 1280px) of `/`, `/blog`, `/blog/ai-agent-workflow-portfolio`, `/nope`, `/blog/nope` into an untracked folder `specs/004-upgrade-nextjs-16/screenshots/baseline/` and add `specs/004-upgrade-nextjs-16/screenshots/` to `.gitignore`
-- [ ] T005 Confirm the baseline was taken on unchanged code: `git diff master --stat -- . ":!specs" ":!.gitignore"` prints nothing (the only allowed non-spec change is the `.gitignore` line from T004)
+- [X] T001 On branch `004-upgrade-nextjs-16`, run `npm ci; npm audit` and save the summary (counts per severity, package names of every critical/high) to `specs/004-upgrade-nextjs-16/baseline.md`
+- [X] T002 Run `npm run build` (before any dependency change) and paste the route table (static/dynamic markers for `/`, `/blog`, `/blog/[slug]`, `/_not-found`) into `specs/004-upgrade-nextjs-16/baseline.md`
+- [X] T003 With `npm start` on this build, run Lighthouse (mobile) on `/` and `/blog/ai-agent-workflow-portfolio` three times each and record the best of 3 for the four category scores per page in `specs/004-upgrade-nextjs-16/baseline.md`
+- [X] T004 [P] Capture screenshots (EN and ES; 390px and 1280px) of `/`, `/blog`, `/blog/ai-agent-workflow-portfolio`, `/nope`, `/blog/nope` into an untracked folder `specs/004-upgrade-nextjs-16/screenshots/baseline/` and add `specs/004-upgrade-nextjs-16/screenshots/` to `.gitignore`
+- [X] T005 Confirm the baseline was taken on unchanged code: `git diff master --stat -- . ":!specs" ":!.gitignore"` prints nothing (the only allowed non-spec change is the `.gitignore` line from T004)
 
 **Checkpoint**: `baseline.md` contains audit, route table and best-of-3 Lighthouse numbers; baseline screenshots exist; T005 passed.
 
