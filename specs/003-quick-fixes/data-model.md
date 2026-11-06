@@ -20,7 +20,7 @@ Added to `Translation.experience`:
 logiztik: {
   role:    string        // EN "Full Stack Developer"      | ES "Desarrollador Full Stack"
   period:  string        // EN "Oct 2019 – Apr 2020"       | ES "Oct 2019 – Abr 2020"
-  bullets: string[]      // exactly 2, EN and ES as in spec FR-014
+  bullets: [string, string]   // tuple: exactly 2, EN and ES as in spec FR-014
 }
 ```
 
@@ -28,7 +28,8 @@ Company ("Logiztik Alliance Group") is not translated and stays in `Experience.t
 
 Validation rules:
 
-- Both `en` and `es` MUST define all three fields (enforced by the `Translation` type).
+- Both `en` and `es` MUST define all three fields; the `Translation` type enforces presence in
+  both languages and, via the `[string, string]` tuple, exactly two bullets.
 - `bullets` has exactly the two owner-supplied bullets (spec FR-014); no other facts added.
 - Entry order stays newest first: MyWork (Jun 2020 – Present), Logiztik (Oct 2019 – Apr 2020),
   IESS (2017 – 2019).

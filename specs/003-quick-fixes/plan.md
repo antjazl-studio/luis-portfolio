@@ -20,8 +20,10 @@ Three small changes on the existing Next.js 14 App Router site:
 2. **Experience**: the "Previous Role" entry becomes Full Stack Developer at Logiztik Alliance
    Group, Oct 2019 – Apr 2020; its role, period and bullets live in `lib/translations.ts` (EN +
    ES).
-3. **Security**: `npm audit fix` (no `--force`). Fixes 4 of the 9 high/critical packages; the
-   rest need major upgrades and are recorded as residual risk (see research.md R-04).
+3. **Security**: `npm audit fix` (no `--force`). Fixes every critical/high finding that has a
+   non-breaking fix (including top-level `postcss`); what remains needs a major upgrade
+   (`next`, the PostCSS copy nested in it, the `eslint-config-next` family) and is recorded as
+   residual risk (see research.md R-04).
 
 ## Technical Context
 

@@ -95,9 +95,9 @@ manual pass of the home page and blog; confirm fewer critical/high findings, no 
 
 ### Edge Cases
 
-- A visitor opens `/blog/<slug>#something` or a non-existent blog URL: the not-found page also
-  shows the Blog item active (path begins with `/blog/`) only for post paths, and the footer
-  and working navigation are present.
+- A visitor opens a non-existent blog URL such as `/blog/does-not-exist`: any path starting
+  with `/blog/` (including unknown slugs) shows the Blog item active, and the footer and
+  working navigation are present. A `/blog/<slug>#something` URL behaves like the post.
 - A visitor on a blog page uses the mobile drawer: selecting a section closes the drawer and
   navigates home to that section.
 - A visitor lands on `/#contact` from a blog page: the section is in view on arrival, with the
@@ -119,8 +119,8 @@ manual pass of the home page and blog; confirm fewer critical/high findings, no 
 - **FR-002**: On the home page, section navigation MUST keep its current behavior.
 - **FR-003**: Selecting the "LJ" monogram MUST take the visitor to the home page when on any
   other page, and keep scrolling to the top when already on the home page.
-- **FR-004**: The Blog item MUST be shown as active on `/blog` and on every `/blog/<slug>`
-  page, in both the desktop bar and the mobile drawer, and not shown as active elsewhere.
+- **FR-004**: The Blog item MUST be shown as active on `/blog` and on every path starting with
+  `/blog/` (posts and unknown slugs), in both the desktop bar and the mobile drawer, and not shown as active elsewhere.
 - **FR-005**: While the Blog item is active, no section item MUST be shown as active.
 - **FR-006**: The site footer MUST appear on the blog list, blog post and not-found pages, with
   the same content and localization as on the home page.
@@ -175,7 +175,7 @@ manual pass of the home page and blog; confirm fewer critical/high findings, no 
 - **Navigation item**: label (EN/ES), destination (home-page section or blog), and active
   state derived from the current page.
 - **Experience entry**: role title, company, date range, location (optional), description
-  bullets; some fields currently pending owner confirmation.
+  bullets.
 - **Audit finding**: package, severity, advisory, whether fixable without a major upgrade.
 
 ## Success Criteria *(mandatory)*
@@ -183,9 +183,10 @@ manual pass of the home page and blog; confirm fewer critical/high findings, no 
 ### Measurable Outcomes
 
 - **SC-001**: From any blog page, a visitor reaches any of the five home sections or the home
-  page top in one click or tap (5 of 5 sections, plus the monogram).
-- **SC-002**: The Blog item is active on 100% of blog pages (list and posts) and 0% of
-  non-blog pages.
+  page top in one click on desktop, or two taps on mobile (menu button, then the item); the
+  monogram takes one tap (5 of 5 sections, plus the monogram).
+- **SC-002**: The Blog item is active on 100% of pages whose path is `/blog` or starts with
+  `/blog/` (list, posts and unknown blog URLs) and 0% of other pages.
 - **SC-003**: The footer is present on 100% of site pages (home, blog list, blog posts,
   not-found).
 - **SC-004**: The text "Previous Role" appears on 0 pages in either language, and the entry

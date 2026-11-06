@@ -14,7 +14,8 @@ npm audit
 
 Expected: lint and build pass with no errors. `npm audit` no longer lists `source-map-js`,
 `nanoid`, `js-yaml`, `brace-expansion`; remaining critical/high entries match the residual table
-in [research.md](./research.md) R-04 (Next.js, PostCSS, `eslint-config-next` family). `package.json`
+in [research.md](./research.md) R-04 (Next.js, the PostCSS copy nested in it, `eslint-config-next` family);
+top-level `postcss` is ≥ 8.5.23. `package.json`
 has no dependency changes; `next` is still 14.2.35.
 
 ## 2. Navigation on blog routes (spec User Story 1)

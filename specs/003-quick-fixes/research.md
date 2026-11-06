@@ -53,21 +53,39 @@ resolve the design choices the spec left to planning. Findings come from reading
 State on 2026-11-05: 17 findings (1 critical, 8 high, 8 moderate); Next.js is 14.2.35, the
 newest 14.2.x, so the "upgrade within 14.2" step is a no-op.
 
-**Fixed by `npm audit fix` (non-breaking)**: `source-map-js` (high), `nanoid` (high),
-`js-yaml` (high, dev), `brace-expansion` (high, dev), and the `@typescript-eslint/*` moderates
-(dev). `package.json` should not change; the lockfile will, including optional
-platform-specific native packages (`@next/swc-*`, `@unrs/resolver-binding-*`, `fsevents`) added
-for other operating systems — expected lockfile noise, not new dependencies.
+`npm audit` groups some findings under the package that would force a major upgrade, which
+hides what a plain `npm audit fix` can still do. `npm audit fix --dry-run` (2026-11-05) shows
+it also updates top-level `postcss` 8.5.14 → 8.5.32 (a direct devDependency within `^8`),
+`postcss-selector-parser` 6.1.2 → 6.1.5 and `@tailwindcss/typography` 0.5.19 → 0.5.20, so
+those are **not** residual.
 
-**Not fixable without a major upgrade (residual risk, recorded per FR-023)**:
+**Fixed by `npm audit fix` (non-breaking, per dry run)**: `source-map-js` (high), `nanoid`
+(high), `js-yaml` (high, dev), `brace-expansion` (high, dev), top-level `postcss` (high),
+`postcss-selector-parser` / `@tailwindcss/typography` (moderate), and the `@typescript-eslint/*`
+moderates (dev). `package.json` should not change (all ranges already allow the new versions);
+the lockfile will, including optional platform-specific native packages (`@next/swc-*`,
+`@unrs/resolver-binding-*`, `fsevents`) added for other operating systems — expected lockfile
+noise, not new dependencies. The real run (T012/T013) is the source of truth.
+
+**Actual result (T012/T013, 2026-11-05)**: it took **two** `npm audit fix` passes (the first
+left `brace-expansion`; the second fixed it). Findings went from 17 (1 critical, 8 high,
+8 moderate) to **13 (1 critical, 4 high, 8 moderate)**. Fixed: `source-map-js`, `nanoid`,
+`js-yaml`, `brace-expansion`, top-level `postcss` (now 8.5.32). `package.json` is unchanged;
+`next` is still 14.2.35. The dry-run prediction was too optimistic for the moderates: the
+`@tailwindcss/typography` → `postcss-selector-parser` finding and the `@typescript-eslint/*`
+moderates are still reported after the fix.
+
+**Residual risk after the fix (recorded per FR-023)** — each critical/high item needs a
+major upgrade:
 
 | Package | Severity | Scope | Only fix |
 |---|---|---|---|
 | `next` | critical | runtime | `next@16.4.5` — owner decision: feature 004 |
-| `postcss` (top-level and nested in `next`) | high | build-time (nested copy ships with Next) | `next@16.4.5` |
+| `postcss@8.4.31` nested in `next` | high | build-time (ships inside Next) | `next@16.4.5` |
 | `eslint-config-next`, `@next/eslint-plugin-next` | high | dev only (lint) | `eslint-config-next@16.4.5` — goes with 004 |
 | `glob` (via eslint-config-next) | high | dev only | `eslint-config-next@16.4.5` |
-| `minimatch` | moderate | dev only | same |
+| `minimatch` (eslint-config-next / typescript-eslint copies) | moderate | dev only | same |
+| `@typescript-eslint/*` | moderate | dev only | stay flagged while pinned by `eslint-config-next@14` |
 | `@tailwindcss/typography` → `postcss-selector-parser` | moderate | build-time | `@tailwindcss/typography@0.5.4` (a downgrade flagged as breaking) |
 
 - **Decision**: run `npm audit fix` without `--force`; re-run `npm audit` and paste the
@@ -79,7 +97,7 @@ for other operating systems — expected lockfile noise, not new dependencies.
 
 ## R-05 Experience data in translations
 
-- **Decision**: Add `experience.logiztik = { role, period, bullets: string[] }` to the
+- **Decision**: Add `experience.logiztik = { role, period, bullets: [string, string] }` to the
   `Translation` type and to both languages in `lib/translations.ts`. `Experience.tsx` builds the
   second entry from `t.experience.logiztik`; the company name "Logiztik Alliance Group" stays in
   the component (proper noun, identical in both languages). The other two entries are left as
