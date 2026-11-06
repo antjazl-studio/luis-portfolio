@@ -73,7 +73,7 @@ components:
     height: "44px"
 ---
 
-<!-- DRAFT: proposal, not implemented. Theme decided: DARK (2026-11-06). Constitution v1.0.1 stays binding until amended through /speckit-constitution: it still specifies --background #0d1117 and --accent #0078d4, so the values below conflict with it until then. Re-run $impeccable document after implementation to capture real tokens. -->
+<!-- DRAFT: proposal, not yet implemented in src/. Theme decided: DARK (2026-11-06). Token values match constitution v1.1.0 (no conflict); the constitution wins if they ever diverge. Re-run $impeccable document after implementation to capture real tokens. -->
 
 # Design System: Luis Jacho Portfolio
 
@@ -205,5 +205,3 @@ Rejected because the portrait is photographed on a near-black background and onl
 | Accent text, focus ring (derived) | #1461FF | 5.02 / 4.57 |
 | Accent hover (derived) | #0B4AD9 | 7.01 / 6.38 |
 | Border / Border strong | #E4E4E7 / #8A8A93 | 1.27 / 3.42 |
-
-The mock `specs/005-design-refresh/mocks/hero-light.html` is kept unchanged as a record and no longer tracks the current hero copy.

@@ -1,10 +1,21 @@
 <!--
 Sync Impact Report
-- Version change: 1.0.0 -> 1.0.1 (PATCH: clarifications for feature 002-native-blog)
-- Modified principles: II (structure list updated for the native blog); VII (removed the
-  retired feed-service example; rule unchanged)
+- Version change: 1.0.1 -> 1.1.0 (MINOR: new theme token set, materially expanded accessibility
+  and governance guidance)
+- Modified principles: V (theme values replaced by the dark token set from DESIGN.md; DESIGN.md
+  named as the detailed token reference that must stay consistent; dark-only and accent rules
+  kept)
+- Modified sections: Stack & Design Constraints (prefers-reduced-motion SHOULD -> MUST; new WCAG
+  AA contrast requirement replaces "sufficient contrast"); Governance (PRODUCT.md and DESIGN.md
+  are subordinate to this constitution)
 - Added sections: none
 - Removed sections: none
+- Checked, no change needed: the "8+ years" -> "9 years" fix has no target here, the constitution
+  never states an experience duration (the old wording lives in src/lib/translations.ts and the
+  baseline spec; copy work is out of scope for this amendment)
+- Follow-up (outside this file): CLAUDE.md theme table updated in the same change;
+  src/app/globals.css and components still use the old values until the design-refresh feature
+  implements them; `--focus-ring` is a new variable to add there
 - Deferred TODOs: none
 -->
 # Luis Portfolio Constitution
@@ -57,12 +68,27 @@ float animation (`y: [0, -8, 0]`, ~5s). When in doubt, remove decoration rather 
 Rationale: the owner flagged these patterns as generic AI-generated UI-kit tells.
 
 ### V. Theme Through CSS Variables
-Colors MUST come from the CSS variables in `src/app/globals.css` (`--background #0d1117`,
-`--foreground #e6edf3`, `--accent #0078d4`, `--accent-hover #106ebe`, `--surface #161b22`,
-`--surface-2 #21262d`, `--muted #8b949e`, `--border #30363d`) or Tailwind neutral utilities
-permitted by Principle IV. `--accent` and `--accent-hover` MUST be used only for links and
-focus rings; CTAs MUST stay neutral per Principle IV. The theme is dark-only. Changes to theme
-values MUST update both `globals.css` and this constitution.
+Colors MUST come from the CSS variables in `src/app/globals.css` or Tailwind neutral utilities
+permitted by Principle IV. Core values (dark token set):
+
+| Variable | Value | Role |
+|----------|-------|------|
+| `--background` | `#050505` | Page (Ink Black) |
+| `--foreground` | `#FFFFFF` | Text and headings (Paper White) |
+| `--accent` | `#548CFF` | Links and focus rings (Cornflower Blue) |
+| `--accent-hover` | `#7DA8FF` | Link hover |
+| `--surface` | `#0E0E10` | Panels |
+| `--surface-2` | `#18181B` | Surface hover |
+| `--muted` | `#A1A1AA` | Secondary text |
+| `--border` | `#27272A` | Decorative hairline dividers |
+| `--border-strong` | `#71717A` | Outline of interactive controls |
+| `--focus-ring` | `#548CFF` | Keyboard focus ring |
+
+`--accent` and `--accent-hover` MUST be used only for links and focus rings; CTAs MUST stay
+neutral per Principle IV. The theme is dark-only. `DESIGN.md` is the detailed token reference
+(derivations, contrast ratios, typography, components) and MUST stay consistent with this table;
+on any conflict, this constitution wins. Changes to theme values MUST update `globals.css`,
+`DESIGN.md`, `CLAUDE.md` and this constitution together.
 
 ### VI. Bilingual Parity (NON-NEGOTIABLE)
 Every user-facing string MUST exist in both English (EN) and Spanish (ES) and be served through
@@ -83,10 +109,12 @@ a first impression and must not depend on third-party uptime.
 - Content describes the owner: Luis Antonio Jacho Zambrano, Senior Full Stack Developer
   (.NET | Angular | Azure), Quito, Ecuador. Factual claims (roles, dates, projects) MUST NOT be
   invented; unknown content MUST be marked as a placeholder for the owner to confirm.
-- Animations MUST use Framer Motion, MUST be subtle, and SHOULD respect
+- Animations MUST use Framer Motion, MUST be subtle, and MUST respect
   `prefers-reduced-motion`.
-- Pages MUST meet baseline accessibility: semantic landmarks, alt text on images, visible focus
-  states, and sufficient contrast against the dark background.
+- Pages MUST meet baseline accessibility: semantic landmarks, alt text on images, and visible
+  focus states.
+- Text contrast MUST meet WCAG AA: at least 4.5:1 for body text and 3:1 for large text and for
+  UI components (control outlines, focus rings, icons).
 - Root layout MUST define page metadata (title, description) and fonts.
 
 ## Development Workflow
@@ -108,6 +136,9 @@ follows semantic versioning: MAJOR for removed or redefined principles, MINOR fo
 principles or materially expanded guidance, PATCH for clarifications. Every spec, plan, and
 review MUST verify compliance with the principles above; deviations MUST be justified in the
 plan's complexity/constitution-check section. `CLAUDE.md` provides runtime guidance and MUST
-stay consistent with this document.
+stay consistent with this document. `PRODUCT.md` (product context) and `DESIGN.md` (design
+system reference) are subordinate to this constitution: they MAY refine it but MUST NOT
+contradict it, and a conflict is resolved by amending this file first via `/speckit-constitution`,
+never by following the subordinate document.
 
-**Version**: 1.0.1 | **Ratified**: 2026-11-05 | **Last Amended**: 2026-11-05
+**Version**: 1.1.0 | **Ratified**: 2026-11-05 | **Last Amended**: 2026-11-06
