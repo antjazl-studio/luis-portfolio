@@ -18,14 +18,36 @@ export function Navbar() {
 
   const { language, toggleLanguage } = useLanguage();
   const t        = translations[language];
-  const pathname = usePathname();
-  const onBlog   = pathname === "/blog";
+  const pathname = usePathname() ?? "";
+  const onHome   = pathname === "/";
+  const onBlog   = pathname === "/blog" || pathname.startsWith("/blog/");
 
   const navLinks = NAV_IDS.map((id) => ({
     id,
     label: t.nav[id as NavId],
-    href:  `#${id}`,
+    href:  `/#${id}`,
   }));
+
+  // Plain left click on the home page keeps the smooth scroll; modified clicks
+  // (new tab/window) and clicks on other pages use normal link navigation.
+  const isPlainClick = (e: React.MouseEvent) =>
+    e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;
+
+  const handleSectionClick = (e: React.MouseEvent, id: string) => {
+    setMobileOpen(false);
+    if (onHome && isPlainClick(e)) {
+      e.preventDefault();
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleMonogramClick = (e: React.MouseEvent) => {
+    setMobileOpen(false);
+    if (onHome && isPlainClick(e)) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -35,6 +57,11 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
+    // Section elements exist only on the home page; re-subscribe on route change.
+    if (pathname !== "/") {
+      setActive(null);
+      return;
+    }
     const observers: IntersectionObserver[] = [];
     NAV_IDS.forEach((id) => {
       const el = document.getElementById(id);
@@ -47,18 +74,13 @@ export function Navbar() {
       observers.push(observer);
     });
     return () => observers.forEach((o) => o.disconnect());
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     const onResize = () => { if (window.innerWidth >= 768) setMobileOpen(false); };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
-
-  const handleNavClick = (href: string) => {
-    setMobileOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
     <header
@@ -69,13 +91,13 @@ export function Navbar() {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
 
         {/* Monogram */}
-        <a
-          href="#"
-          onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+        <Link
+          href="/"
+          onClick={handleMonogramClick}
           className="font-mono text-sm font-semibold text-cyan-400 transition-colors duration-150 hover:text-cyan-300"
         >
           LJ
-        </a>
+        </Link>
 
         {/* Right group — desktop */}
         <div className="hidden items-center gap-7 md:flex">
@@ -83,9 +105,10 @@ export function Navbar() {
             {navLinks.map(({ id, label, href }) => {
               const isActive = active === id && !onBlog;
               return (
-                <button
+                <Link
                   key={id}
-                  onClick={() => handleNavClick(href)}
+                  href={href}
+                  onClick={(e) => handleSectionClick(e, id)}
                   className={`relative text-sm font-medium transition-colors duration-150 ${
                     isActive ? "text-white" : "text-neutral-400 hover:text-white"
                   }`}
@@ -98,13 +121,14 @@ export function Navbar() {
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
-                </button>
+                </Link>
               );
             })}
 
             {/* Blog link */}
             <Link
               href="/blog"
+              aria-current={onBlog ? "page" : undefined}
               className={`relative text-sm font-medium transition-colors duration-150 ${
                 onBlog ? "text-white" : "text-neutral-400 hover:text-white"
               }`}
@@ -165,18 +189,20 @@ export function Navbar() {
           >
             <nav className="flex flex-col px-6 py-3">
               {navLinks.map(({ id, label, href }) => (
-                <button
+                <Link
                   key={id}
-                  onClick={() => handleNavClick(href)}
+                  href={href}
+                  onClick={(e) => handleSectionClick(e, id)}
                   className={`border-b border-white/5 py-3.5 text-left text-sm font-medium transition-colors duration-150 ${
                     active === id && !onBlog ? "text-white" : "text-neutral-400"
                   }`}
                 >
                   {label}
-                </button>
+                </Link>
               ))}
               <Link
                 href="/blog"
+                aria-current={onBlog ? "page" : undefined}
                 onClick={() => setMobileOpen(false)}
                 className={`py-3.5 text-left text-sm font-medium transition-colors duration-150 ${
                   onBlog ? "text-white" : "text-neutral-400"
