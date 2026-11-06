@@ -1,7 +1,7 @@
 # Mi Portfolio Profesional
 
 ## Stack Tecnológico
-- Framework: Next.js 14 (App Router)
+- Framework: Next.js 16 (App Router), React 19, Node 24
 - Lenguaje: TypeScript
 - Estilos: Tailwind CSS
 - Animaciones: Framer Motion

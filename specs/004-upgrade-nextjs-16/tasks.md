@@ -77,12 +77,12 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 
 - [ ] T018 [US2] Run `npm run build; npm start` and capture the same screenshot set as T004 into `specs/004-upgrade-nextjs-16/screenshots/after/`; compare each pair at both widths and both languages and list any difference in `specs/004-upgrade-nextjs-16/research.md` (create section R-14); accept differences no larger than anti-aliasing noise, anything else is a failure (expected: none). Pay attention to prose styling on the blog post (typography plugin) and the hero image
 - [ ] T019 [US2] In the running site, check EN/ES switching, Navbar links, CV download of `/Luis_Jacho_Resume.pdf`, WhatsApp button, Contact links, and that the browser console shows no hydration errors or React 19 warnings; tab through the page to confirm focus rings are still visible, and toggle `prefers-reduced-motion` once to confirm animations still calm down (constitution accessibility rules); note results in R-14
-- [ ] T020 [US2] Confirm the `next build` route table matches the baseline from T002: `/`, `/blog` static, `/blog/[slug]` statically generated with only existing slugs, no route turned dynamic (R-08)
-- [ ] T021 [US2] Confirm `/nope` shows the general localized 404 and `/blog/nope` the post-not-found wording, in EN and ES
-- [ ] T022 [US2] Draft gating, production: create an uncommitted throwaway post `content/blog/zz-draft-check/en.md` and `es.md` (valid frontmatter, `draft: true` in both), run `$env:VERCEL_ENV="production"; npm run build`, and confirm the draft is absent from the route table and from `/blog`, and `/blog/zz-draft-check` returns 404 (FR-005, SC-006)
-- [ ] T023 [US2] Draft gating, non-production: with `VERCEL_ENV` unset (`Remove-Item Env:VERCEL_ENV`) run `npm run build` and confirm the draft is listed and reachable
-- [ ] T024 [US2] Invalid content still fails the build: temporarily remove `title` from `content/blog/zz-draft-check/en.md`, run `npm run build`, confirm it fails with a message naming the post, language and field; then delete the whole `content/blog/zz-draft-check/` folder and confirm `git status` shows no leftover content changes
-- [ ] T025 [US2] Record T022..T024 outcomes in `research.md` R-09 (replace "expected" with "verified" and the date)
+- [X] T020 [US2] Confirm the `next build` route table matches the baseline from T002: `/`, `/blog` static, `/blog/[slug]` statically generated with only existing slugs, no route turned dynamic (R-08)
+- [X] T021 [US2] Confirm `/nope` shows the general localized 404 and `/blog/nope` the post-not-found wording, in EN and ES
+- [X] T022 [US2] Draft gating, production: create an uncommitted throwaway post `content/blog/zz-draft-check/en.md` and `es.md` (valid frontmatter, `draft: true` in both), run `$env:VERCEL_ENV="production"; npm run build`, and confirm the draft is absent from the route table and from `/blog`, and `/blog/zz-draft-check` returns 404 (FR-005, SC-006)
+- [X] T023 [US2] Draft gating, non-production: with `VERCEL_ENV` unset (`Remove-Item Env:VERCEL_ENV`) run `npm run build` and confirm the draft is listed and reachable
+- [X] T024 [US2] Invalid content still fails the build: temporarily remove `title` from `content/blog/zz-draft-check/en.md`, run `npm run build`, confirm it fails with a message naming the post, language and field; then delete the whole `content/blog/zz-draft-check/` folder and confirm `git status` shows no leftover content changes
+- [X] T025 [US2] Record T022..T024 outcomes in `research.md` R-09 (replace "expected" with "verified" and the date)
 
 **Checkpoint**: No visible or behavioral difference; draft gating verified in both modes.
 
@@ -95,7 +95,7 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 **Independent Test**: CI run on the PR plus Lighthouse comparison.
 
 - [ ] T026 [US3] With the production build running (`npm start`), run Lighthouse (mobile) on `/` and `/blog/ai-agent-workflow-portfolio` three times each and add the best-of-3 "after" table next to the baseline in `specs/004-upgrade-nextjs-16/baseline.md`; every category must be >= baseline (FR-008), and on `/` Performance and Accessibility must also be >= 90 (constitution, Development Workflow). If any category dropped, investigate (image `srcset`/caching defaults in R-07, CSS output in R-04) and fix. If the baseline itself was under 90, stop and report it to the owner instead of passing silently
-- [ ] T027 [US3] Verify the hero image (`src/components/sections/Hero.tsx`) and a markdown image path still load through `next/image` without warnings; if the build warns that `priority` is deprecated, replace it with `preload` and record it in `research.md` R-07
+- [X] T027 [US3] Verify the hero image (`src/components/sections/Hero.tsx`) and a markdown image path still load through `next/image` without warnings; if the build warns that `priority` is deprecated, replace it with `preload` and record it in `research.md` R-07
 - [ ] T028 [US3] Commit the work in logical commits using Conventional Commit prefixes (`chore:` for dependency/CI/config, `fix:` for code changes, `docs:` for docs) on `004-upgrade-nextjs-16`, push, and open a PR to `master`; confirm the CI workflow passes on Node 24 (SC-003)
 
 **Checkpoint**: CI green; Lighthouse table shows no regression.
@@ -120,13 +120,13 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 
 **Purpose**: Documentation consistency, the dependency-diff check and the manual Vercel step.
 
-- [ ] T032 [P] Update `CLAUDE.md`: "Framework: Next.js 14 (App Router)" → "Next.js 16 (App Router)"; mention React 19 and Node 24 only if the file lists runtime versions
-- [ ] T033 [P] Update `README.md` where it states the Next.js version or Node requirement (it lists "Next.js (App Router)"; add Node 24 to any prerequisites list)
-- [ ] T034 Check `.specify/memory/constitution.md` Principle I: it says the version lives in `package.json`, so no edit is expected; if any sentence names Next 14 or Node 20, correct it and add a Sync Impact Report entry (FR-010)
+- [X] T032 [P] Update `CLAUDE.md`: "Framework: Next.js 14 (App Router)" → "Next.js 16 (App Router)"; mention React 19 and Node 24 only if the file lists runtime versions
+- [X] T033 [P] Update `README.md` where it states the Next.js version or Node requirement (it lists "Next.js (App Router)"; add Node 24 to any prerequisites list)
+- [X] T034 Check `.specify/memory/constitution.md` Principle I: it says the version lives in `package.json`, so no edit is expected; if any sentence names Next 14 or Node 20, correct it and add a Sync Impact Report entry (FR-010)
 - [ ] T035 **OWNER (manual, cannot be done from the repo)**: In Vercel → project `luis-jacho` → Settings → Build and Deployment → Node.js Version, select **24.x** and save. Do this before merging the PR (FR-013)
 - [ ] T036 After T035, redeploy the PR preview and confirm in the Vercel build log that Node 24 is used and the build succeeds; note the date in `research.md` R-06
 - [ ] T037 Run the full `quickstart.md` section 3 once more on the final branch state (lint, build, audit, `node -v`) and tick the "Done" list in `quickstart.md` section 4
-- [ ] T038 FR-012 check: run `git diff master -- package.json` and confirm the only changes are: versions of `next`, `react`, `react-dom`, `eslint`, `eslint-config-next`, `@types/react`, `@types/react-dom`, `@types/node`; the `lint` script; the new `engines` field. Any added or removed dependency name is a failure; fix or justify it in `research.md` R-03
+- [X] T038 FR-012 check: run `git diff master -- package.json` and confirm the only changes are: versions of `next`, `react`, `react-dom`, `eslint`, `eslint-config-next`, `@types/react`, `@types/react-dom`, `@types/node`; the `lint` script; the new `engines` field. Any added or removed dependency name is a failure; fix or justify it in `research.md` R-03
 - [ ] T039 Merge the PR after CI and the Vercel preview are green; delete the local throwaway artifacts (`specs/004-upgrade-nextjs-16/screenshots/` stays untracked)
 
 ---

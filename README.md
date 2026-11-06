@@ -14,10 +14,13 @@ Bilingual (EN/ES) portfolio of Luis Antonio Jacho Zambrano, Senior Full Stack De
 
 ## Run locally
 
+Requires Node 24 (see `engines` in `package.json`).
+
 ```bash
 npm ci
 npm run dev     # http://localhost:3000
 npm run build   # production build
+npm run lint    # ESLint (flat config)
 ```
 
 ## How this repo is built

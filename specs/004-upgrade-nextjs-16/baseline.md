@@ -42,3 +42,19 @@ Home Performance and Accessibility are both >= 90 (constitution gate).
 20 PNGs (5 pages x mobile 390px / desktop 1280px x EN/ES) in the untracked folder
 `specs/004-upgrade-nextjs-16/screenshots/baseline/`. No console errors or warnings during the run.
 Language is in-memory state (toggle button), so `<html lang>` stays `en` in both languages.
+
+## After the upgrade (same method, same machine, 2026-11-05)
+
+Lighthouse mobile, best of 3 (home: 6 runs: 87, 92, 92, 92, 91, 92):
+
+| Page | Performance | Accessibility | Best Practices | SEO |
+|------|-------------|---------------|----------------|-----|
+| `/` | **92** (base 93) | 96 | 100 | 100 |
+| `/blog/ai-agent-workflow-portfolio` | 100 | 96 | 100 | 100 |
+
+Home Performance dropped by 1 point and is consistent across runs (LCP about 3.35 s vs 3.18 s;
+total transfer 397 KiB vs 361 KiB, i.e. the larger Next 16 / React 19 client runtime). Still >= 90.
+FR-008 asks for "equal or better", so this needs an owner decision (see PR description).
+
+Audit: 10 moderate, 0 high, 0 critical (research.md R-13). Route table: `/`, `/blog` static,
+`/blog/[slug]` SSG with the single existing slug, `/_not-found` static (unchanged shape).

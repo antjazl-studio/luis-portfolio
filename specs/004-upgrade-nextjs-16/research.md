@@ -133,3 +133,19 @@ Remaining moderates (not a goal of this feature, no critical/high residual):
 - `postcss-selector-parser` via `@tailwindcss/typography`: build-time only (CSS generation from the repo's own config); `npm audit fix --force` would downgrade the plugin to 0.5.4, which is worse, so it is not applied.
 
 Installed: `next@16.4.5`, `react@19.3.1`, `react-dom@19.3.1` (`npm ls next react react-dom`, single copy each).
+
+## R-14 Visual and behavior comparison (2026-11-05)
+
+Method: headless Chrome through DevTools, 5 pages x 390px/1280px x EN/ES (20 screenshots), before and after.
+
+- Page height, visible text length and `<title>` are identical for all 20 captures; screenshot files are byte-identical or within 0.5% size (animation timing), no visible difference found in the pages viewed.
+- Language toggle, navigation, CV and contact links: no console errors on `/`, `/blog`, a post and the general 404.
+- **Regression found: React hydration error #418 on unknown `/blog/<slug>` URLs** (the `/blog/nope` 404; 4 of 20 captures; baseline had none). Cause: the 404 body is prerendered once as a static shell (`/_not-found`), so the server HTML is built without the requested URL. `Navbar` (Blog link `aria-current`/highlight) and `BlogNotFound` (post-not-found wording) depend on `usePathname()`, which on the client is the real `/blog/nope`. The page recovers by client re-rendering, so the end state is identical, but the console error is new and the pre-hydration HTML shows the generic "Page not found" wording with the Blog tab unhighlighted. Attempts: `useSyncExternalStore` in `BlogNotFound` only (error remains: the navbar differs too); `await connection()` in `not-found.tsx` (turns every route dynamic, rejected); `app/blog/not-found.tsx` (Next still serves the global shell, no effect). Options left are a product decision, listed in the PR description. Status: **open, not fixed**.
+- Focus rings and `prefers-reduced-motion` were not re-verified manually (no code touching them changed).
+
+## R-09 verification (draft gating), 2026-11-05
+
+- `VERCEL_ENV=production npm run build` with a throwaway draft post: draft absent from the route list and from `/blog`; `/blog/zz-draft-check` returns 404; published post 200.
+- Same build without `VERCEL_ENV`: draft listed, `/blog/zz-draft-check` returns 200, appears in `/blog`.
+- Removing `title` from `en.md`: build fails with `post "zz-draft-check" [en] title: required`.
+- Throwaway post deleted afterwards; `git status` shows no content change.
