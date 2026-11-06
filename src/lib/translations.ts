@@ -32,6 +32,11 @@ type Translation = {
     label:   string;
     heading: string;
     present: string;
+    logiztik: {
+      role:    string;
+      period:  string;
+      bullets: [string, string];
+    };
   };
   skills: {
     label:   string;
@@ -103,6 +108,14 @@ const translations: Record<Language, Translation> = {
       label:   "Experience",
       heading: "Where I've worked",
       present: "Present",
+      logiztik: {
+        role:   "Full Stack Developer",
+        period: "Oct 2019 – Apr 2020",
+        bullets: [
+          "Developed Cargo Plus, a logistics platform for shipment tracking and workflow automation using .NET, PostgreSQL and JavaScript.",
+          "Built RESTful backend services and integrated third-party logistics APIs, reducing manual data entry for operations teams.",
+        ],
+      },
     },
     skills: {
       label:   "Skills",
@@ -173,6 +186,14 @@ const translations: Record<Language, Translation> = {
       label:   "Experiencia",
       heading: "Dónde he trabajado",
       present: "Presente",
+      logiztik: {
+        role:   "Desarrollador Full Stack",
+        period: "Oct 2019 – Abr 2020",
+        bullets: [
+          "Desarrollé Cargo Plus, una plataforma logística para el seguimiento de envíos y la automatización de flujos de trabajo con .NET, PostgreSQL y JavaScript.",
+          "Construí servicios backend RESTful e integré APIs logísticas de terceros, reduciendo la entrada manual de datos para los equipos de operaciones.",
+        ],
+      },
     },
     skills: {
       label:   "Habilidades",
