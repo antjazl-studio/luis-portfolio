@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
+import type { Language } from "@/context/LanguageContext";
 
 type Entry = {
   role:     string;
@@ -15,7 +16,9 @@ type Entry = {
   bullets:  string[];
 };
 
-const EXPERIENCE: Entry[] = [
+type Translations = (typeof translations)[Language];
+
+const buildExperience = (t: Translations): Entry[] => [
   {
     role:     "Senior Full Stack Consultant",
     company:  "MyWork",
@@ -32,16 +35,13 @@ const EXPERIENCE: Entry[] = [
     ],
   },
   {
-    role:    "Full Stack Developer",
-    company: "Previous Role",
-    start:   "2019",
+    role:    t.experience.logiztik.role,
+    company: "Logiztik Alliance Group",
+    start:   "Oct 2019",
     current: false,
-    period:  "2019 – 2020",
+    period:  t.experience.logiztik.period,
     location: "",
-    bullets: [
-      ".NET and Angular development for enterprise clients",
-      "SQL Server database design and optimization",
-    ],
+    bullets: t.experience.logiztik.bullets,
   },
   {
     role:    ".NET Developer",
@@ -62,6 +62,7 @@ export function Experience() {
   const isInView = useInView(ref, { once: true, amount: 0.1 });
   const { language } = useLanguage();
   const t = translations[language];
+  const experience = buildExperience(t);
 
   const anim = (delay = 0) => ({
     initial:    { opacity: 0, y: 16 },
@@ -91,7 +92,7 @@ export function Experience() {
             </motion.h2>
 
             <div className="relative border-l border-neutral-800 pl-8 space-y-12">
-              {EXPERIENCE.map((entry, i) => (
+              {experience.map((entry, i) => (
                 <motion.div key={entry.company} {...anim(0.1 + i * 0.07)} className="relative">
 
                   {i === 0 && (
