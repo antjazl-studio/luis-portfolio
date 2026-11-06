@@ -99,3 +99,19 @@ Target after upgrade: 0 critical, 0 high (spec SC-001). Expected to be resolved 
 ## R-12 Rollback
 
 Work is on branch `004-upgrade-nextjs-16`; `master` is untouched until the PR merges. If a blocker appears (e.g., Turbopack/Tailwind difference without a workaround), fall back to `--webpack` first; if the upgrade as a whole is blocked, stop and report rather than pin back (the critical advisory stays open on 14.2).
+
+## R-15 Implementation log (what the codemods and manual edits actually did)
+
+Run: `npx @next/codemod@latest upgrade latest --yes --skip-adoption --verbose` (2026-11-05).
+
+| Step | Result |
+|------|--------|
+| `next-async-request-api` | Applied to `src/app/blog/[slug]/page.tsx`: `params` typed as `Promise<{ slug: string }>`, `generateMetadata` and `PostPage` made `async` and `await props.params`. Other files: unmodified (33 scanned, 0 other changes). |
+| ESLint migration (`next-lint-to-eslint-cli`) | Removed `next lint`: script became `eslint .`, `eslint` 8 -> 9.39.5, `eslint-config-next` 14.2.35 -> 16.4.5, generated `eslint.config.mjs`. `.eslintrc.json` still existed, so it was deleted by hand. |
+| React 19 recipe (`react/19/migration-recipe`) and `types-react-codemod` preset-19 | Bumped `react` / `react-dom` / `@types/react*` to 19.x; 0 source files modified (no removed APIs used, as predicted in R-05). |
+| Manual: package.json | Codemod pinned exact React / types versions and added an `overrides` block for `@types/react*`. Replaced by ranges (`^19`) and removed `overrides` so the allowed-diff check (T038) is clean. `next` and `eslint-config-next` stay exact (as `next` was before). Added `"engines": {"node": ">=24"}`, `@types/node` `^24`. |
+| Manual: `eslint.config.mjs` | The generated file had an unused `__dirname` block and no ignores; rewritten with `globalIgnores` (`.next`, `out`, `build`, `next-env.d.ts`, `.claude`, `.specify`). |
+| Manual: lint findings | `eslint .` now also covers root config files and applies React-hooks 7 rules. Two errors: (1) `tailwind.config.ts` `require("@tailwindcss/typography")` -> `import typography from "@tailwindcss/typography"` (same plugin object); (2) `Navbar.tsx` `setActive(null)` synchronous in an effect -> moved into the effect cleanup (the highlight is still cleared when leaving the home page). |
+| Manual: CI | `.github/workflows/ci.yml` `node-version: 20` -> `24`. |
+| Turbopack build | Default. First build passed with 2 warnings ("dynamic filesystem access causes tracing of the whole project") from `src/lib/blog.ts` (`rootDir` parameter). Fixed with the `/*turbopackIgnore: true*/` markers Next suggests on `existsSync` / `readdirSync`; no behavior change. Build is now warning-free. Tailwind 3 + typography under Turbopack: verified in the US2 visual comparison. |
+| `tsconfig.json` | Next rewrote it automatically: `jsx: react-jsx`, `target: ES2017`, `.next/dev/types/**/*.ts` in `include`, arrays reformatted. Accepted. |
