@@ -18,21 +18,16 @@ type Entry = {
 
 type Translations = (typeof translations)[Language];
 
+// Company names, years and the "Jun 2020" start are language-neutral (spec FR-010); every sentence comes
+// from the shared translation table.
 const buildExperience = (t: Translations): Entry[] => [
   {
-    role:     "Senior Full Stack Consultant",
+    role:     t.experience.mywork.role,
     company:  "MyWork",
     start:    "Jun 2020",
     current:  true,
-    location: "Quito, Ecuador (Remote)",
-    bullets: [
-      "Led architectural decisions for workforce management platform (.NET + Angular + Azure), 30,000+ active users",
-      "Designed REST APIs and Azure Functions using the isolated worker model",
-      "Implemented Azure autoscaling policies, eliminating peak-load performance issues",
-      "CI/CD pipelines with deployment slot swapping, cutting release downtime ~60%",
-      "Optimized SQL Server schemas for a high-traffic multi-tenant system",
-      "Mentored a 4-person dev team through code reviews and pair programming",
-    ],
+    location: t.experience.mywork.location,
+    bullets:  t.experience.mywork.bullets,
   },
   {
     role:    t.experience.logiztik.role,
@@ -44,16 +39,13 @@ const buildExperience = (t: Translations): Entry[] => [
     bullets: t.experience.logiztik.bullets,
   },
   {
-    role:    ".NET Developer",
+    role:    t.experience.iess.role,
     company: "IESS — Instituto Ecuatoriano de Seguridad Social",
     start:   "2017",
     current: false,
     period:  "2017 – 2019",
     location: "",
-    bullets: [
-      "AS400 and legacy system integrations with .NET Framework",
-      "Government-scale backend development and maintenance",
-    ],
+    bullets: t.experience.iess.bullets,
   },
 ];
 

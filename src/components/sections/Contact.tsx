@@ -62,7 +62,7 @@ export function Contact() {
                     linkedin.com/in/luis-jacho-zambrano-843558139
                   </a>
                   <span className="inline-flex min-h-11 items-center text-sm text-muted">
-                    Quito, Ecuador (UTC−5)
+                    {t.contact.location}
                   </span>
                 </motion.div>
 
