@@ -99,8 +99,8 @@ and is a draft for the owner.
 
 **Independent Test**: read spec.md Owner Decisions; DOM check.
 
-- [ ] T028 [US4] Verify `specs/006-bilingual-parity/spec.md` "Owner Decisions" lists the wordmark, flat Projects cards and inline skills text, each dated 2026-11-06 and attributed to the owner (already written by `/speckit-specify`; fix wording if needed) (FR-030)
-- [ ] T029 [US4] With `next start`, check the DOM: the navigation wordmark reads "Luis Jacho Zambrano"; Projects cards have no hover or link behavior (no `a`, no `hover:` background change); Skills render as inline text separated by `·` with no chips; confirms the shipped UI still matches the decisions after US1 (FR-030, FR-044)
+- [x] T028 [US4] Verify `specs/006-bilingual-parity/spec.md` "Owner Decisions" lists the wordmark, flat Projects cards and inline skills text, each dated 2026-11-06 and attributed to the owner (already written by `/speckit-specify`; fix wording if needed) (FR-030)
+- [x] T029 [US4] With `next start`, check the DOM: the navigation wordmark reads "Luis Jacho Zambrano"; Projects cards have no hover or link behavior (no `a`, no `hover:` background change); Skills render as inline text separated by `·` with no chips; confirms the shipped UI still matches the decisions after US1 (FR-030, FR-044)
 
 **Checkpoint**: lint and build pass. Commit (if anything changed): `docs(006): confirm carried-over owner decisions (006)`.
 
@@ -108,14 +108,14 @@ and is a draft for the owner.
 
 ## Phase 7: Polish and verification
 
-- [ ] T030 Run `npm run lint`, `npx tsc --noEmit` and `npm run build`; all exit 0 (quickstart V1; FR-042)
-- [ ] T031 Compare the visible English text of the 4 page types on the new build with `.tmp/baseline-en-text.json` (T002): identical (FR-008, FR-044)
-- [ ] T032 Run `.tmp/es-scan.mjs` (T005): 0 English sentences in ES on the 4 page types; every identical pair on the allowlist (quickstart V6; FR-001, SC-001)
-- [ ] T033 Run `.tmp/es-layout.mjs` (T007): 0px overflow at 360px in ES on the 4 page types; ES first screen above the fold at both viewports; fix any wrapping or overflow without changing the design (quickstart V8; FR-040, FR-041, FR-044)
-- [ ] T034 Rerun the 005 scripts in `.tmp/` (`verify.mjs`, `firstscreen.mjs`, `decisions-check.mjs`, `hydration.mjs` against `next dev` if needed): all still pass, no hydration warning on `/` and `/blog` (quickstart V9)
-- [ ] T035 Run Lighthouse 3 times, best of 3 (same procedure as T001), save `.tmp/lighthouse-after-006.json`; Performance and Accessibility each at least 90 and no drop greater than 3 vs baseline (quickstart V10; FR-043)
-- [ ] T036 Generate `specs/006-bilingual-parity/es-review.md`: a table of every NEW Spanish string with its key, the English original and the Spanish draft, grouped by section, for the owner's review (FR-031); add a note that the About statistic "30k+" is a numeral shown unchanged in ES (the rest of the ES copy writes "30.000") so the owner can decide whether to change it in a follow-up
-- [ ] T037 Record the verification results table in `specs/006-bilingual-parity/quickstart.md` and make sure no spec, plan or task claims something the shipped code contradicts
+- [x] T030 Run `npm run lint`, `npx tsc --noEmit` and `npm run build`; all exit 0 (quickstart V1; FR-042)
+- [x] T031 Compare the visible English text of the 4 page types on the new build with `.tmp/baseline-en-text.json` (T002): identical (FR-008, FR-044)
+- [x] T032 Run `.tmp/es-scan.mjs` (T005): 0 English sentences in ES on the 4 page types; every identical pair on the allowlist (quickstart V6; FR-001, SC-001)
+- [x] T033 Run `.tmp/es-layout.mjs` (T007): 0px overflow at 360px in ES on the 4 page types; ES first screen above the fold at both viewports; fix any wrapping or overflow without changing the design (quickstart V8; FR-040, FR-041, FR-044)
+- [x] T034 Rerun the 005 scripts in `.tmp/` (`verify.mjs`, `firstscreen.mjs`, `decisions-check.mjs`, `hydration.mjs` against `next dev` if needed): all still pass, no hydration warning on `/` and `/blog` (quickstart V9)
+- [x] T035 Run Lighthouse 3 times, best of 3 (same procedure as T001), save `.tmp/lighthouse-after-006.json`; Performance and Accessibility each at least 90 and no drop greater than 3 vs baseline (quickstart V10; FR-043)
+- [x] T036 Generate `specs/006-bilingual-parity/es-review.md`: a table of every NEW Spanish string with its key, the English original and the Spanish draft, grouped by section, for the owner's review (FR-031); add a note that the About statistic "30k+" is a numeral shown unchanged in ES (the rest of the ES copy writes "30.000") so the owner can decide whether to change it in a follow-up
+- [x] T037 Record the verification results table in `specs/006-bilingual-parity/quickstart.md` and make sure no spec, plan or task claims something the shipped code contradicts
 - [ ] T038 [OWNER] Authorize the Vercel preview for the fork PR
 - [ ] T039 [OWNER] Review every new Spanish string (use `es-review.md` and the preview), approve or correct them before merge (quickstart O1; FR-031, SC-007)
 - [ ] T040 [OWNER] On a real phone and a laptop toggle EN/ES: nothing stays English except names and technology names, nothing overflows, layout otherwise unchanged (quickstart O2)
