@@ -54,7 +54,7 @@ Lighthouse mobile, best of 3 (home: 6 runs: 87, 92, 92, 92, 91, 92):
 
 Home Performance dropped by 1 point and is consistent across runs (LCP about 3.35 s vs 3.18 s;
 total transfer 397 KiB vs 361 KiB, i.e. the larger Next 16 / React 19 client runtime). Still >= 90.
-FR-008 asks for "equal or better", so this needs an owner decision (see PR description).
+FR-008 asks for "equal or better"; the owner accepted the 1-point drop on 2026-11-06 as within Lighthouse noise and above the constitution's 90 gate (spec.md W-2).
 
 Audit: 10 moderate, 0 high, 0 critical (research.md R-13). Route table: `/`, `/blog` static,
 `/blog/[slug]` SSG with the single existing slug, `/_not-found` static (unchanged shape).

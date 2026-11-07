@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-05
 
-**Status**: Draft
+**Status**: Complete (merged in PR #6, 2026-11-06; accepted deviations in "Recorded Waivers")
 
 **Input**: User description: "004 Upgrade Next.js 14.2 → 16 (latest stable), with React 19: close the critical Next.js advisory and the remaining high npm audit findings recorded as residual risk in specs/003-quick-fixes/research.md (R-04). No visual or behavioral changes. Lint, build and CI must pass; Lighthouse must not regress. Use the official codemods and upgrade guide; record each breaking change that applied and how it was handled. Constitution Principle I: update only if the stack description must change."
 
@@ -117,6 +117,17 @@ As the maintainer, I want a record of each breaking change from the official upg
 - **SC-005**: 100% of breaking changes in the official guides have an applicable / not-applicable entry, with a resolution for each applicable one.
 - **SC-006**: Draft gating verified in both modes: a draft is absent in a production-environment build and present in a non-production one.
 - **SC-007**: The local environment, CI and the hosting platform's build log all report the same current LTS Node.js release (24).
+
+## Recorded Waivers
+
+Deviations from the requirements above that shipped with PR #6 and were accepted by the owner.
+
+- **W-1 (FR-003, FR-004, US2 scenario 3) — 2026-11-06, owner**: On unknown `/blog/*` URLs (e.g. `/blog/nope`) React reports hydration error #418 (new; the baseline had none). The static `/_not-found` shell is prerendered without the requested URL, while `Navbar` and `BlogNotFound` read `usePathname()` on the client. The page recovers by client re-rendering, so the end state is identical, but the pre-hydration HTML shows the generic "Page not found" wording and an unhighlighted Blog tab. The mismatch is **accepted**; the fix is tracked as **feature 006**. Details and attempted fixes: research.md R-14.
+- **W-2 (FR-008, SC-004) — 2026-11-06, owner**: Home Performance is 92 versus the 93 baseline (consistent across runs; LCP about 3.35 s vs 3.18 s). **Accepted** as within Lighthouse noise and above the constitution's 90 gate. All other categories are equal to baseline. Details: baseline.md.
+- **W-3 (constitution accessibility rules) — 2026-11-06, owner**: Keyboard focus rings were not re-verified after the upgrade. `prefers-reduced-motion` is **not respected by the site**; this is pre-existing (not caused by the upgrade) and is fixed in feature 005 (US3). Tracked in research.md R-14.
+- **SC-003 result (2026-11-06)**: `gh pr checks 6`: `build` pass (34s), Vercel pass, Vercel Preview Comments pass. Met.
+- **SC-007 (2026-11-06)**: local and CI report Node 24. The hosting platform's build log was **not checked** by the owner (the Vercel Node.js setting was confirmed as 24.x). The hosting part is **NOT VERIFIED** (tasks.md T036).
+- **Speed Insights (R-16)**: `@vercel/speed-insights` was not in use before the upgrade, so Next 15 removing its auto-instrumentation has no effect. No action.
 
 ## Assumptions
 

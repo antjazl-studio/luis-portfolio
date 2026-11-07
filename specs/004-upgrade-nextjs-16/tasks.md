@@ -76,9 +76,9 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 **Independent Test**: Screenshot comparison, interaction walkthrough, draft-gating builds.
 
 - [X] T018 [US2] Run `npm run build; npm start` and capture the same screenshot set as T004 into `specs/004-upgrade-nextjs-16/screenshots/after/`; compare each pair at both widths and both languages and list any difference in `specs/004-upgrade-nextjs-16/research.md` (create section R-14); accept differences no larger than anti-aliasing noise, anything else is a failure (expected: none). Pay attention to prose styling on the blog post (typography plugin) and the hero image — _done; no visible difference; see R-14_
-- [X] T019 [US2] In the running site, check EN/ES switching, Navbar links, CV download of `/Luis_Jacho_Resume.pdf`, WhatsApp button, Contact links, and that the browser console shows no hydration errors or React 19 warnings; tab through the page to confirm focus rings are still visible, and toggle `prefers-reduced-motion` once to confirm animations still calm down (constitution accessibility rules); note results in R-14 — _done; hydration error #418 on unknown /blog/* URLs accepted by owner as documented, R-14; focus/reduced-motion not re-verified_
+- [ ] T019 [US2] In the running site, check EN/ES switching, Navbar links, CV download of `/Luis_Jacho_Resume.pdf`, WhatsApp button, Contact links, and that the browser console shows no hydration errors or React 19 warnings; tab through the page to confirm focus rings are still visible, and toggle `prefers-reduced-motion` once to confirm animations still calm down (constitution accessibility rules); note results in R-14 — _partly done. Done: EN/ES switching, links, CV, WhatsApp. Hydration error #418 on unknown /blog/* URLs: waived 2026-11-06 by owner (spec W-1), fix tracked as feature 006. NOT done: focus rings not verified; reduced motion is NOT respected (pre-existing, not caused by the upgrade; fixed in 005 US3) — spec W-3_
 - [X] T020 [US2] Confirm the `next build` route table matches the baseline from T002: `/`, `/blog` static, `/blog/[slug]` statically generated with only existing slugs, no route turned dynamic (R-08)
-- [X] T021 [US2] Confirm `/nope` shows the general localized 404 and `/blog/nope` the post-not-found wording, in EN and ES
+- [X] T021 [US2] Confirm `/nope` shows the general localized 404 and `/blog/nope` the post-not-found wording, in EN and ES — _done; on `/blog/nope` the final (post-hydration) wording is correct, but the pre-hydration HTML shows the generic wording and React logs hydration error #418: waived 2026-11-06 (spec W-1), fix tracked as feature 006_
 - [X] T022 [US2] Draft gating, production: create an uncommitted throwaway post `content/blog/zz-draft-check/en.md` and `es.md` (valid frontmatter, `draft: true` in both), run `$env:VERCEL_ENV="production"; npm run build`, and confirm the draft is absent from the route table and from `/blog`, and `/blog/zz-draft-check` returns 404 (FR-005, SC-006)
 - [X] T023 [US2] Draft gating, non-production: with `VERCEL_ENV` unset (`Remove-Item Env:VERCEL_ENV`) run `npm run build` and confirm the draft is listed and reachable
 - [X] T024 [US2] Invalid content still fails the build: temporarily remove `title` from `content/blog/zz-draft-check/en.md`, run `npm run build`, confirm it fails with a message naming the post, language and field; then delete the whole `content/blog/zz-draft-check/` folder and confirm `git status` shows no leftover content changes
@@ -94,9 +94,9 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 
 **Independent Test**: CI run on the PR plus Lighthouse comparison.
 
-- [X] T026 [US3] With the production build running (`npm start`), run Lighthouse (mobile) on `/` and `/blog/ai-agent-workflow-portfolio` three times each and add the best-of-3 "after" table next to the baseline in `specs/004-upgrade-nextjs-16/baseline.md`; every category must be >= baseline (FR-008), and on `/` Performance and Accessibility must also be >= 90 (constitution, Development Workflow). If any category dropped, investigate (image `srcset`/caching defaults in R-07, CSS output in R-04) and fix. If the baseline itself was under 90, stop and report it to the owner instead of passing silently — _done; home Performance 92 vs baseline 93, still >= 90; accepted by owner, baseline.md_
+- [X] T026 [US3] With the production build running (`npm start`), run Lighthouse (mobile) on `/` and `/blog/ai-agent-workflow-portfolio` three times each and add the best-of-3 "after" table next to the baseline in `specs/004-upgrade-nextjs-16/baseline.md`; every category must be >= baseline (FR-008), and on `/` Performance and Accessibility must also be >= 90 (constitution, Development Workflow). If any category dropped, investigate (image `srcset`/caching defaults in R-07, CSS output in R-04) and fix. If the baseline itself was under 90, stop and report it to the owner instead of passing silently — _done; home Performance 92 vs baseline 93, still >= 90; accepted by owner 2026-11-06 as within Lighthouse noise and above the 90 gate (spec W-2), baseline.md_
 - [X] T027 [US3] Verify the hero image (`src/components/sections/Hero.tsx`) and a markdown image path still load through `next/image` without warnings; if the build warns that `priority` is deprecated, replace it with `preload` and record it in `research.md` R-07
-- [ ] T028 [US3] Commit the work in logical commits using Conventional Commit prefixes (`chore:` for dependency/CI/config, `fix:` for code changes, `docs:` for docs) on `004-upgrade-nextjs-16`, push, and open a PR to `master`; confirm the CI workflow passes on Node 24 (SC-003)
+- [X] T028 [US3] Commit the work in logical commits using Conventional Commit prefixes (`chore:` for dependency/CI/config, `fix:` for code changes, `docs:` for docs) on `004-upgrade-nextjs-16`, push, and open a PR to `master`; confirm the CI workflow passes on Node 24 (SC-003) — _done: PR #6 merged 2026-11-06; `gh pr checks 6`: `build` pass (34s, run 42217780037), Vercel pass, Vercel Preview Comments pass_
 
 **Checkpoint**: CI green; Lighthouse table shows no regression.
 
@@ -124,10 +124,22 @@ description: "Task list for the Next.js 16 / React 19 / Node 24 upgrade"
 - [X] T033 [P] Update `README.md` where it states the Next.js version or Node requirement (it lists "Next.js (App Router)"; add Node 24 to any prerequisites list)
 - [X] T034 Check `.specify/memory/constitution.md` Principle I: it says the version lives in `package.json`, so no edit is expected; if any sentence names Next 14 or Node 20, correct it and add a Sync Impact Report entry (FR-010)
 - [X] T035 **OWNER (manual, cannot be done from the repo)**: In Vercel → project `luis-jacho` → Settings → Build and Deployment → Node.js Version, select **24.x** and save. Do this before merging the PR (FR-013) — _confirmed by owner 2026-11-06: Vercel Node.js Version was already 24.x_
-- [ ] T036 After T035, redeploy the PR preview and confirm in the Vercel build log that Node 24 is used and the build succeeds; note the date in `research.md` R-06
+- [ ] T036 After T035, redeploy the PR preview and confirm in the Vercel build log that Node 24 is used and the build succeeds; note the date in `research.md` R-06 — _NOT VERIFIED: the owner did not check the Vercel build log (the Vercel deployment itself passed). SC-007 has no recorded evidence for the hosting platform's build log_
 - [X] T037 Run the full `quickstart.md` section 3 once more on the final branch state (lint, build, audit, `node -v`) and tick the "Done" list in `quickstart.md` section 4 — _done 2026-11-06: lint 0, build 0 (Turbopack), audit 10 moderate / 0 high / 0 critical, next 16.4.5 + react 19.3.1 single copies, package.json diff only planned changes_
 - [X] T038 FR-012 check: run `git diff master -- package.json` and confirm the only changes are: versions of `next`, `react`, `react-dom`, `eslint`, `eslint-config-next`, `@types/react`, `@types/react-dom`, `@types/node`; the `lint` script; the new `engines` field. Any added or removed dependency name is a failure; fix or justify it in `research.md` R-03
-- [ ] T039 Merge the PR after CI and the Vercel preview are green; delete the local throwaway artifacts (`specs/004-upgrade-nextjs-16/screenshots/` stays untracked)
+- [X] T039 Merge the PR after CI and the Vercel preview are green; delete the local throwaway artifacts (`specs/004-upgrade-nextjs-16/screenshots/` stays untracked) — _done: PR #6 merged 2026-11-06_
+
+---
+
+## Phase 8: Retroactive records (docs-only follow-up, 2026-11-06)
+
+Closes the 004 review findings. Tasks describe work already shipped in PR #6 or documentation-only fixes; no code changes.
+
+- [X] T040 Record owner waivers (hydration mismatch on unknown `/blog/*`, home Performance 92 vs 93, focus/reduced-motion) in `spec.md` "Recorded Waivers" and set status to Complete
+- [X] T041 Retroactive: `src/app/layout.tsx` (`data-scroll-behavior="smooth"`), `src/components/Navbar.tsx` (`setActive(null)` moved into the effect cleanup), `tailwind.config.ts` (`import` instead of `require`) and `src/lib/blog.ts` (`turbopackIgnore` markers) were changed by PR #6; justification in research.md R-15/R-16. Navbar neutrality was checked only by the R-14 visual and behavior comparison (no automated test)
+- [X] T042 Record that Speed Insights was not in use (spec "Recorded Waivers", research.md R-16)
+- [X] T043 Update `plan.md` (touched files, Constitution Check) to match the shipped diff; fix section order and cross-reference in `research.md`
+- [X] T044 `README.md`: live site link `luis-jacho.vercel.app` → `luisjacho.dev`
 
 ---
 

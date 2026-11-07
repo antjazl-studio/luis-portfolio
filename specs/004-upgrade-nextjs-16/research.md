@@ -53,6 +53,7 @@ Hydration: `LanguageContext` must not read browser storage during first render (
   - `package.json`: `"engines": { "node": ">=24" }` (not a dependency; makes a mismatch fail early).
   - `@types/node`: `^20` → `^24` so types match the runtime.
   - **Owner task (manual, cannot be done from the repo)**: in Vercel → Settings → Build and Deployment → Node.js Version, select 24.x. Do this before merging, otherwise the Vercel build runs on an older Node and `engines` may fail or warn it. Record the date done in this file.
+  - **Status (2026-11-06)**: owner confirmed the Vercel setting was already 24.x. CI on Node 24 passed (`build` job, PR #6). The Vercel build log was **not checked** by the owner, so the Node version used by the hosting build is **NOT VERIFIED** (tasks.md T036, SC-007).
 - **Verification**: Local Node is already 24, so local runs match CI. `npm ci` on Node 24 must succeed with the new lockfile; confirm the Vercel preview deployment of the PR builds on Node 24 (build log shows the Node version).
 - **Supersedes**: the earlier plan to keep CI on Node 20. Node 20 remains compatible with Next 16 but is no longer a target.
 
@@ -134,14 +135,17 @@ Remaining moderates (not a goal of this feature, no critical/high residual):
 
 Installed: `next@16.4.5`, `react@19.3.1`, `react-dom@19.3.1` (`npm ls next react react-dom`, single copy each).
 
+> Section order note: R-13..R-16 below follow implementation order, not numeric order (R-15, R-13, R-14, the R-09 verification, then R-16). The "R-04" in tasks.md T031 and in the spec header refers to **003**'s `specs/003-quick-fixes/research.md` R-04 (audit), not to R-04 (Turbopack) in this file.
+
 ## R-14 Visual and behavior comparison (2026-11-05)
 
 Method: headless Chrome through DevTools, 5 pages x 390px/1280px x EN/ES (20 screenshots), before and after.
 
 - Page height, visible text length and `<title>` are identical for all 20 captures; screenshot files are byte-identical or within 0.5% size (animation timing), no visible difference found in the pages viewed.
 - Language toggle, navigation, CV and contact links: no console errors on `/`, `/blog`, a post and the general 404.
-- **Regression found: React hydration error #418 on unknown `/blog/<slug>` URLs** (the `/blog/nope` 404; 4 of 20 captures; baseline had none). Cause: the 404 body is prerendered once as a static shell (`/_not-found`), so the server HTML is built without the requested URL. `Navbar` (Blog link `aria-current`/highlight) and `BlogNotFound` (post-not-found wording) depend on `usePathname()`, which on the client is the real `/blog/nope`. The page recovers by client re-rendering, so the end state is identical, but the console error is new and the pre-hydration HTML shows the generic "Page not found" wording with the Blog tab unhighlighted. Attempts: `useSyncExternalStore` in `BlogNotFound` only (error remains: the navbar differs too); `await connection()` in `not-found.tsx` (turns every route dynamic, rejected); `app/blog/not-found.tsx` (Next still serves the global shell, no effect). Options left are a product decision, listed in the PR description. Status: **open, not fixed**.
-- Focus rings and `prefers-reduced-motion` were not re-verified manually (no code touching them changed).
+- **Regression found: React hydration error #418 on unknown `/blog/<slug>` URLs** (the `/blog/nope` 404; 4 of 20 captures; baseline had none). Cause: the 404 body is prerendered once as a static shell (`/_not-found`), so the server HTML is built without the requested URL. `Navbar` (Blog link `aria-current`/highlight) and `BlogNotFound` (post-not-found wording) depend on `usePathname()`, which on the client is the real `/blog/nope`. The page recovers by client re-rendering, so the end state is identical, but the console error is new and the pre-hydration HTML shows the generic "Page not found" wording with the Blog tab unhighlighted. Attempts: `useSyncExternalStore` in `BlogNotFound` only (error remains: the navbar differs too); `await connection()` in `not-found.tsx` (turns every route dynamic, rejected); `app/blog/not-found.tsx` (Next still serves the global shell, no effect). Options left are a product decision, listed in the PR description. Status: **open, not fixed; accepted by the owner on 2026-11-06 (spec.md W-1); the fix is tracked as feature 006**.
+- Focus rings were **not verified**. `prefers-reduced-motion` is **not respected by the site**; this is pre-existing (not caused by the upgrade) and is fixed in feature 005 (US3). See spec.md W-3.
+- Home Performance 92 vs baseline 93: accepted 2026-11-06 (spec.md W-2, baseline.md).
 
 ## R-09 verification (draft gating), 2026-11-05
 
@@ -182,7 +186,7 @@ Read in full: https://nextjs.org/docs/app/guides/upgrading/version-15 and .../ve
 | 15: `fetch`, Route Handler, client router caching defaults | No effect | No `fetch`, no handlers; `staleTimes` unset; routes stay static (R-08) |
 | 15: `@next/font` -> `next/font` | No | Already `next/font/local` |
 | 15: `bundlePagesExternals`, `serverExternalPackages` renames | No | Not configured |
-| 15: Speed Insights auto-instrumentation removed | Not in repo | No `@vercel/speed-insights` in `package.json`; if the owner relied on the Vercel dashboard feature, it needs the package (owner check) |
+| 15: Speed Insights auto-instrumentation removed | Not in repo | No `@vercel/speed-insights` in `package.json`. Owner confirmed 2026-11-06: Speed Insights was not in use, so no effect and no action |
 | 15: `NextRequest` `geo`/`ip` removed | No | No middleware |
 
 Result: 1 item missed at planning time (scroll behavior), fixed and verified (lint, build and the `data-scroll-behavior` attribute present in the prerendered HTML). SC-005 satisfied.
