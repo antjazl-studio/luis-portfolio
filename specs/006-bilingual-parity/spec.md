@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-06
 
-**Status**: Implemented, pending the owner's review of the Spanish copy (2026-11-06)
+**Status**: Implemented; Spanish copy reviewed and approved by the owner (2026-11-06)
 
 **Input**: User description: "006 EN/ES parity: every user-facing string exists in both languages per Principle VI, including experience, project and skill-group text that is currently English-only. Facts stay identical across languages; only translation changes. Owner reviews all ES copy before merge. Also record in spec.md: Owner Decision (2026-11-06) from 005: keep the full-name wordmark, flat Projects cards and inline skills text."
 
@@ -145,18 +145,19 @@ date and "owner".
 - **FR-003**: Projects: all three titles and all three descriptions MUST be provided in both
   languages.
 - **FR-004**: Skills: the five group names and every skill label that is not a technology name
-  (for example "Agile/Scrum", "Layered Architecture", "REST APIs", "Microservices") MUST be provided
+  (for example "Layered Architecture", "REST APIs", "Microservices") MUST be provided
   in both languages.
 - **FR-005**: The Contact location line MUST be served from the shared table in both languages; it
   is identical in both because it contains only a place name and a time-zone token (FR-010).
-- **FR-006**: The WhatsApp prefilled messages MUST be provided in both languages with the same
-  meaning and wording as today.
+- **FR-006**: The WhatsApp prefilled messages MUST be provided in both languages; the English wording
+  is unchanged and the Spanish wording was set by the owner's review (Owner Decision 11).
 - **FR-007**: Facts MUST be identical across languages: names, employers, titles' meaning, dates,
   numbers (30,000+ users, ~60%, a 4-person team, and so on), the number of bullets per entry and
   their order. No fact is added, removed or reworded; only translation changes.
 - **FR-008**: English strings MUST NOT change, and the 14 Spanish strings the owner already
-  reviewed in feature 005 MUST NOT be re-translated. The only existing Spanish string changed by this
-  feature is the Logiztik role, by the owner's decision (Owner Decision 8).
+  reviewed in feature 005 MUST NOT be re-translated. The existing Spanish strings changed by this
+  feature are the Logiztik role (Owner Decision 8) and the WhatsApp message (Owner Decision 11), by the
+  owner's decisions.
 
 **US2: single source and enforcement**
 
@@ -165,7 +166,7 @@ date and "owner".
   Zambrano, Luis Jacho); organization names (MyWork, Logiztik Alliance Group, IESS and its Spanish
   full name, Cargo Plus); technology and product names (C#, .NET, .NET Core, .NET Framework,
   Angular, TypeScript, JavaScript, Microsoft Azure, Azure DevOps, Azure Functions, App Services,
-  Docker, SQL Server, PostgreSQL, MongoDB, MySQL, Power BI, React, Node.js, Git, CI/CD, DVIR,
+  Docker, SQL Server, PostgreSQL, MongoDB, MySQL, Power BI, React, Node.js, Git, Agile/Scrum, CI/CD, DVIR,
   .NET 8); the technology arrays of Hero and Projects stay as constants for the same reason;
   brand names (LinkedIn, WhatsApp); certification names (Azure Developer Associate); technical
   loanwords used unchanged in Spanish technical writing (Blog, Backend, Frontend, DevOps); place
@@ -279,6 +280,16 @@ Decisions made by the owner (Luis) and recorded here on 2026-11-06.
    "+30 mil" in Spanish; English stays "30k+". The text now comes from the translation table.
 10. **Keep the IESS entry (owner, 2026-11-06, on PR #9).** The IESS (2017 – 2019) entry stays as it is
     because it supports the "nine years" claim. No change.
+11. **Spanish copy review done and approved (owner, 2026-11-06).** The owner reviewed all of
+    `es-review.md` and approved it as written except five corrections, now applied:
+    (a) MyWork bullet 4 uses "ranuras de implementación" instead of "ranuras de despliegue";
+    (b) MyWork bullet 6 reads "Fui mentor de un equipo de desarrollo de 4 personas mediante revisiones
+    de código y programación en pareja";
+    (c) IESS bullet 2 reads "Desarrollo y mantenimiento de sistemas backend a escala gubernamental";
+    (d) the skill label "Agile/Scrum" stays in English in Spanish and is added to the language-neutral
+    list (FR-010);
+    (e) the Spanish WhatsApp message reads "¡Hola, Luis! Vi tu portafolio y me gustaría conversar.".
+    FR-031 and SC-007 are met.
 
 ## Backlog (separate features, not started)
 

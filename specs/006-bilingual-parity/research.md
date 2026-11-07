@@ -105,7 +105,7 @@ the noun.
 | Tools & Methods | Herramientas y métodos |
 | REST APIs | API REST |
 | Microservices | Microservicios |
-| Agile/Scrum | Ágil/Scrum |
+| Agile/Scrum | Agile/Scrum (unchanged: language-neutral, owner review 2026-11-06) |
 | Layered Architecture | Arquitectura en capas |
 | MyWork — Workforce Management Platform | MyWork — Plataforma de gestión de personal |
 | Azure Functions Migration | Migración a Azure Functions |

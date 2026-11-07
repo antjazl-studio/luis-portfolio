@@ -92,3 +92,15 @@ English text identical to the baseline on the 4 page types; ES overflow at 360px
 005 regression 18/18 and token/Contact 6/6; US4 UI checks 6/6; "+30 mil" and "Desarrollador full stack"
 render in ES, "30k+" stays in EN, and the IESS entry is unchanged. Lighthouse was not re-run (the change
 removes code and edits two strings); the earlier result was 100/100 on mobile and desktop.
+
+### After the owner's Spanish review (2026-11-06, Owner Decision 11)
+
+Five corrections applied (exactly 5 string-value lines changed in `translations.ts`). Re-run on a fresh
+production build: lint, `tsc --noEmit` and build pass; key parity passes (110 keys, every identical
+EN/ES pair on the neutral list, which now includes "Agile/Scrum"); facts invariants pass; the ES page
+shows "ranuras de implementación", "Fui mentor de un equipo de desarrollo de 4 personas", "sistemas
+backend a escala gubernamental" and "Agile/Scrum" and no longer shows the replaced wording; the
+WhatsApp link keeps the number 593960138279, EN text unchanged and ES text
+"¡Hola, Luis! Vi tu portafolio y me gustaría conversar."; ES scan 4/4; English text identical to the
+baseline; title tests 14/14; ES overflow at 360px and ES first screen pass; 005 regression 18/18; UI
+decision checks 6/6. Lighthouse was not re-run (five Spanish strings changed).
