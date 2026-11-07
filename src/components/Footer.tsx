@@ -1,13 +1,12 @@
 "use client";
 
-import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
 
 export function Footer() {
-  const { language } = useLanguage();
+  const { language, reduceMotion: reduce } = useLanguage();
   const t = translations[language];
-  const reduce = useReducedMotion();
 
   return (
     <footer className="border-t border-border bg-background py-8">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
 
@@ -20,11 +20,10 @@ const SEPARATOR = " · ";
 export function Skills() {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.1 });
-  const { language } = useLanguage();
+  const { language, reduceMotion: reduce } = useLanguage();
   const t = translations[language];
 
   // Reduced motion: no entrance animation at all, content is simply present.
-  const reduce = useReducedMotion();
   const anim = (delay = 0) =>
     reduce
       ? { initial: false as const, animate: { opacity: 1, y: 0 }, transition: { duration: 0 } }

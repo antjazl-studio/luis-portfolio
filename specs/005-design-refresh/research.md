@@ -80,8 +80,14 @@ Found by grep survey of `src/`:
   opacity; entrance fades remain. Spec SC-005 says no animation or movement transitions play, so
   the CSS block and per-component handling must also remove opacity entrance animations: the
   hero and sections use `initial` states that must resolve to the final state immediately.
-  Implementation verifies this with reduced-motion emulation (quickstart V15) and, where an
-  opacity fade remains, gates `initial` with `useReducedMotion()`.
+  Implementation verifies this with reduced-motion emulation (quickstart V15) and gates the
+  opacity entrances per component.
+- **Hydration-safe preference (found in review, fixed)**: reading the preference with Framer
+  Motion's `useReducedMotion()` during render caused a dev hydration warning for reduced-motion
+  visitors (the server always renders with motion on). The shipped approach exposes
+  `reduceMotion` from `LanguageContext` using `useSyncExternalStore` with a `false` server
+  snapshot, so the first client render matches the server and the real preference applies right
+  after hydration. Components read it with `useLanguage()`. No new file was added.
 - **Keep** `data-scroll-behavior="smooth"` on `<html>`: verified in
   `node_modules/next/dist/docs/01-app/02-guides/upgrading/version-16.md` (line 963) that Next 16
   no longer overrides scroll behavior unless this attribute is set, and the site relies on

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
 import type { Language } from "@/context/LanguageContext";
@@ -19,8 +19,7 @@ export function Navbar() {
   const [active,     setActive]     = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const { language, toggleLanguage } = useLanguage();
-  const reduce = useReducedMotion();
+  const { language, toggleLanguage, reduceMotion: reduce } = useLanguage();
   const dur = (seconds: number) => (reduce ? 0 : seconds);
   const t        = translations[language];
   const pathname = usePathname() ?? "";
@@ -110,6 +109,7 @@ export function Navbar() {
                 <Link
                   key={id}
                   href={href}
+                  aria-current={isActive ? "location" : undefined}
                   onClick={(e) => handleSectionClick(e, id)}
                   className={`inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium transition-colors duration-150 ${
                     isActive ? "text-foreground" : "text-muted hover:text-foreground"
@@ -181,6 +181,7 @@ export function Navbar() {
                 <Link
                   key={id}
                   href={href}
+                  aria-current={active === id && !onBlog ? "location" : undefined}
                   onClick={(e) => handleSectionClick(e, id)}
                   className={`flex min-h-11 items-center border-b border-border py-3 text-left text-sm font-medium transition-colors duration-150 ${
                     active === id && !onBlog ? "text-foreground" : "text-muted"

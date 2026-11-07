@@ -73,7 +73,7 @@ Scripts live in `.tmp/` (gitignored): `lh.sh`, `verify.mjs`, `firstscreen.mjs`, 
 
 | Check | Result |
 |-------|--------|
-| B1 / V12 Lighthouse (best of 3) | Baseline mobile Perf 92, A11y 96; desktop 100 / 96. After: mobile 100 / 100; desktop 100 / 100. Meets "at least 90 and no drop greater than 3" |
+| B1 / V12 Lighthouse (best of 3) | Baseline mobile Perf 92, A11y 96; desktop 100 / 96. After (final code, best of 3): mobile 100 / 100; desktop 100 / 100. Meets "at least 90 and no drop greater than 3" |
 | V1 lint and build | pass (`npm run lint`, `npm run build`) |
 | V2 old palette, V3 hard-coded greys, V4 "8+", V7 literal aria-labels, V8 vh | no matches |
 | V5 banned patterns | only the Azure logo SVG gradient stops (documented exception) |
@@ -84,6 +84,7 @@ Scripts live in `.tmp/` (gitignored): `lh.sh`, `verify.mjs`, `firstscreen.mjs`, 
 | V13 first screen | title, subline, proof line and both buttons above the fold at 1280x800 and 390x844, EN and ES; live hero compared with the mock screenshot |
 | V14 keyboard | skip link is the first Tab stop, visible, moves focus to `#main`; 20 Tab stops all show a 2px `#548CFF` outline |
 | V15 reduced motion | emulated: no hidden content, no running animations, `scroll-behavior: auto` on `/` and `/blog`; control run without the preference shows the entrance animation |
+| Hydration (dev server, console) | No hydration warnings on `/` and `/blog`, with and without `prefers-reduced-motion` (a first version had one under reduced motion; fixed, see research.md R7) |
 | V16 360px overflow | 0px on `/`, `/blog`, a blog post, and a 404 |
 | V17 language | `html lang` en to es to en; ES skip link, language group, footer and WhatsApp labels; ES availability line is the owner's exact text |
 | V18 touch targets | every link and button at least 44x44 at 1280 and at 390 (menu open) |
