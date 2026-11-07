@@ -116,3 +116,10 @@ them; none adds scope.
 | Availability dot uses the mock's status green `#34D399`, a color not in the Principle V table | The owner-approved mock specifies it; Principle IV approves "static status dot with plain text" | A white dot loses the status meaning; adding a theme variable would be a theme-value change needing an amendment. Needs owner confirmation at hand-off |
 | WhatsApp button keeps its brand green fill | Recognizable third-party brand affordance, existing behavior | Recoloring to neutral makes the contact action harder to recognize. Needs owner confirmation at hand-off |
 | `linearGradient` inside the Azure logo SVG in `About.tsx` is kept | It is brand artwork, not a UI gradient | Redrawing a flat logo changes a third-party mark. Banned-pattern grep excludes this one SVG |
+
+Status as of 2026-11-06 (implementation done): the status-dot green and the WhatsApp brand green are
+**awaiting owner confirmation** (the dot color comes from the owner-approved mock; the WhatsApp
+green is pre-existing). Two small literals were also added and are covered by the same
+justification: the neutral `rgba(255,255,255,.2)` selection highlight in `globals.css`, and the
+`#34D399` dot in `Hero.tsx` and `Contact.tsx`. Pre-existing and left as is (out of scope): English-only
+experience, project and skill-group prose (baseline deviation D-041).

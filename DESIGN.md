@@ -73,7 +73,19 @@ components:
     height: "44px"
 ---
 
-<!-- DRAFT: proposal, not yet implemented in src/. Theme decided: DARK (2026-11-06). Token values match constitution v1.1.0 (no conflict); the constitution wins if they ever diverge. Re-run $impeccable document after implementation to capture real tokens. -->
+<!-- IMPLEMENTED in feature 005 (2026-11-06). Theme: DARK. Token values in src/app/globals.css equal constitution v1.1.0 and this file; the constitution wins if they ever diverge. Differences between this draft and the shipped code are listed in "Implemented as built" below. -->
+
+## Implemented as built (005)
+
+Shipped on branch `005-design-refresh`. Everything above holds except these deliberate differences:
+
+- **Breakpoint:** the hero is two columns from Tailwind `md` (768px), not 800px, because the constitution requires Tailwind's standard breakpoints.
+- **Touch targets:** all interactive elements are at least 44x44px, so the language buttons are 44px (the mock drew them at 28px) and nav links have a 44px hit area.
+- **Selection:** text selection is a neutral white highlight, not the mock's blue, because the accent is for links and focus rings only.
+- **Motion:** the hero has one CSS fade-in (0.5s, 8px rise) and nothing loops; the previous float animation and the WhatsApp pulse were removed. All animation is disabled under `prefers-reduced-motion`.
+- **Portrait:** `public/pic.png` is 1086x1448 (3:4) shown in a 4:5 frame with `object-cover object-top`.
+- **Documented color exceptions** (not in the token table): the 6px availability dot `#34D399` (from the approved mock), the WhatsApp brand green `#25D366`, and the Azure logo's own SVG gradient. See `specs/005-design-refresh/plan.md`, Complexity Tracking.
+- **Not changed:** section content, the experience and project prose, and the skill group names remain English-only in both languages (pre-existing; out of scope for this feature).
 
 # Design System: Luis Jacho Portfolio
 

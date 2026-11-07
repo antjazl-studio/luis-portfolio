@@ -118,14 +118,14 @@ localized labels, `svh`.
 
 ## Phase 7: Polish and verification
 
-- [ ] T036 Run `npm run lint` and `npm run build`; both must exit 0 (FR-040; V1)
-- [ ] T037 Run the grep checks V2, V3, V4, V5, V6, V7, V8 from `quickstart.md`; fix or document every hit (FR-001, FR-008, FR-010, FR-012, FR-026, FR-027)
-- [ ] T038 Write `.tmp/` script comparing the EN and ES key sets in `src/lib/translations.ts`; they must be identical (quickstart V9; FR-009)
-- [ ] T039 Run `.tmp/contrast.mjs` on every foreground/background pair in use, paste the table into `specs/005-design-refresh/research.md` R12; all text pairs at least 4.5:1, large text and UI at least 3:1 (quickstart V10; FR-020)
-- [ ] T040 Build, start and run Lighthouse 3 times (same procedure as T002), best of 3, save `.tmp/lighthouse-after.json`; Performance and Accessibility each at least 90 and no drop greater than 3 vs baseline (quickstart V12; FR-041)
-- [ ] T041 Use browser tooling if available to check quickstart V13 to V19 (first screen at both viewports in EN and ES, keyboard and skip link, reduced-motion emulation, 360px, language and `html lang`, 44px targets); list what could not be run (FR-002, FR-007, FR-021 to FR-025, FR-028)
-- [ ] T042 Update `DESIGN.md`: replace the DRAFT comment with a short "Implemented 005" note (shipped tokens, hero as built, exceptions); confirm `CLAUDE.md` theme table equals the shipped `:root`; do NOT edit `.specify/memory/constitution.md` (FR-042)
-- [ ] T043 Write the final exception list (status dot green, WhatsApp green, Azure SVG gradient, ES translations) into `plan.md` Complexity Tracking with date, for the PR body
+- [x] T036 Run `npm run lint` and `npm run build`; both must exit 0 (FR-040; V1)
+- [x] T037 Run the grep checks V2, V3, V4, V5, V6, V7, V8 from `quickstart.md`; fix or document every hit (FR-001, FR-008, FR-010, FR-012, FR-026, FR-027)
+- [x] T038 Write `.tmp/` script comparing the EN and ES key sets in `src/lib/translations.ts`; they must be identical (quickstart V9; FR-009)
+- [x] T039 Run `.tmp/contrast.mjs` on every foreground/background pair in use, paste the table into `specs/005-design-refresh/research.md` R12; all text pairs at least 4.5:1, large text and UI at least 3:1 (quickstart V10; FR-020)
+- [x] T040 Build, start and run Lighthouse 3 times (same procedure as T002), best of 3, save `.tmp/lighthouse-after.json`; Performance and Accessibility each at least 90 and no drop greater than 3 vs baseline (quickstart V12; FR-041)
+- [x] T041 Use browser tooling if available to check quickstart V13 to V19 (first screen at both viewports in EN and ES, keyboard and skip link, reduced-motion emulation, 360px, language and `html lang`, 44px targets); list what could not be run (FR-002, FR-007, FR-021 to FR-025, FR-028)
+- [x] T042 Update `DESIGN.md`: replace the DRAFT comment with a short "Implemented 005" note (shipped tokens, hero as built, exceptions); confirm `CLAUDE.md` theme table equals the shipped `:root`; do NOT edit `.specify/memory/constitution.md` (FR-042)
+- [x] T043 Write the final exception list (status dot green, WhatsApp green, Azure SVG gradient, ES translations) into `plan.md` Complexity Tracking with date, for the PR body
 - [ ] T044 [OWNER] Confirm the ES translations flagged in T008 (title, subline, name line, timezone line) and the exceptions of T043 (status-dot green `#34D399`, WhatsApp brand green)
 - [ ] T045 [OWNER] On the Vercel preview (authorize it for the fork PR), run quickstart V13 to V19 on a real phone and a laptop; report anything off
 

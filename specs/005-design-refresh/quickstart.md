@@ -65,3 +65,29 @@ smooth scrolling, no hover movement on home, blog index, blog post, 404.
 
 **V19. Mobile viewport.** On a phone or emulator with a collapsing address bar, the hero fits
 without extra scroll.
+
+## Verification results (2026-11-06, run by the supervisor on a production build)
+
+Scripts live in `.tmp/` (gitignored): `lh.sh`, `verify.mjs`, `firstscreen.mjs`, `contrast.mjs`,
+`parity.mjs`.
+
+| Check | Result |
+|-------|--------|
+| B1 / V12 Lighthouse (best of 3) | Baseline mobile Perf 92, A11y 96; desktop 100 / 96. After: mobile 100 / 100; desktop 100 / 100. Meets "at least 90 and no drop greater than 3" |
+| V1 lint and build | pass (`npm run lint`, `npm run build`) |
+| V2 old palette, V3 hard-coded greys, V4 "8+", V7 literal aria-labels, V8 vh | no matches |
+| V5 banned patterns | only the Azure logo SVG gradient stops (documented exception) |
+| V6 accent usage | only link elements (hero, contact, blog back links, Markdown links) and the focus ring |
+| V9 EN/ES key parity | 59 keys, none missing; 5 identical strings are proper nouns |
+| V10 contrast | all 19 pairs pass (table in research.md R12) |
+| V11 spec 001 | additions only, 33 insertions, 0 deletions |
+| V13 first screen | title, subline, proof line and both buttons above the fold at 1280x800 and 390x844, EN and ES; live hero compared with the mock screenshot |
+| V14 keyboard | skip link is the first Tab stop, visible, moves focus to `#main`; 20 Tab stops all show a 2px `#548CFF` outline |
+| V15 reduced motion | emulated: no hidden content, no running animations, `scroll-behavior: auto` on `/` and `/blog`; control run without the preference shows the entrance animation |
+| V16 360px overflow | 0px on `/`, `/blog`, a blog post, and a 404 |
+| V17 language | `html lang` en to es to en; ES skip link, language group, footer and WhatsApp labels; ES availability line is the owner's exact text |
+| V18 touch targets | every link and button at least 44x44 at 1280 and at 390 (menu open) |
+
+Not verified by the supervisor: a real phone with a collapsing address bar (V19, the `svh` behavior),
+forced-colors/high-contrast mode (outline is used so it should survive), Safari and Firefox, a screen
+reader, and the Vercel preview. These are on the owner checklist.

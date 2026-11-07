@@ -127,6 +127,33 @@ Found by grep survey of `src/`:
   background 20.38, muted 7.95 / 7.52 on surface, accent 6.38, focus ring 6.38 (needs 3),
   `border-strong` 4.22 on background (needs 3). Implementation re-computes every used pair with a
   script kept in `.tmp/` (gitignored) and appends the result here.
+- **Result (2026-11-06)**: WCAG 2.x ratios computed from the shipped hex values by a script kept in
+  `.tmp/` (gitignored). Every pair passes.
+
+| Pair | Ratio | Needs | Result |
+|------|-------|-------|--------|
+| text on background | 20.38 | 4.5 | PASS |
+| text on surface | 19.28 | 4.5 | PASS |
+| text on surface-2 | 17.72 | 4.5 | PASS |
+| muted on background | 7.95 | 4.5 | PASS |
+| muted on surface | 7.52 | 4.5 | PASS |
+| muted on surface-2 | 6.91 | 4.5 | PASS |
+| accent link on background | 6.38 | 4.5 | PASS |
+| accent link on surface | 6.04 | 4.5 | PASS |
+| accent link on surface-2 | 5.54 | 4.5 | PASS |
+| accent-hover on background | 8.65 | 4.5 | PASS |
+| accent-hover on surface | 8.19 | 4.5 | PASS |
+| primary button text on white | 20.38 | 4.5 | PASS |
+| primary button text on hover fill | 16.06 | 4.5 | PASS |
+| focus ring on background (UI) | 6.38 | 3 | PASS |
+| focus ring on surface (UI) | 6.04 | 3 | PASS |
+| focus ring on surface-2 (UI) | 5.54 | 3 | PASS |
+| border-strong on background (UI) | 4.22 | 3 | PASS |
+| border-strong on surface (UI) | 3.99 | 3 | PASS |
+| status dot on background (UI) | 10.60 | 3 | PASS |
+
+Decorative only (no requirement): border #27272A on background = 1.37
+
 - **Status dot** `#34D399` on `#050505` is above 3:1 (graphic) and the adjacent text is the
   accessible name, so the dot is decorative.
 
