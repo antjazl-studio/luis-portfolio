@@ -8,7 +8,7 @@ or `node_modules` where it states a fact.
 - **Decision**: Set `:root` in `globals.css` to the constitution v1.1.0 table, add `--border-strong`
   and `--focus-ring`; add `border-strong` and `focus-ring` to the Tailwind color map (the other
   variables are already mapped in `tailwind.config.ts`). Add `color-scheme: dark`, a global
-  `:focus-visible` ring (2px, offset 2px, `--focus-ring`) and a `::selection` rule from the mock.
+  `:focus-visible` ring (2px, offset 2px, `--focus-ring`) and a `::selection` rule with a neutral highlight (`rgba(255,255,255,.2)`; deliberately not the mock's blue, because the accent is for links and focus rings only; a documented literal, like the status dot).
 - **Rationale**: Principle V requires colors from variables. Current values are the old palette
   (`#0d1117`, `#0078d4`), and sections use hard-coded `#0a0a0a`, `#0f0f0f`, `black/..` and
   `white/..` backgrounds that bypass the tokens.
@@ -50,7 +50,7 @@ Found by grep survey of `src/`:
 
 - **Exception**: `linearGradient` inside the Azure logo SVG in `About.tsx` is brand artwork.
   Kept and excluded from the final grep.
-- **Final verification** (quickstart V6): no matches for `backdrop-blur`, `gradient`, `shadow-`,
+- **Final verification** (quickstart V5): no matches for `backdrop-blur`, `gradient`, `shadow-`,
   `blur-`, `animate-pulse`, `animate-ping`, `cyan-`, `emerald-`, `blue-500`, `text-transparent`
   other than the allowed Azure SVG (and the status dot, see Plan exceptions).
 
@@ -80,7 +80,7 @@ Found by grep survey of `src/`:
   opacity; entrance fades remain. Spec SC-005 says no animation or movement transitions play, so
   the CSS block and per-component handling must also remove opacity entrance animations: the
   hero and sections use `initial` states that must resolve to the final state immediately.
-  Implementation verifies this with reduced-motion emulation (quickstart V5) and, where an
+  Implementation verifies this with reduced-motion emulation (quickstart V15) and, where an
   opacity fade remains, gates `initial` with `useReducedMotion()`.
 - **Keep** `data-scroll-behavior="smooth"` on `<html>`: verified in
   `node_modules/next/dist/docs/01-app/02-guides/upgrading/version-16.md` (line 963) that Next 16
@@ -132,7 +132,7 @@ Found by grep survey of `src/`:
 
 ## R13. Years of experience
 
-- **Decision**: Change "8+" to "9" in `translations.ts` (About stat, bio, `about.p1`; EN and ES)
+- **Decision**: Change "8+" to "9" in `translations.ts` (`hero.bio`, `about.p1`; EN and ES), in the hard-coded About stat `value: "8+"` in `About.tsx:21`,
   and in `layout.tsx` metadata description. A grep for `8+` and `8 años` confirms none remain.
 - **Source**: PRODUCT.md "Operating Context": career starts 2017, use "9 years" everywhere.
 

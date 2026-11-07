@@ -71,7 +71,7 @@ specs/005-design-refresh/
 ├── plan.md
 ├── research.md
 ├── quickstart.md
-├── tasks.md             # created by /speckit-tasks
+├── tasks.md             # Phase 2 output (/speckit-tasks)
 ├── checklists/requirements.md
 └── mocks/hero-dark.html
 ```

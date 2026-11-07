@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-06
 
-**Status**: Draft
+**Status**: Ready for implementation
 
 **Input**: User description: "Design refresh (feature 005), applying constitution v1.1.0, PRODUCT.md, DESIGN.md and the approved dark hero mock at specs/005-design-refresh/mocks/hero-dark.html to the live site. US1 tokens + hero, US2 remove banned patterns, US3 accessibility, US4 mark spec 001 blog sections superseded. Out of scope: new photo, OG image, new content."
 
@@ -274,6 +274,7 @@ superseded marker pointing to spec 002.
   strings are translations of the EN wording and are flagged for the owner's confirmation.
 - The static availability dot color follows the mock (a plain status color, not an accent), and
   is exempt from the accent-only-for-links rule because it is not the accent.
+- Where the mock and a requirement differ, the requirement wins: FR-024 (44px targets) overrides the mock's 28px language buttons, and the selection highlight is neutral because the accent is only for links and focus rings (FR-012). The proof line keeps the existing facts with the mock's punctuation.
 - Sections other than the hero (About, Experience, Skills, Projects, Contact, Footer, Navbar,
   blog) keep their content and structure; only styling, banned patterns and accessibility change.
 - The pre-change Lighthouse baseline is captured before implementation.
