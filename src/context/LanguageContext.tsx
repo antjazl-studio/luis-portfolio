@@ -49,20 +49,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     document.documentElement.lang = language;
   }, [language]);
 
-  // Tab title (owner decision 2026-11-06): the title follows the language. Next resets document.title
-  // from route metadata on client navigation, so the provider both applies the wanted title and
-  // re-applies it whenever something else changes the <title>. Effects only: the server HTML keeps the
-  // existing English metadata, so there is no hydration mismatch.
+  // Tab title (owner decisions 2026-11-06): the title follows the language and is re-applied on every
+  // route change and language change (Next sets document.title from route metadata on navigation, and
+  // this effect runs after it). Effects only: the server HTML keeps the existing English metadata, so
+  // there is no hydration mismatch.
   const desiredTitle = pageTitle ?? (pathname === "/" ? translations[language].meta.home : null);
   useEffect(() => {
     if (desiredTitle === null) return;
-    const apply = () => {
-      if (document.title !== desiredTitle) document.title = desiredTitle;
-    };
-    apply();
-    const observer = new MutationObserver(apply);
-    observer.observe(document.head, { childList: true, subtree: true, characterData: true });
-    return () => observer.disconnect();
+    document.title = desiredTitle;
   }, [desiredTitle, pathname]);
 
   return (

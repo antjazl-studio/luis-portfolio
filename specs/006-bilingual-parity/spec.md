@@ -155,7 +155,8 @@ date and "owner".
   numbers (30,000+ users, ~60%, a 4-person team, and so on), the number of bullets per entry and
   their order. No fact is added, removed or reworded; only translation changes.
 - **FR-008**: English strings MUST NOT change, and the 14 Spanish strings the owner already
-  reviewed in feature 005 MUST NOT be re-translated.
+  reviewed in feature 005 MUST NOT be re-translated. The only existing Spanish string changed by this
+  feature is the Logiztik role, by the owner's decision (Owner Decision 8).
 
 **US2: single source and enforcement**
 
@@ -169,7 +170,7 @@ date and "owner".
   brand names (LinkedIn, WhatsApp); certification names (Azure Developer Associate); technical
   loanwords used unchanged in Spanish technical writing (Blog, Backend, Frontend, DevOps); place
   names (Quito, Ecuador); the time-zone token UTC−5; contact addresses (the email address and the
-  LinkedIn address); code identifiers and shell commands inside blog code blocks; the language codes EN and ES; and numerals, numeral abbreviations (30k+) and years. This list is complete: any other EN/ES pair that
+  LinkedIn address); code identifiers and shell commands inside blog code blocks; the language codes EN and ES; and numerals and years. This list is complete: any other EN/ES pair that
   is identical is a defect.
 - **FR-011**: Every other user-facing string MUST live in the shared translation table with both
   languages; components MUST NOT contain user-facing prose.
@@ -267,6 +268,17 @@ Decisions made by the owner (Luis) and recorded here on 2026-11-06.
 6. **The Spanish tab title must survive client-side navigation (owner, 2026-11-06).** Next resets the
    title from route metadata on route changes; the feature must keep the Spanish title anyway
    (FR-020, SC-004).
+7. **Remove the title observer; keep re-applying on route change (owner, 2026-11-06, on PR #9).** The
+   `MutationObserver` that re-applied the Spanish title is removed. The title is applied and then
+   re-applied on every route change and language change, which the test results showed is sufficient.
+   FR-020 and SC-004 are unchanged (the title still must not revert to English after navigation).
+8. **Logiztik role in Spanish (owner, 2026-11-06, on PR #9).** The Spanish role of the Logiztik entry is
+   "Desarrollador full stack" (lowercase, consistent with the owner's reviewed style), replacing
+   "Desarrollador Full Stack".
+9. **About statistic in Spanish (owner, 2026-11-06, on PR #9).** The "30k+" users statistic reads
+   "+30 mil" in Spanish; English stays "30k+". The text now comes from the translation table.
+10. **Keep the IESS entry (owner, 2026-11-06, on PR #9).** The IESS (2017 – 2019) entry stays as it is
+    because it supports the "nine years" claim. No change.
 
 ## Backlog (separate features, not started)
 

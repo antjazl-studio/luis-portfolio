@@ -34,6 +34,7 @@ type Translation = {
     azure_badge: string;
     stat1_label: string;
     stat2_label: string;
+    stat2_value: string;
     stat3_label: string;
   };
   experience: {
@@ -141,6 +142,7 @@ const translations: Record<Language, Translation> = {
       azure_badge: "Azure Developer Associate",
       stat1_label: "Years of experience",
       stat2_label: "Users on production",
+      stat2_value: "30k+",
       stat3_label: "Azure certification",
     },
     experience: {
@@ -274,13 +276,14 @@ const translations: Record<Language, Translation> = {
       azure_badge: "Azure Developer Associate",
       stat1_label: "Años de experiencia",
       stat2_label: "Usuarios en producción",
+      stat2_value: "+30 mil",
       stat3_label: "Certificación Azure",
     },
     experience: {
       heading: "Dónde he trabajado",
       present: "Presente",
       logiztik: {
-        role:   "Desarrollador Full Stack",
+        role:   "Desarrollador full stack",
         period: "Oct 2019 – Abr 2020",
         bullets: [
           "Desarrollé Cargo Plus, una plataforma logística para el seguimiento de envíos y la automatización de flujos de trabajo con .NET, PostgreSQL y JavaScript.",

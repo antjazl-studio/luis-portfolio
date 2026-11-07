@@ -10,7 +10,7 @@ Make the whole site Spanish when ES is selected (Principle VI). Experience, Proj
 Contact location line and the WhatsApp message move from component constants into
 `src/lib/translations.ts`, typed so a missing key or a different number of bullets or items fails
 the type check and therefore the build. The browser tab title follows the language through
-a title owner in the existing language provider that survives Next's title reset on navigation. No new dependency and no new file under
+a title owner in the existing language provider that re-applies the title on every route change. No new dependency and no new file under
 `src/`. Decisions and the Spanish glossary are in [research.md](research.md); validation steps are
 in [quickstart.md](quickstart.md).
 
@@ -39,8 +39,9 @@ and no drop greater than 3 points versus the pre-change baseline (best of 3)
 ES strings from 005 unchanged; facts identical across languages; no layout or design change; no
 horizontal overflow at 360px in ES
 
-**Scale/Scope**: 50 new translation keys (25 Spanish prose strings for the owner to review, 24
-language-neutral, the WhatsApp message moved unchanged); 10 source files touched
+**Scale/Scope**: 51 new translation keys (26 Spanish prose strings for the owner to review, one of them
+("+30 mil") already decided by the owner; 24 language-neutral; the WhatsApp message moved unchanged);
+10 source files touched
 
 ## Constitution Check
 
@@ -81,7 +82,7 @@ No `data-model.md` or `contracts/`: the feature has no new data model or externa
 ```text
 src/
 ├── lib/translations.ts                  # new typed groups (tuples); ES drafts for owner review
-├── context/LanguageContext.tsx          # owns the tab title: registry + re-apply on route change
+├── context/LanguageContext.tsx          # owns the tab title: registry + re-apply on route/language change
 ├── components/
 │   ├── WhatsAppButton.tsx               # message from translations
 │   ├── BlogIndex.tsx                    # registers the "/blog" title

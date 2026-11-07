@@ -68,13 +68,13 @@ Scripts live in `.tmp/` (gitignored). Baseline = unmodified `upstream/master` bu
 |-------|--------|
 | B1 / V10 Lighthouse (best of 3) | Baseline mobile Perf 100 / A11y 100, desktop 100 / 100. After: mobile 100 / 100, desktop 100 / 100. Meets "at least 90 and no drop greater than 3" |
 | V1 lint, `tsc --noEmit`, build | pass |
-| V2 key parity and allowlist | 107 keys in each language, none missing; every identical EN/ES pair is on the FR-010 list |
+| V2 key parity and allowlist | 108 keys in each language, none missing; every identical EN/ES pair is on the FR-010 list |
 | V3 compile-time guarantee (SC-003) | demonstrated: missing ES property fails `tsc` (TS2741) and `npm run build` (exit 1); a 5-bullet ES list where 6 are required fails (TS2322, "Source has 5 element(s) but target requires 6"); file restored (research.md R2) |
 | V4 prose outside the table | 18 hits, none is user-facing prose that belongs in the table (class strings, organization names, static metadata); research.md R3 |
 | V5 facts invariants (SC-002) | numbers, years, percentages and list shapes identical between EN and ES for Experience, Projects and Skills ("30,000+" equals "más de 30.000", "~60%" equals "~60 %") |
 | V6 ES text scan (SC-001) | 0 English sentences on the home page, `/blog`, a post and a 404 in ES (code blocks in posts excluded as code) |
 | English unchanged (FR-008) | visible EN text of the 4 page types identical to the baseline capture; translations diff: 0 EN and 0 existing ES strings changed; only 7 type-declaration lines removed |
-| V7 tab title (SC-004) | 16 checks pass: ES on home, post and 404; in-app navigation home to `/blog` to post to `/blog` to home keeps the title; EN returns; overwrite test restores ES; meta description and post Open Graph in the served HTML stay English. Control: with the observer disabled the overwrite test fails (research.md R4) |
+| V7 tab title (SC-004) | passes with the effect only (owner removed the observer on PR #9, decision 7): ES on home, post and 404; in-app navigation home to `/blog` to post to `/blog` to home keeps the title; EN returns; the meta description and post Open Graph in the served HTML stay English; see research.md R4 for the evidence and the known limit |
 | V8 ES layout (SC-005) | 0px horizontal overflow at 360px on `/`, `/blog`, a post and a 404 in ES; ES first screen above the fold at 1280x800 and 390x844 |
 | V9 regression | 005 browser checks 18/18, token and Contact copy 6/6, hydration: 0 warnings on `/` and `/blog` with and without reduced motion (dev server) |
 | US4 owner decisions | spec lists the three decisions with date and owner; DOM confirms full-name wordmark, 3 flat non-interactive cards, inline `·` skills in EN and ES |
@@ -83,3 +83,12 @@ Not verified by the supervisor: a real phone, Safari, Firefox, forced-colors mod
 the Vercel deployment, and whether Next rewrites the title on a real deployment (the tab title was
 tested in headless Chrome against `next start` only). The quality of the Spanish copy is the owner's
 review (`es-review.md`, tasks T038 to T040).
+
+### After the owner's decisions on PR #9 (2026-11-06)
+
+Re-run on a fresh production build: lint, `tsc --noEmit` and build pass; key parity passes (108 keys);
+facts invariants pass; title tests 14/14 with the effect only (the observer was removed); ES scan 4/4;
+English text identical to the baseline on the 4 page types; ES overflow at 360px and ES first screen pass;
+005 regression 18/18 and token/Contact 6/6; US4 UI checks 6/6; "+30 mil" and "Desarrollador full stack"
+render in ES, "30k+" stays in EN, and the IESS entry is unchanged. Lighthouse was not re-run (the change
+removes code and edits two strings); the earlier result was 100/100 on mobile and desktop.

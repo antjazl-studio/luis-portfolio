@@ -2,17 +2,27 @@
 
 Generated from `src/lib/translations.ts` against `upstream/master` on 2026-11-06. Every string below is a **draft written by the assistant**: faithful to the English, same facts, following the glossary in `research.md` R5 (the owner's own wording from feature 005). **Approve or correct each one before merge** (spec FR-031).
 
-- English strings changed: **0**. Spanish strings already on `master` changed: **0**.
-- New strings: **50** (25 to review, 24 identical and language-neutral, 1 moved with unchanged text: the WhatsApp message in both languages).
+- English strings changed: **0**. Spanish strings already on `master` changed: **1** (the Logiztik role, by the owner's decision).
+- New strings: **51** (26 to review, 24 identical and language-neutral, 1 moved with unchanged text: the WhatsApp message in both languages).
 
-## Things to decide
+## Decided by the owner (PR #9, 2026-11-06)
+
+1. **Logiztik role (existing string, changed on the owner's decision):** "Desarrollador Full Stack" became "Desarrollador full stack".
+2. **About statistic:** ES "+30 mil" (EN stays "30k+"); it now comes from the translation table.
+3. **IESS entry:** kept as is (supports the "nine years" claim); no change.
+
+## Still to review
 
 1. **Tab title (home):** "Luis Jacho Zambrano — Desarrollador full stack senior" (lowercase "full stack senior", as you wrote it in About).
-2. **Existing Logiztik role** (not in this change, not yet reviewed by you): ES reads "Desarrollador Full Stack" in title case, while your reviewed style and the new MyWork role use lowercase "full stack". Suggest "Desarrollador full stack" for consistency; I did not change it because it is outside this feature's scope.
-3. **About statistic "30k+"** is shown unchanged in Spanish while the rest of the Spanish copy writes "30.000". It is a numeral, so it is on the language-neutral list; say if you want "30 mil+" or "30.000+" in a follow-up.
-4. **Terminology choices:** "modelo de trabajo aislado" (isolated worker model), "intercambio de ranuras de despliegue" (deployment slot swapping), "multiinquilino" (multi-tenant), "API REST", "Ágil/Scrum", "Arquitectura en capas".
+2. **Terminology choices:** "modelo de trabajo aislado" (isolated worker model), "intercambio de ranuras de despliegue" (deployment slot swapping), "multiinquilino" (multi-tenant), "API REST", "Ágil/Scrum", "Arquitectura en capas".
 
 The WhatsApp message (`contact.whatsappMessage`) and the Contact location line were moved into the table with their text unchanged.
+
+## About
+
+| Key | English (unchanged) | Spanish (draft) |
+|-----|---------------------|-----------------|
+| `about.stat2_value` | 30k+ | +30 mil |
 
 ## Experience
 

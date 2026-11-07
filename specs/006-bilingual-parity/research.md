@@ -54,46 +54,36 @@ the accepted Principle VI deviation and, for the title, followed on the client b
 
 ## R4. Tab title
 
-- **Decision** (owner, 2026-11-06): the tab title follows the language and survives client-side
-  navigation (the owner noted Next resets `document.title` from metadata on route change).
-- **Design: one owner of the title, no race.** `LanguageProvider` (already in the root layout) holds a
-  `pageTitle` value and exposes `setPageTitle(title | null)` through the existing context. The
-  provider computes the desired title: the registered `pageTitle`, or `meta.home` when
-  `usePathname()` is `/`, or none. When a desired title exists it (1) sets `document.title`, and (2)
-  installs a `MutationObserver` on the `<title>` element / `document.head` that re-applies the desired
-  title whenever something else (Next's route-metadata update) changes it. The observer ignores
-  changes that already equal the desired title, so it cannot loop, and it is disconnected on
-  cleanup. Pages register in effects: `BlogIndex` (`meta.blog`), `LocalizedPost` (the post title in
-  the active language; cleanup resets to none), `BlogNotFound` (`meta.home`, so the English 404
-  title is unchanged), each with explicit dependencies (`[language]`, `[post.title]`, `[language]`).
+- **Decision** (owner, 2026-11-06): the tab title follows the language and is still Spanish after
+  client-side navigation. On PR #9 the owner decided to **remove the `MutationObserver`** and keep only
+  re-applying the Spanish title on route change, because the tests showed that is sufficient.
+- **Design (final)**: `LanguageProvider` (already in the root layout) holds a `pageTitle` value and
+  exposes `setPageTitle(title | null)` through the existing context. The desired title is the
+  registered `pageTitle`, or `meta.home` when `usePathname()` is `/`, or none. One effect, keyed on
+  `[desiredTitle, pathname]`, sets `document.title` whenever the desired title, the route or the
+  language changes, so it runs after Next has set the title for the new route. Pages register in
+  effects with explicit dependencies: `BlogIndex` (`meta.blog`), `LocalizedPost` (the post title in the
+  active language; cleanup clears it), `BlogNotFound` (`meta.home`, so the English 404 title is
+  unchanged).
 - **Facts verified in the repo**: home and blog titles are static `metadata`; post titles come from
   `generateMetadata` with `post.en.title`; the 404 renders `BlogNotFound` and inherits the root title;
-  the initial language is `en`, so effects after hydration cannot cause a hydration mismatch.
-  Child effects run before the provider's effect, which is why registration goes through state in the
+  the initial language is `en`, so effects after hydration cannot cause a hydration mismatch. Child
+  effects run before the provider's effect, which is why registration goes through state in the
   provider and not through direct `document.title` writes in children.
-- **Why not effects alone**: a late metadata update after the child's mount effect (for example
-  `/blog` to a post in ES) would overwrite the Spanish title and the effect would never re-run;
-  `useLayoutEffect` fires even earlier. The observer is the deterministic guarantee.
-- **Cost**: no new dependency and no new file; a short flicker of the English title during navigation
-  is possible and accepted; the steady state must be Spanish.
-- **Verification (mandatory, task T027)**: headless browser against `next start`: ES selected, home to
-  `/blog` to a post to `/blog` to home through in-app links, with the title sampled over time after
-  each navigation (it must settle on the Spanish value within 1 second and stay), a language switch
-  on each page, a missing URL, back to EN. The result is recorded here after implementation.
-- **Result (T027, 2026-11-06, headless Chrome against `next start`)**: all 16 title checks pass with
-  the provider design: ES home, in-app navigation home to `/blog` to a post to `/blog` to home (title
-  settled on the expected value at the first sample, no deviation afterwards), language switches on
-  each page, a missing URL and a missing post URL, back to EN, and the served HTML still carrying the
-  English meta description and post Open Graph title.
-- **What was and was not shown about the Next title reset**: with the `MutationObserver` temporarily
-  DISABLED (the effect alone), the same navigation sequence ALSO passed on this build, so I could not
-  reproduce Next overwriting the Spanish title in this environment; the observer is therefore a
-  defensive guarantee that the owner asked for (owner, 2026-11-06), not a proven necessity. The
-  mechanism itself is tested directly: a script overwrites `document.title` with the English title
-  while ES is selected (simulating a metadata reset). With the observer disabled that test FAILS
-  (control: the title stays English); with the observer enabled it passes on the home page and on a
-  post (corrected back to Spanish within the first samples). Not tested: a real device, Safari or
-  Firefox, `next dev`, or the Vercel deployment.
+- **History and evidence**: the first design added a `MutationObserver` as a defensive guarantee
+  (the owner had said Next resets the title on route change). Testing showed the observer was not
+  necessary: with it disabled, the full navigation sequence (home to `/blog` to a post to `/blog` to
+  home, with the title sampled over time) still passed, so Next's reset was not reproduced. The
+  observer also protected against something no route or language change triggers (an outside script
+  overwriting the title), which the design no longer promises. It was removed by the owner's decision.
+- **Result of the final design (headless Chrome against `next start`)**: the title checks pass with
+  the effect only: ES on home, post and 404; in-app navigation home to `/blog` to a post to `/blog` to
+  home keeps the title (settled at the first sample, no later deviation); language switches on each
+  page; missing post URL; back to EN; and the served HTML still carries the English meta description
+  and post Open Graph title.
+- **Known limit (accepted with the decision)**: if something rewrote the title without a route or
+  language change, the effect would not re-apply it. Not tested: a real device, Safari, Firefox,
+  `next dev`, or the Vercel deployment; the owner's check on the preview covers those.
 - **Accepted deviation**: the meta description and Open Graph text stay English (Principle VI
   deviation, owner 2026-11-06; plan.md Complexity Tracking). Per-language URLs are on the backlog.
 
