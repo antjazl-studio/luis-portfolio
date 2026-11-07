@@ -86,7 +86,7 @@ src/
 │   ├── globals.css            # tokens, focus ring, reduced-motion block, selection
 │   ├── layout.tsx             # metadata (9 years), <main> target id lives in pages
 │   ├── page.tsx               # main landmark id="main"
-│   ├── not-found.tsx          # main landmark id="main"
+│   ├── not-found.tsx          # unchanged (renders BlogNotFound, which owns its <main>)
 │   └── blog/...               # pages only if main landmark lives there
 ├── components/
 │   ├── Navbar.tsx             # skip link, plain-text language toggle, solid bar, targets
