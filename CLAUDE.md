@@ -65,14 +65,21 @@ Reglas de gobierno completas en `.specify/memory/constitution.md`.
 ## Tema (CSS variables en globals.css)
 | Variable        | Valor     | Uso                        |
 |-----------------|-----------|----------------------------|
-| --background    | #0d1117   | Fondo principal            |
-| --foreground    | #e6edf3   | Texto principal            |
-| --accent        | #0078d4   | Azure blue, solo links y focus rings (CTAs neutrales) |
-| --accent-hover  | #106ebe   | Hover state del accent     |
-| --surface       | #161b22   | Cards, paneles             |
-| --surface-2     | #21262d   | Hover de surface           |
-| --muted         | #8b949e   | Texto secundario           |
-| --border        | #30363d   | Bordes y divisores         |
+| --background    | #050505   | Fondo principal (Ink Black) |
+| --foreground    | #FFFFFF   | Texto principal (Paper White) |
+| --accent        | #548CFF   | Cornflower Blue, solo links y focus rings (CTAs neutrales) |
+| --accent-hover  | #7DA8FF   | Hover state del accent     |
+| --surface       | #0E0E10   | Paneles                    |
+| --surface-2     | #18181B   | Hover de surface           |
+| --muted         | #A1A1AA   | Texto secundario           |
+| --border        | #27272A   | Divisores decorativos      |
+| --border-strong | #71717A   | Contorno de controles interactivos |
+| --focus-ring    | #548CFF   | Anillo de foco de teclado  |
+| --status-available | #34D399 | Punto de estado de disponibilidad (estático, solo junto a texto) |
+
+Referencia detallada de tokens, contrastes WCAG y tipografía: `DESIGN.md` (debe mantenerse
+consistente con la constitución; si hay conflicto, gana la constitución). `PRODUCT.md` y
+`DESIGN.md` están subordinados a la constitución.
 
 ## Design skills — precedence
 - The constitution (.specify/memory/constitution.md, Principle IV) overrides every design skill.

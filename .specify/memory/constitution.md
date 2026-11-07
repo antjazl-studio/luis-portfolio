@@ -1,10 +1,20 @@
 <!--
 Sync Impact Report
-- Version change: 1.0.0 -> 1.0.1 (PATCH: clarifications for feature 002-native-blog)
-- Modified principles: II (structure list updated for the native blog); VII (removed the
-  retired feed-service example; rule unchanged)
+- Version change: 1.1.0 -> 1.2.0 (MINOR: new theme token `--status-available` and new
+  third-party brand-marks exemption, materially expanded guidance in Principle V; owner decision
+  2026-11-06 for PR #8, replacing an earlier PATCH 1.1.1 designation)
+- Modified principles: V only. (1) New token `--status-available` (#34D399) in the table, with a
+  usage rule: static availability status dot only, always with adjacent plain text. (2) New
+  "third-party brand marks" exemption: the WhatsApp button fill (#25D366) and the Azure logo's own
+  SVG gradient; any other brand mark needs an amendment. The accent rule and Principle IV are
+  unchanged.
+- Modified sections: none other than Principle V and the version line
 - Added sections: none
 - Removed sections: none
+- Follow-up (outside this file, applied in the same PR, not by this command): src/app/globals.css
+  (`--status-available`), tailwind.config.ts (`status-available`), Hero.tsx and Contact.tsx (use
+  the token), DESIGN.md (token table, exceptions, version references), CLAUDE.md (theme table),
+  specs/005-design-refresh (plan Complexity Tracking, spec Owner Decisions)
 - Deferred TODOs: none
 -->
 # Luis Portfolio Constitution
@@ -57,12 +67,36 @@ float animation (`y: [0, -8, 0]`, ~5s). When in doubt, remove decoration rather 
 Rationale: the owner flagged these patterns as generic AI-generated UI-kit tells.
 
 ### V. Theme Through CSS Variables
-Colors MUST come from the CSS variables in `src/app/globals.css` (`--background #0d1117`,
-`--foreground #e6edf3`, `--accent #0078d4`, `--accent-hover #106ebe`, `--surface #161b22`,
-`--surface-2 #21262d`, `--muted #8b949e`, `--border #30363d`) or Tailwind neutral utilities
-permitted by Principle IV. `--accent` and `--accent-hover` MUST be used only for links and
-focus rings; CTAs MUST stay neutral per Principle IV. The theme is dark-only. Changes to theme
-values MUST update both `globals.css` and this constitution.
+Colors MUST come from the CSS variables in `src/app/globals.css` or Tailwind neutral utilities
+permitted by Principle IV. Core values (dark token set):
+
+| Variable | Value | Role |
+|----------|-------|------|
+| `--background` | `#050505` | Page (Ink Black) |
+| `--foreground` | `#FFFFFF` | Text and headings (Paper White) |
+| `--accent` | `#548CFF` | Links and focus rings (Cornflower Blue) |
+| `--accent-hover` | `#7DA8FF` | Link hover |
+| `--surface` | `#0E0E10` | Panels |
+| `--surface-2` | `#18181B` | Surface hover |
+| `--muted` | `#A1A1AA` | Secondary text |
+| `--border` | `#27272A` | Decorative hairline dividers |
+| `--border-strong` | `#71717A` | Outline of interactive controls |
+| `--focus-ring` | `#548CFF` | Keyboard focus ring |
+| `--status-available` | `#34D399` | Static availability status dot (not text, not a CTA, not an accent) |
+
+`--accent` and `--accent-hover` MUST be used only for links and focus rings; CTAs MUST stay
+neutral per Principle IV. `--status-available` MUST be used only for the static availability
+status dot and only next to plain text that carries the meaning; it MUST NOT color text, buttons,
+borders or backgrounds, and it does not widen the accent rule. The theme is dark-only. `DESIGN.md` is the detailed token reference
+(derivations, contrast ratios, typography, components) and MUST stay consistent with this table;
+on any conflict, this constitution wins. Changes to theme values MUST update `globals.css`,
+`DESIGN.md`, `CLAUDE.md` and this constitution together.
+
+Third-party brand marks: as an exception to the first sentence of this principle, an official
+third-party brand mark MAY keep its own colors although they are not in the table. The complete
+list is: the WhatsApp button fill (`#25D366`) and the Azure logo's own SVG gradient (artwork
+inside the third-party mark). Any other brand mark requires an amendment. This exemption does not
+relax Principle IV: gradients, glows and shadows in the site's own UI remain banned.
 
 ### VI. Bilingual Parity (NON-NEGOTIABLE)
 Every user-facing string MUST exist in both English (EN) and Spanish (ES) and be served through
@@ -83,10 +117,12 @@ a first impression and must not depend on third-party uptime.
 - Content describes the owner: Luis Antonio Jacho Zambrano, Senior Full Stack Developer
   (.NET | Angular | Azure), Quito, Ecuador. Factual claims (roles, dates, projects) MUST NOT be
   invented; unknown content MUST be marked as a placeholder for the owner to confirm.
-- Animations MUST use Framer Motion, MUST be subtle, and SHOULD respect
+- Animations MUST use Framer Motion, MUST be subtle, and MUST respect
   `prefers-reduced-motion`.
-- Pages MUST meet baseline accessibility: semantic landmarks, alt text on images, visible focus
-  states, and sufficient contrast against the dark background.
+- Pages MUST meet baseline accessibility: semantic landmarks, alt text on images, and visible
+  focus states.
+- Text contrast MUST meet WCAG AA: at least 4.5:1 for body text and 3:1 for large text and for
+  UI components (control outlines, focus rings, icons).
 - Root layout MUST define page metadata (title, description) and fonts.
 
 ## Development Workflow
@@ -108,6 +144,9 @@ follows semantic versioning: MAJOR for removed or redefined principles, MINOR fo
 principles or materially expanded guidance, PATCH for clarifications. Every spec, plan, and
 review MUST verify compliance with the principles above; deviations MUST be justified in the
 plan's complexity/constitution-check section. `CLAUDE.md` provides runtime guidance and MUST
-stay consistent with this document.
+stay consistent with this document. `PRODUCT.md` (product context) and `DESIGN.md` (design
+system reference) are subordinate to this constitution: they MAY refine it but MUST NOT
+contradict it, and a conflict is resolved by amending this file first via `/speckit-constitution`,
+never by following the subordinate document.
 
-**Version**: 1.0.1 | **Ratified**: 2026-11-05 | **Last Amended**: 2026-11-05
+**Version**: 1.2.0 | **Ratified**: 2026-11-05 | **Last Amended**: 2026-11-06

@@ -15,82 +15,66 @@ const PRIMARY_SKILLS = [
 
 const SECONDARY_SKILLS = ["React", "Node.js", "MongoDB", "MySQL", "Power BI"];
 
+const SEPARATOR = " · ";
+
 export function Skills() {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.1 });
-  const { language } = useLanguage();
+  const { language, reduceMotion: reduce } = useLanguage();
   const t = translations[language];
 
-  const anim = (delay = 0) => ({
-    initial:    { opacity: 0, y: 16 },
-    animate:    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
-    transition: { duration: 0.5, delay },
-  });
+  // Reduced motion: no entrance animation at all, content is simply present.
+  const anim = (delay = 0) =>
+    reduce
+      ? { initial: false as const, animate: { opacity: 1, y: 0 }, transition: { duration: 0 } }
+      : {
+          initial:    { opacity: 0, y: 16 },
+          animate:    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
+          transition: { duration: 0.5, delay },
+        };
 
   return (
-    <section
-      id="skills"
-      ref={ref}
-      className="border-t border-white/5 bg-[#0f0f0f] py-24"
-      style={{
-        backgroundImage: "radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)",
-        backgroundSize:  "32px 32px",
-      }}
-    >
+    <section id="skills" ref={ref} className="border-t border-border bg-background py-24">
       <div className="relative mx-auto max-w-6xl px-6">
         <AnimatePresence mode="popLayout">
           <motion.div
             key={language}
-            initial={{ opacity: 0 }}
+            initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            exit={reduce ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: reduce ? 0 : 0.15 }}
           >
-            <motion.p {...anim(0)} className="mb-3 text-xs font-medium uppercase tracking-widest text-cyan-400">
-              {t.skills.label}
-            </motion.p>
             <motion.h2
               {...anim(0.05)}
-              className="mb-14 bg-gradient-to-b from-white to-white/70 bg-clip-text text-2xl font-semibold text-transparent sm:text-3xl"
+              className="mb-14 text-2xl font-semibold text-foreground sm:text-3xl"
             >
               {t.skills.heading}
             </motion.h2>
 
-            <div className="space-y-10">
+            <dl className="space-y-6">
               {PRIMARY_SKILLS.map((group, i) => (
-                <motion.div key={group.category} {...anim(0.1 + i * 0.06)}>
-                  <p className="mb-3 text-xs font-bold uppercase tracking-widest text-cyan-400">
-                    {group.category}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {group.items.map((skill) => (
-                      <span
-                        key={skill}
-                        className="cursor-default rounded border border-neutral-800 bg-neutral-900 px-2.5 py-1 text-xs text-neutral-400 transition-all duration-150 hover:-translate-y-0.5 hover:border-cyan-400/50 hover:bg-cyan-400/10 hover:text-neutral-200"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
+                <motion.div
+                  key={group.category}
+                  {...anim(0.1 + i * 0.06)}
+                  className="grid gap-1 md:grid-cols-[12rem_1fr] md:gap-8"
+                >
+                  <dt className="text-sm font-medium text-foreground">{group.category}</dt>
+                  <dd className="text-sm leading-relaxed text-muted">
+                    {group.items.join(SEPARATOR)}
+                  </dd>
                 </motion.div>
               ))}
 
-              <motion.div {...anim(0.1 + PRIMARY_SKILLS.length * 0.06)}>
-                <p className="mb-3 text-xs font-medium uppercase tracking-widest text-neutral-600">
-                  {t.skills.also}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {SECONDARY_SKILLS.map((skill) => (
-                    <span
-                      key={skill}
-                      className="cursor-default rounded border border-neutral-800/60 bg-neutral-900/50 px-2.5 py-1 text-xs text-neutral-600 transition-all duration-150 hover:text-neutral-400"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
+              <motion.div
+                {...anim(0.1 + PRIMARY_SKILLS.length * 0.06)}
+                className="grid gap-1 md:grid-cols-[12rem_1fr] md:gap-8"
+              >
+                <dt className="text-sm font-medium text-muted">{t.skills.also}</dt>
+                <dd className="text-sm leading-relaxed text-muted">
+                  {SECONDARY_SKILLS.join(SEPARATOR)}
+                </dd>
               </motion.div>
-            </div>
+            </dl>
           </motion.div>
         </AnimatePresence>
       </div>

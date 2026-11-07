@@ -11,12 +11,16 @@ import type { Language } from "@/context/LanguageContext";
 const NAV_IDS = ["about", "experience", "skills", "projects", "contact"] as const;
 type NavId = typeof NAV_IDS[number];
 
+// Smooth scrolling is motion: honour the visitor's reduced-motion preference.
+const scrollBehavior = (): ScrollBehavior =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+
 export function Navbar() {
-  const [scrolled,   setScrolled]   = useState(false);
   const [active,     setActive]     = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const { language, toggleLanguage } = useLanguage();
+  const { language, toggleLanguage, reduceMotion: reduce } = useLanguage();
+  const dur = (seconds: number) => (reduce ? 0 : seconds);
   const t        = translations[language];
   const pathname = usePathname() ?? "";
   const onHome   = pathname === "/";
@@ -37,7 +41,7 @@ export function Navbar() {
     setMobileOpen(false);
     if (onHome && isPlainClick(e)) {
       e.preventDefault();
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      document.getElementById(id)?.scrollIntoView({ behavior: scrollBehavior() });
     }
   };
 
@@ -45,16 +49,9 @@ export function Navbar() {
     setMobileOpen(false);
     if (onHome && isPlainClick(e)) {
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: scrollBehavior() });
     }
   };
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     // Section elements exist only on the home page; re-subscribe on route change.
@@ -83,23 +80,27 @@ export function Navbar() {
   }, []);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-black/80 backdrop-blur-md" : "bg-transparent"
-      }`}
+    <>
+    {/* First focusable element on every page: jumps past the navigation to <main id="main">. */}
+    <a
+      href="#main"
+      className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:inline-flex focus:min-h-11 focus:items-center focus:rounded-[10px] focus:bg-white focus:px-[22px] focus:text-sm focus:font-medium focus:text-neutral-900"
     >
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
+      {t.a11y.skip}
+    </a>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-6">
 
-        {/* Monogram */}
+        {/* Wordmark */}
         <Link
           href="/"
           onClick={handleMonogramClick}
-          className="font-mono text-sm font-semibold text-cyan-400 transition-colors duration-150 hover:text-cyan-300"
+          className="inline-flex min-h-11 items-center text-[0.9375rem] font-semibold tracking-tight text-foreground"
         >
-          LJ
+          Luis Jacho Zambrano
         </Link>
 
-        {/* Right group — desktop */}
+        {/* Right group: desktop */}
         <div className="hidden items-center gap-7 md:flex">
           <nav className="flex items-center gap-7">
             {navLinks.map(({ id, label, href }) => {
@@ -108,19 +109,13 @@ export function Navbar() {
                 <Link
                   key={id}
                   href={href}
+                  aria-current={isActive ? "location" : undefined}
                   onClick={(e) => handleSectionClick(e, id)}
-                  className={`relative text-sm font-medium transition-colors duration-150 ${
-                    isActive ? "text-white" : "text-neutral-400 hover:text-white"
+                  className={`inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium transition-colors duration-150 ${
+                    isActive ? "text-foreground" : "text-muted hover:text-foreground"
                   }`}
                 >
                   {label}
-                  {isActive && (
-                    <motion.span
-                      layoutId="nav-indicator"
-                      className="absolute -bottom-0.5 left-0 right-0 h-px bg-white/50"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
                 </Link>
               );
             })}
@@ -129,48 +124,42 @@ export function Navbar() {
             <Link
               href="/blog"
               aria-current={onBlog ? "page" : undefined}
-              className={`relative text-sm font-medium transition-colors duration-150 ${
-                onBlog ? "text-white" : "text-neutral-400 hover:text-white"
+              className={`inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium transition-colors duration-150 ${
+                onBlog ? "text-foreground" : "text-muted hover:text-foreground"
               }`}
             >
               {t.nav.blog}
-              {onBlog && (
-                <motion.span
-                  layoutId="nav-indicator"
-                  className="absolute -bottom-0.5 left-0 right-0 h-px bg-white/50"
-                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                />
-              )}
             </Link>
           </nav>
 
           {/* Language switcher */}
-          <LangSwitcher language={language} onToggle={toggleLanguage} />
+          <LangSwitcher language={language} onToggle={toggleLanguage} label={t.a11y.language} divided />
         </div>
 
         {/* Mobile: language switcher + hamburger */}
-        <div className="flex items-center gap-3 md:hidden">
-          <LangSwitcher language={language} onToggle={toggleLanguage} />
+        <div className="flex items-center gap-1 md:hidden">
+          <LangSwitcher language={language} onToggle={toggleLanguage} label={t.a11y.language} />
 
           <button
             onClick={() => setMobileOpen((v) => !v)}
-            aria-label="Toggle menu"
-            className="flex h-8 w-8 flex-col items-center justify-center gap-[5px]"
+            aria-label={t.a11y.menu}
+            aria-expanded={mobileOpen}
+            className="flex h-11 w-11 flex-col items-center justify-center gap-[5px]"
           >
             <motion.span
               animate={mobileOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
-              transition={{ duration: 0.18 }}
-              className="block h-px w-5 origin-center bg-neutral-400"
+              transition={{ duration: dur(0.18) }}
+              className="block h-px w-5 origin-center bg-muted"
             />
             <motion.span
               animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-              transition={{ duration: 0.12 }}
-              className="block h-px w-5 bg-neutral-400"
+              transition={{ duration: dur(0.12) }}
+              className="block h-px w-5 bg-muted"
             />
             <motion.span
               animate={mobileOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
-              transition={{ duration: 0.18 }}
-              className="block h-px w-5 origin-center bg-neutral-400"
+              transition={{ duration: dur(0.18) }}
+              className="block h-px w-5 origin-center bg-muted"
             />
           </button>
         </div>
@@ -184,17 +173,18 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="overflow-hidden border-t border-white/5 bg-black/90 backdrop-blur-md md:hidden"
+            transition={{ duration: dur(0.2), ease: "easeInOut" }}
+            className="overflow-hidden border-t border-border bg-background md:hidden"
           >
             <nav className="flex flex-col px-6 py-3">
               {navLinks.map(({ id, label, href }) => (
                 <Link
                   key={id}
                   href={href}
+                  aria-current={active === id && !onBlog ? "location" : undefined}
                   onClick={(e) => handleSectionClick(e, id)}
-                  className={`border-b border-white/5 py-3.5 text-left text-sm font-medium transition-colors duration-150 ${
-                    active === id && !onBlog ? "text-white" : "text-neutral-400"
+                  className={`flex min-h-11 items-center border-b border-border py-3 text-left text-sm font-medium transition-colors duration-150 ${
+                    active === id && !onBlog ? "text-foreground" : "text-muted"
                   }`}
                 >
                   {label}
@@ -204,8 +194,8 @@ export function Navbar() {
                 href="/blog"
                 aria-current={onBlog ? "page" : undefined}
                 onClick={() => setMobileOpen(false)}
-                className={`py-3.5 text-left text-sm font-medium transition-colors duration-150 ${
-                  onBlog ? "text-white" : "text-neutral-400"
+                className={`flex min-h-11 items-center py-3 text-left text-sm font-medium transition-colors duration-150 ${
+                  onBlog ? "text-foreground" : "text-muted"
                 }`}
               >
                 {t.nav.blog}
@@ -215,27 +205,36 @@ export function Navbar() {
         )}
       </AnimatePresence>
     </header>
+    </>
   );
 }
 
-function LangSwitcher({ language, onToggle }: { language: Language; onToggle: () => void }) {
+function LangSwitcher({
+  language,
+  onToggle,
+  label,
+  divided = false,
+}: {
+  language: Language;
+  onToggle: () => void;
+  label: string;
+  divided?: boolean;
+}) {
   return (
-    <div className="relative flex rounded-full border border-white/10 bg-white/5 p-0.5">
+    <div
+      role="group"
+      aria-label={label}
+      className={`flex items-center ${divided ? "border-l border-border pl-4" : ""}`}
+    >
       {(["en", "es"] as Language[]).map((lang) => (
         <button
           key={lang}
           onClick={() => { if (lang !== language) onToggle(); }}
-          className={`relative z-10 rounded-full px-2.5 py-1 text-xs font-medium uppercase transition-colors duration-150 ${
-            language === lang ? "text-white" : "text-neutral-500 hover:text-neutral-300"
+          aria-pressed={language === lang}
+          className={`inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium uppercase transition-colors duration-150 ${
+            language === lang ? "text-foreground" : "text-muted hover:text-foreground"
           }`}
         >
-          {language === lang && (
-            <motion.span
-              layoutId="lang-pill"
-              className="absolute inset-0 rounded-full bg-white/10"
-              transition={{ type: "spring", stiffness: 380, damping: 30 }}
-            />
-          )}
           {lang}
         </button>
       ))}

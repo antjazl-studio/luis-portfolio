@@ -10,15 +10,17 @@ type Translation = {
     blog:       string;
   };
   hero: {
-    badge:    string;
-    subtitle: string;
-    impact:   string;
-    bio:      string;
-    cta_work: string;
-    cta_cv:   string;
+    title:       string;
+    subline:     string;
+    who:         string;
+    impact:      string;
+    availability: string;
+    timezone:    string;
+    portraitAlt: string;
+    cta_work:    string;
+    cta_cv:      string;
   };
   about: {
-    label:       string;
     heading:     string;
     p1:          string;
     p2:          string;
@@ -29,7 +31,6 @@ type Translation = {
     stat3_label: string;
   };
   experience: {
-    label:   string;
     heading: string;
     present: string;
     logiztik: {
@@ -39,17 +40,14 @@ type Translation = {
     };
   };
   skills: {
-    label:   string;
     heading: string;
     also:    string;
   };
   projects: {
-    label:    string;
     heading:  string;
     featured: string;
   };
   contact: {
-    label:        string;
     heading:      string;
     sub:          string;
     button:       string;
@@ -72,6 +70,14 @@ type Translation = {
     pageNotFoundLink:  string;
     dateLocale:    string;
   };
+  a11y: {
+    skip:      string;
+    menu:      string;
+    language:  string;
+    linkedin:  string;
+    email:     string;
+    whatsapp:  string;
+  };
   footer: string;
 };
 
@@ -86,17 +92,19 @@ const translations: Record<Language, Translation> = {
       blog:       "Blog",
     },
     hero: {
-      badge:    "Available for freelance projects",
-      subtitle: "Senior Full Stack Developer",
-      impact:   "Reduced release downtime ~60% with CI/CD automation · Architected Azure systems for 30,000+ users.",
-      bio:      "8+ years building enterprise platforms at scale. Led development of a workforce management platform serving 30,000+ active users.",
-      cta_work: "View My Work",
-      cta_cv:   "Download CV",
+      title:       "Senior .NET & Azure engineer.",
+      subline:     "Nine years shipping for US teams. Now building AI agents.",
+      who:         "Luis Antonio Jacho Zambrano · Quito, Ecuador",
+      impact:      "Reduced release downtime ~60% with CI/CD automation. Architected Azure systems for 30,000+ users.",
+      availability: "Open to senior remote roles and consulting",
+      timezone:    "Quito, UTC−5 year-round: fully overlapping US Eastern and Central business hours.",
+      portraitAlt: "Portrait of Luis Antonio Jacho Zambrano",
+      cta_work:    "View My Work",
+      cta_cv:      "Download CV",
     },
     about: {
-      label:       "About me",
       heading:     "Building scalable systems, leading teams, shipping products.",
-      p1:          "I'm a Senior Full Stack Developer based in Quito, Ecuador with 8+ years of experience building enterprise-grade web applications.",
+      p1:          "I'm a Senior Full Stack Developer based in Quito, Ecuador with 9 years of experience building enterprise-grade web applications.",
       p2:          "At MyWork, I led the full-stack development of a workforce management platform serving 30,000+ active users — owning everything from API architecture and Azure infrastructure to CI/CD pipelines and frontend delivery.",
       p3:          "I specialize in .NET, Angular, and Azure, with a strong focus on system performance, clean architecture, and mentoring engineering teams.",
       azure_badge: "Azure Developer Associate",
@@ -105,7 +113,6 @@ const translations: Record<Language, Translation> = {
       stat3_label: "Azure certification",
     },
     experience: {
-      label:   "Experience",
       heading: "Where I've worked",
       present: "Present",
       logiztik: {
@@ -118,24 +125,21 @@ const translations: Record<Language, Translation> = {
       },
     },
     skills: {
-      label:   "Skills",
       heading: "What I work with",
       also:    "Also experienced with:",
     },
     projects: {
-      label:    "Projects",
       heading:  "Selected work",
       featured: "Featured",
     },
     contact: {
-      label:        "Contact",
       heading:      "Let's work together",
-      sub:          "I'm currently available for freelance projects and full-time remote positions. Let's talk.",
+      sub:          "Open to senior remote roles and consulting. Let's talk.",
       button:       "Send me an email",
       availability: "Available for work",
-      open_to:      "Open to: Freelance · Consulting",
+      open_to:      "Open to: Senior remote roles · Consulting",
       response:     "Response time: within 24h",
-      timezone:     "Timezone: GMT-5 (flexible)",
+      timezone:     "Timezone: UTC−5 year-round",
     },
     blog: {
       title:         "Blog",
@@ -151,6 +155,14 @@ const translations: Record<Language, Translation> = {
       pageNotFoundLink:  "Back to home",
       dateLocale:    "en-US",
     },
+    a11y: {
+      skip:     "Skip to main content",
+      menu:     "Toggle menu",
+      language: "Language",
+      linkedin: "LinkedIn",
+      email:    "Email",
+      whatsapp: "Chat on WhatsApp",
+    },
     footer: "Built with Next.js & Tailwind",
   },
 
@@ -164,18 +176,20 @@ const translations: Record<Language, Translation> = {
       blog:       "Blog",
     },
     hero: {
-      badge:    "Disponible para proyectos freelance",
-      subtitle: "Desarrollador Full Stack Senior",
-      impact:   "Reduje el downtime en releases ~60% con CI/CD · Arquitecté sistemas Azure para 30,000+ usuarios.",
-      bio:      "Más de 8 años construyendo plataformas empresariales a escala. Lideré el desarrollo de una plataforma de gestión de personal con más de 30,000 usuarios activos.",
-      cta_work: "Ver mi trabajo",
-      cta_cv:   "Descargar CV",
+      title:       "Ingeniero senior de .NET y Azure.",
+      subline:     "Nueve años desarrollando software para equipos de EE. UU. Ahora, construyendo agentes de IA.",
+      who:         "Luis Antonio Jacho Zambrano · Quito, Ecuador",
+      impact:      "Reduje ~60 % el tiempo de inactividad en despliegues con CI/CD. Diseñé la arquitectura en Azure de sistemas con más de 30.000 usuarios.",
+      availability: "Disponible para puestos remotos senior y consultoría",
+      timezone:    "Quito, UTC−5 todo el año: horario laboral compatible con el este y el centro de EE. UU.",
+      portraitAlt: "Retrato de Luis Antonio Jacho Zambrano",
+      cta_work:    "Ver mi trabajo",
+      cta_cv:      "Descargar CV",
     },
     about: {
-      label:       "Sobre mí",
-      heading:     "Construyendo sistemas escalables, liderando equipos, entregando productos.",
-      p1:          "Soy un Desarrollador Full Stack Senior con sede en Quito, Ecuador, con más de 8 años de experiencia construyendo aplicaciones web empresariales.",
-      p2:          "En MyWork, lideré el desarrollo full-stack de una plataforma de gestión de personal con más de 30,000 usuarios activos — a cargo de todo, desde la arquitectura de APIs e infraestructura en Azure hasta pipelines de CI/CD y entrega frontend.",
+      heading:     "Construyo sistemas escalables, lidero equipos y entrego productos.",
+      p1:          "Soy desarrollador full stack senior en Quito, Ecuador, con 9 años de experiencia construyendo aplicaciones web empresariales.",
+      p2:          "En MyWork lideré el desarrollo full stack de una plataforma de gestión de personal con más de 30.000 usuarios activos: desde la arquitectura de las API y la infraestructura en Azure hasta los pipelines de CI/CD y el frontend.",
       p3:          "Me especializo en .NET, Angular y Azure, con un fuerte enfoque en el rendimiento del sistema, arquitectura limpia y mentoría de equipos de ingeniería.",
       azure_badge: "Azure Developer Associate",
       stat1_label: "Años de experiencia",
@@ -183,7 +197,6 @@ const translations: Record<Language, Translation> = {
       stat3_label: "Certificación Azure",
     },
     experience: {
-      label:   "Experiencia",
       heading: "Dónde he trabajado",
       present: "Presente",
       logiztik: {
@@ -191,29 +204,26 @@ const translations: Record<Language, Translation> = {
         period: "Oct 2019 – Abr 2020",
         bullets: [
           "Desarrollé Cargo Plus, una plataforma logística para el seguimiento de envíos y la automatización de flujos de trabajo con .NET, PostgreSQL y JavaScript.",
-          "Construí servicios backend RESTful e integré APIs logísticas de terceros, reduciendo la entrada manual de datos para los equipos de operaciones.",
+          "Desarrollé servicios backend REST e integré API logísticas de terceros, lo que redujo la carga manual de datos de los equipos de operaciones.",
         ],
       },
     },
     skills: {
-      label:   "Habilidades",
       heading: "Con qué trabajo",
-      also:    "También con experiencia en:",
+      also:    "También he trabajado con:",
     },
     projects: {
-      label:    "Proyectos",
-      heading:  "Trabajo seleccionado",
+      heading:  "Proyectos seleccionados",
       featured: "Destacado",
     },
     contact: {
-      label:        "Contacto",
       heading:      "Trabajemos juntos",
-      sub:          "Actualmente estoy disponible para proyectos freelance y posiciones remotas a tiempo completo. Hablemos.",
+      sub:          "Disponible para puestos remotos senior y consultoría. Hablemos.",
       button:       "Envíame un correo",
       availability: "Disponible para trabajar",
-      open_to:      "Abierto a: Freelance · Consultoría",
-      response:     "Tiempo de respuesta: dentro de 24h",
-      timezone:     "Zona horaria: GMT-5 (flexible)",
+      open_to:      "Abierto a: puestos remotos senior · consultoría",
+      response:     "Tiempo de respuesta: menos de 24 h",
+      timezone:     "Zona horaria: UTC−5 todo el año",
     },
     blog: {
       title:         "Blog",
@@ -229,7 +239,15 @@ const translations: Record<Language, Translation> = {
       pageNotFoundLink:  "Volver al inicio",
       dateLocale:    "es-EC",
     },
-    footer: "Construido con Next.js & Tailwind",
+    a11y: {
+      skip:     "Saltar al contenido principal",
+      menu:     "Abrir o cerrar el menú",
+      language: "Idioma",
+      linkedin: "LinkedIn",
+      email:    "Correo electrónico",
+      whatsapp: "Escríbeme por WhatsApp",
+    },
+    footer: "Hecho con Next.js y Tailwind",
   },
 };
 

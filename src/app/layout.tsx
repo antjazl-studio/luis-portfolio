@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "Luis Jacho Zambrano — Senior Full Stack Developer",
   description:
-    "Senior Full Stack Developer with 8+ years of experience in .NET, Angular, and Azure. Azure Developer Associate certified.",
+    "Senior Full Stack Developer with 9 years of experience in .NET, Angular, and Azure. Azure Developer Associate certified.",
   keywords: [".NET", "Angular", "Azure", "Full Stack", "TypeScript", "Ecuador"],
   authors: [{ name: "Luis Antonio Jacho Zambrano" }],
 };

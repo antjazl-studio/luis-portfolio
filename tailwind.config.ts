@@ -18,6 +18,19 @@ const config: Config = {
         "surface-2": "var(--surface-2)",
         muted: "var(--muted)",
         border: "var(--border)",
+        "border-strong": "var(--border-strong)",
+        "focus-ring": "var(--focus-ring)",
+        "status-available": "var(--status-available)",
+      },
+      // One quiet entrance for the hero. The global prefers-reduced-motion block in
+      // globals.css collapses its duration, so it needs no JS handling.
+      keyframes: {
+        rise: {
+          from: { opacity: "0", transform: "translateY(8px)" },
+        },
+      },
+      animation: {
+        rise: "rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both",
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],

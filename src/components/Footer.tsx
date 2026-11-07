@@ -5,24 +5,24 @@ import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
 
 export function Footer() {
-  const { language } = useLanguage();
+  const { language, reduceMotion: reduce } = useLanguage();
   const t = translations[language];
 
   return (
-    <footer className="border-t border-white/5 bg-[#0a0a0a] py-8">
+    <footer className="border-t border-border bg-background py-8">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 sm:flex-row">
 
         <AnimatePresence mode="popLayout">
           <motion.p
             key={language}
-            initial={{ opacity: 0 }}
+            initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-            className="text-xs text-neutral-600"
+            exit={reduce ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: reduce ? 0 : 0.15 }}
+            className="text-xs text-muted"
           >
             © {new Date().getFullYear()} Luis Jacho
-            <span className="mx-2 text-neutral-800">·</span>
+            <span className="mx-2">·</span>
             {t.footer}
           </motion.p>
         </AnimatePresence>
@@ -32,15 +32,15 @@ export function Footer() {
             href="https://linkedin.com/in/luis-jacho-zambrano-843558139"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            className="text-neutral-700 transition-colors duration-150 hover:text-neutral-400"
+            aria-label={t.a11y.linkedin}
+            className="inline-flex h-11 w-11 items-center justify-center text-muted transition-colors duration-150 hover:text-foreground"
           >
             <LinkedInIcon />
           </a>
           <a
             href="mailto:antjazl@gmail.com"
-            aria-label="Email"
-            className="text-neutral-700 transition-colors duration-150 hover:text-neutral-400"
+            aria-label={t.a11y.email}
+            className="inline-flex h-11 w-11 items-center justify-center text-muted transition-colors duration-150 hover:text-foreground"
           >
             <EmailIcon />
           </a>

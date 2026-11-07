@@ -13,6 +13,10 @@
 > constitution v1.0.0 it is recorded under "Known deviations" instead of being silently
 > blessed. Future features SHOULD diff against this baseline.
 
+> **Update 2026-11-06 (spec 005):** the blog parts of this baseline (Dev.to via rss2json, browser
+> storage, English-only blog pages, and the related deviations) are superseded by spec 002 and are
+> marked inline. The Input line above still mentions them as originally written.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Recruiter scans the home page (Priority: P1)
@@ -117,6 +121,9 @@ button; each performs the action described below.
 
 ### User Story 5 - Read blog posts (Priority: P2)
 
+> **Superseded by spec 002 (native blog).** The Dev.to feed, browser-storage flow and English-only
+> blog described in this story were replaced by the native Markdown blog. Original text kept for history.
+
 A visitor opens the Blog to see recent Dev.to articles and reads one inside the site.
 
 **Why this priority**: Secondary content; not part of the core recruiter flow.
@@ -151,9 +158,12 @@ A visitor opens the Blog to see recent Dev.to articles and reads one inside the 
   are not suppressed.
 - JavaScript disabled: page content depends on client-side rendering; behavior not guaranteed.
 - Blog thumbnails are absent: card/post renders without an image.
+  *Superseded by spec 002 (native blog).*
 - Dev.to returns an item without a category: "Dev" (post) / "Tech" (card) label is used.
+  *Superseded by spec 002 (native blog).*
 - Blog texts (header, error, Refresh, Back, Read original) do not change with the language
   switcher.
+  *Superseded by spec 002 (native blog).*
 - Experience entry dates for past roles are fixed text and not translated; job titles, company
   names, bullets, project descriptions, and skill names are English-only in both languages.
 
@@ -237,23 +247,30 @@ A visitor opens the Blog to see recent Dev.to articles and reads one inside the 
 **Blog index**
 - **FR-110**: `/blog` MUST fetch the Dev.to feed through the rss2json service when the page
   opens in the browser and show the first 6 items.
+  *Superseded by spec 002 (native blog).*
 - **FR-111**: Each loaded list MUST be saved in the browser's local storage so post pages can
   read it.
+  *Superseded by spec 002 (native blog).*
 - **FR-112**: Loading MUST show skeleton rows; failure MUST show the inline error message
   defined in User Story 5.
+  *Superseded by spec 002 (native blog).*
 - **FR-113**: A "Refresh" button MUST re-run the fetch (only visible after a successful load).
+  *Superseded by spec 002 (native blog).*
 
 **Blog post**
 - **FR-120**: `/blog/<slug>` MUST locate the article by slug in local storage and render its
   HTML content with typography styling; unknown slug MUST show "Article not found."
+  *Superseded by spec 002 (native blog).*
 - **FR-121**: The slug MUST be derived from the article title (lowercase, hyphenated, up to 60
   characters).
+  *Superseded by spec 002 (native blog).*
 
 ### Key Entities
 
 - **Article**: title, summary, category, date, source (author), original URL, slug, optional
   thumbnail, optional full HTML content. Held only in browser storage; not persisted anywhere
   server-side.
+  *Superseded by spec 002 (native blog).*
 - **Language**: "en" | "es", the single piece of shared UI state.
 - **Experience entry / Project / Skill group**: static content authored in the code; not
   editable without a code change.
@@ -266,16 +283,20 @@ constitution**; none is fixed by this document.
 ### Principle II — Component Conventions
 - **D-001**: `src/app/blog/page.tsx` and `src/app/blog/[slug]/page.tsx` are `"use client"`
   pages (constitution: pages MUST stay server components).
+  *Superseded by spec 002 (native blog).*
 - **D-002**: `Footer.tsx` is a client component only for the language cross-fade; it has no
   other interactivity needed beyond language. `BlogCard.tsx` is `"use client"` for a mount
   animation. Both are borderline under "only components that need interactivity".
+  *Superseded by spec 002 (native blog) for the `BlogCard` part; the `Footer` part still applies.*
 - **D-003** (compliant, for reference): `app/page.tsx` and `layout.tsx` are server components;
   `layout.tsx` wraps children in a client language provider, which is acceptable.
 - **D-004**: The blog `<img>` tags suppress the Next.js lint rule with `eslint-disable`
   instead of using the framework image component.
+  *Superseded by spec 002 (native blog).*
 - **D-005**: `toArticle` in the blog index uses a double cast (`as unknown as`) and
   `Record<string, string>` to access array data (`categories`), a weak-typing workaround
   against the "no untyped any" spirit.
+  *Superseded by spec 002 (native blog).*
 
 ### Principle IV — Minimal, Opinionated UI (non-negotiable)
 Banned patterns present today:
@@ -289,6 +310,7 @@ Banned patterns present today:
 - **D-014**: Tinted pill badges: Hero tech stack (`bg-blue-500/10 border-blue-500/25
   text-blue-300`), blog category pills (cyan border, rounded-full), "Featured" project tag
   (`bg-cyan-400/10`).
+  *The "blog category pills" part is superseded by spec 002 (native blog); the rest still applied at baseline.*
 - **D-015**: Cyan-tinted tag hover on Skills (`hover:border-cyan-400/50 hover:bg-cyan-400/10`).
 - **D-016**: Cyan accent top gradient line on the featured project card.
 - **D-017**: Frosted/blurred translucent surfaces: navbar when scrolled (`backdrop-blur-md`),
@@ -312,12 +334,14 @@ Banned patterns present today:
   palette classes (`cyan-400`, `blue-600`, `zinc-*`, `neutral-*`, `slate-*`).
 - **D-031**: Mixed page backgrounds: home sections alternate `#0a0a0a` / `#0f0f0f`, the blog
   index uses `#0d1117` (the theme background), blog posts use `#0a0a0a`.
+  *The blog page backgrounds part is superseded by spec 002 (native blog).*
 - **D-032**: `--accent` is not limited to links and focus rings — the cyan/blue accent colors
   are used on CTAs, labels, badges and borders. There are no custom focus-ring styles.
 
 ### Principle VI — Bilingual Parity (non-negotiable)
 - **D-040**: Blog index and post pages are English-only (header, error, "Refresh", "Back to
   Blog", "Read original article on Dev.to →", "Article not found.", date format `en-US`).
+  *Superseded by spec 002 (native blog).*
 - **D-041**: Experience (roles, companies, bullets, location), Projects (titles, descriptions),
   Skills (group names), Contact location "Quito, Ecuador (GMT-5)", Hero tech names, and the
   copyright holder are hard-coded English in the components rather than in the translation
@@ -335,19 +359,25 @@ Banned patterns present today:
 - **D-050**: The blog fetch runs client-side on mount (`useEffect`), so the page is
   non-blocking and the home page has no external calls (compliant), but the blog list is
   empty until JavaScript runs.
+  *Superseded by spec 002 (native blog).*
 - **D-051**: Failure fallback exists (inline error text) but offers no retry button, and a
   stale cached list in local storage is not used as a fallback.
+  *Superseded by spec 002 (native blog).*
 - **D-052**: The blog post page depends entirely on local storage populated by the list page;
   deep links, shared URLs, and a second device show "Article not found." There is no
   server-side or on-demand fetch fallback.
+  *Superseded by spec 002 (native blog).*
 - **D-053**: Article HTML from a third party is injected unsanitized via
   `dangerouslySetInnerHTML` (security risk; not a listed principle, but relevant to Principle
   VII's external-content boundary).
+  *Superseded by spec 002 (native blog).*
 - **D-054**: The rss2json service is called without an API key (compliant — no secrets in the
   frontend); the free tier may rate-limit.
+  *Superseded by spec 002 (native blog).*
 - **D-055**: No agent API integration exists in the code (the constitution names one).
 - **D-056**: The feed is `https://dev.to/feed` (global latest posts), not the owner's own posts;
   the page header says "Latest posts from the Dev.to community".
+  *Superseded by spec 002 (native blog).*
 
 ### Principle III — Mobile-First / Accessibility baseline
 - **D-060**: Not verified at 360px by this review. The Hero uses `min-h-screen`, which on mobile
@@ -355,6 +385,7 @@ Banned patterns present today:
 - **D-061**: Animations do not honor `prefers-reduced-motion` (constitution: SHOULD).
 - **D-062**: Blog images and thumbnails use empty `alt=""` even when decorative-vs-informative
   status is unclear; focus states are not styled.
+  *The blog images and thumbnails part is superseded by spec 002 (native blog).*
 - **D-063**: Nav section "buttons" are `<button>` scrolling via script rather than anchor links
   (no URL hash update).
 
@@ -363,6 +394,7 @@ Banned patterns present today:
   unknown.
 - **D-071**: Metadata is defined once in layout; there is no per-page metadata for `/blog` or
   blog posts.
+  *Superseded by spec 002 (native blog).*
 - **D-072**: The Experience entry "Previous Role" (2019 – 2020) is a placeholder company name.
   Under the constitution, unconfirmed content MUST be marked for owner confirmation.
 
@@ -381,6 +413,7 @@ Banned patterns present today:
 - **SC-005**: When the blog feed service is unavailable, the visitor still sees the error
   message and can navigate back to the home page without any crash (verified: error state
   renders).
+  *Superseded by spec 002 (native blog).*
 - **SC-006**: This baseline lists 100% of the components in the requested scope, each with
   behavior and acceptance criteria, and records every constitution deviation found.
 

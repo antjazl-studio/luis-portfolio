@@ -13,17 +13,17 @@ export function BlogNotFound() {
   const isPost = pathname.startsWith("/blog/");
 
   return (
-    <main className="min-h-screen bg-[var(--background)] pb-20 pt-24">
+    <main id="main" tabIndex={-1} className="min-h-svh bg-background pb-20 pt-24 focus:outline-none">
       <div className="mx-auto max-w-3xl px-6 text-center">
-        <h1 className="mb-3 text-2xl font-semibold text-white">
+        <h1 className="mb-3 text-2xl font-semibold text-foreground">
           {isPost ? t.notFoundTitle : t.pageNotFoundTitle}
         </h1>
-        <p className="mb-6 text-sm text-[var(--muted)]">
+        <p className="mb-6 text-sm text-muted">
           {isPost ? t.notFoundBody : t.pageNotFoundBody}
         </p>
         <Link
           href={isPost ? "/blog" : "/"}
-          className="text-sm text-[var(--accent)] hover:text-[var(--accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+          className="inline-flex min-h-11 items-center text-sm text-accent underline underline-offset-[3px] hover:text-accent-hover"
         >
           {isPost ? t.notFoundLink : t.pageNotFoundLink}
         </Link>
