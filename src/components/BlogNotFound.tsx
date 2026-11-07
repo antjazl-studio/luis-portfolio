@@ -2,14 +2,15 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useStablePathname } from "@/components/Navbar";
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
 
 /** Localized 404. Shows the "post not found" wording for /blog/* URLs. */
 export function BlogNotFound() {
   const { language, setPageTitle } = useLanguage();
-  const pathname = usePathname() ?? "";
+  // Only rendered on 404 pages, whose prerendered shell has no URL: neutral until hydrated, then the real path.
+  const pathname = useStablePathname([]);
   const t = translations[language].blog;
   const isPost = pathname.startsWith("/blog/");
   const title = translations[language].meta.home;

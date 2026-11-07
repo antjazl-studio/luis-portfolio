@@ -5,6 +5,7 @@ import { Navbar }           from "@/components/Navbar";
 import { Footer }           from "@/components/Footer";
 import { WhatsAppButton }   from "@/components/WhatsAppButton";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { getVisiblePosts } from "@/lib/blog";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -35,11 +36,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Routes prerendered with their own URL (same source as generateStaticParams). The Navbar keeps the real
+  // pathname for these and renders the neutral 404 shell state for any other URL until hydration.
+  const prerenderedPaths = ["/", "/blog", ...getVisiblePosts().map((p) => `/blog/${p.slug}`)];
   return (
     <html lang="en" className="dark" data-scroll-behavior="smooth">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <LanguageProvider>
-          <Navbar />
+          <Navbar prerenderedPaths={prerenderedPaths} />
           {children}
           <Footer />
           <WhatsAppButton />

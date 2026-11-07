@@ -33,11 +33,11 @@ production server on port 3107 and stop only the process listening on that port.
 
 **Independent Test**: quickstart V4 (unknown URLs), V5 and V6 pass on the production build.
 
-- [ ] T006 [US1] In `src/components/Navbar.tsx` add and export `useStablePathname(prerenderedPaths: readonly string[]): string` per plan.md Design item 1: read `usePathname() ?? ""`; read a `hydrated` flag with `useSyncExternalStore(noopSubscribe, () => true, () => false)` (module-level `noopSubscribe`, same pattern as `reduceMotion` in `src/context/LanguageContext.tsx`); return the pathname if `hydrated` or `prerenderedPaths.includes(pathname)`, else `""`. Named export, typed, no `any` (FR-001, FR-002)
-- [ ] T007 [US1] In `src/components/Navbar.tsx` give `Navbar` the prop `prerenderedPaths: readonly string[]` and replace `usePathname() ?? ""` with `useStablePathname(prerenderedPaths)`; keep `onHome`, `onBlog` and the section-observer effect code unchanged; remove the now-unused `usePathname` import only if nothing else uses it (FR-003, FR-004, FR-006)
-- [ ] T008 [US1] In `src/app/layout.tsx` (server component, no `"use client"`) import `getVisiblePosts` from `@/lib/blog`, build `["/", "/blog", ...getVisiblePosts().map((p) => `/blog/${p.slug}`)]` and pass it as `<Navbar prerenderedPaths={...} />` (FR-001, FR-006, FR-008)
-- [ ] T009 [US2] In `src/components/BlogNotFound.tsx` replace `usePathname() ?? ""` with `useStablePathname([])` imported from `@/components/Navbar`; keep `isPost`, all strings from `translations`, the link targets and the markup exactly as they are (FR-003, FR-004, FR-005, FR-009)
-- [ ] T010 Checkpoint: `npm run lint` and `npm run build` exit 0; commit `fix(404): render a stable pathname until hydration to remove hydration mismatch (007)`
+- [x] T006 [US1] In `src/components/Navbar.tsx` add and export `useStablePathname(prerenderedPaths: readonly string[]): string` per plan.md Design item 1: read `usePathname() ?? ""`; read a `hydrated` flag with `useSyncExternalStore(noopSubscribe, () => true, () => false)` (module-level `noopSubscribe`, same pattern as `reduceMotion` in `src/context/LanguageContext.tsx`); return the pathname if `hydrated` or `prerenderedPaths.includes(pathname)`, else `""`. Named export, typed, no `any` (FR-001, FR-002)
+- [x] T007 [US1] In `src/components/Navbar.tsx` give `Navbar` the prop `prerenderedPaths: readonly string[]` and replace `usePathname() ?? ""` with `useStablePathname(prerenderedPaths)`; keep `onHome`, `onBlog` and the section-observer effect code unchanged; remove the now-unused `usePathname` import only if nothing else uses it (FR-003, FR-004, FR-006)
+- [x] T008 [US1] In `src/app/layout.tsx` (server component, no `"use client"`) import `getVisiblePosts` from `@/lib/blog`, build `["/", "/blog", ...getVisiblePosts().map((p) => `/blog/${p.slug}`)]` and pass it as `<Navbar prerenderedPaths={...} />` (FR-001, FR-006, FR-008)
+- [x] T009 [US2] In `src/components/BlogNotFound.tsx` replace `usePathname() ?? ""` with `useStablePathname([])` imported from `@/components/Navbar`; keep `isPost`, all strings from `translations`, the link targets and the markup exactly as they are (FR-003, FR-004, FR-005, FR-009)
+- [x] T010 Checkpoint: `npm run lint` and `npm run build` exit 0; commit `fix(404): render a stable pathname until hydration to remove hydration mismatch (007)`
 
 ---
 
