@@ -50,7 +50,7 @@ beyond the upgraded ones (the one exception, `@eslint/eslintrc`, is **not** need
 
 Post-design re-check (after Phase 1): all PASS; no violations to justify.
 
-Post-implementation re-check (2026-11-06): Principles I, II, III, V, VI, VII still PASS. Principle IV: no UI redesign, but a hydration mismatch on unknown `/blog/*` URLs was accepted as a waiver (spec.md W-1, feature 006). The constitution's accessibility rules (visible focus, reduced motion) were not re-verified; reduced motion was already not respected before the upgrade (spec.md W-3, feature 005 US3).
+Post-implementation re-check (2026-11-06): Principles I, II, III, V, VI, VII still PASS. Principle IV: no UI redesign, but a hydration mismatch on unknown `/blog/*` URLs was accepted as a waiver (spec.md W-1) and closed on 2026-11-07 by feature 007. The constitution's accessibility rules (visible focus, reduced motion) were not re-verified; reduced motion was already not respected before the upgrade (spec.md W-3, feature 005 US3).
 
 ## Project Structure
 

@@ -1,20 +1,20 @@
 <!--
 Sync Impact Report
-- Version change: 1.1.0 -> 1.2.0 (MINOR: new theme token `--status-available` and new
-  third-party brand-marks exemption, materially expanded guidance in Principle V; owner decision
-  2026-11-06 for PR #8, replacing an earlier PATCH 1.1.1 designation)
-- Modified principles: V only. (1) New token `--status-available` (#34D399) in the table, with a
-  usage rule: static availability status dot only, always with adjacent plain text. (2) New
-  "third-party brand marks" exemption: the WhatsApp button fill (#25D366) and the Azure logo's own
-  SVG gradient; any other brand mark needs an amendment. The accent rule and Principle IV are
-  unchanged.
-- Modified sections: none other than Principle V and the version line
+- Version change: 1.2.0 -> 1.3.0 (MINOR: materially changed guidance in Principle II on when the
+  structure list needs an amendment; owner decision 2026-11-07, raised by PR #10 where a new hook
+  file would otherwise have required an amendment)
+- Modified principles: II only. The structure list now describes the folder layout and key files,
+  not an exhaustive file inventory. New files inside the existing folders (`app/` routes,
+  `components/`, `components/sections/`, `context/`, `hooks/`, `lib/`) are allowed without an
+  amendment and MUST be added to the tree in `CLAUDE.md` in the same pull request. Only a new
+  top-level folder or a change to the layout itself requires an amendment. The component rules
+  (functional components, named exports, `"use client"`, no `any`) are unchanged.
+- Modified sections: none other than Principle II and the version line
 - Added sections: none
 - Removed sections: none
-- Follow-up (outside this file, applied in the same PR, not by this command): src/app/globals.css
-  (`--status-available`), tailwind.config.ts (`status-available`), Hero.tsx and Contact.tsx (use
-  the token), DESIGN.md (token table, exceptions, version references), CLAUDE.md (theme table),
-  specs/005-design-refresh (plan Complexity Tracking, spec Owner Decisions)
+- Follow-up (outside this file, not done by this command): PR #10 moves `useStablePathname` from
+  `src/components/Navbar.tsx` to `src/hooks/useStablePathname.ts` and adds it to the `CLAUDE.md`
+  tree; `specs/007-fix-404-hydration` (plan Constitution Check and research R4) is updated to match
 - Deferred TODOs: none
 -->
 # Luis Portfolio Constitution
@@ -35,7 +35,8 @@ components that need interactivity (state, effects, event handlers, browser APIs
 Motion); pages and layouts MUST stay server components. Code MUST be TypeScript with no untyped
 `any` unless justified in a comment.
 
-Structure (`src/`), verified against the repository:
+Structure (`src/`), verified against the repository. The list describes the folder layout and its
+key files; it is not an exhaustive inventory of every file:
 - `app/`: `layout.tsx` (root layout, metadata, fonts, providers), `page.tsx` (composes
   sections only), `globals.css`, `not-found.tsx` (localized 404), `blog/page.tsx` (blog index,
   server), `blog/[slug]/page.tsx` (post, statically generated).
@@ -49,7 +50,14 @@ Structure (`src/`), verified against the repository:
 - `lib/translations.ts`: all EN/ES strings; `lib/blog.ts`: blog content loader and validation.
 - `content/blog/<slug>/{en,es}.md`: blog post content (Markdown with frontmatter), outside `src/`.
 
-New files MUST follow this layout; structural changes MUST update this list and `CLAUDE.md`.
+New files inside the existing folders above (routes under `app/`, `components/`,
+`components/sections/`, `context/`, `hooks/`, `lib/`) are allowed without an amendment. They MUST
+follow the conventions of this principle and MUST be added to the tree in `CLAUDE.md` in the same
+pull request. A new top-level folder (under `src/` or outside it) or any change to the layout
+itself (renaming, moving or removing a folder, or changing what a folder is for) MUST be made by
+amending this list and `CLAUDE.md` together through `/speckit-constitution`. Rationale: one person
+maintains the site, so adding a file to a known folder should not need governance, while a change
+of shape should.
 
 ### III. Mobile-First Responsive Design
 Styles MUST be authored mobile-first, with Tailwind breakpoints (`sm:`, `md:`, `lg:`) adding
@@ -149,4 +157,4 @@ system reference) are subordinate to this constitution: they MAY refine it but M
 contradict it, and a conflict is resolved by amending this file first via `/speckit-constitution`,
 never by following the subordinate document.
 
-**Version**: 1.2.0 | **Ratified**: 2026-11-05 | **Last Amended**: 2026-11-06
+**Version**: 1.3.0 | **Ratified**: 2026-11-05 | **Last Amended**: 2026-11-07

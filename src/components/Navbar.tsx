@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useStablePathname } from "@/hooks/useStablePathname";
 import translations from "@/lib/translations";
 import type { Language } from "@/context/LanguageContext";
 
@@ -15,14 +15,14 @@ type NavId = typeof NAV_IDS[number];
 const scrollBehavior = (): ScrollBehavior =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
 
-export function Navbar() {
+export function Navbar({ prerenderedPaths }: { prerenderedPaths: readonly string[] }) {
   const [active,     setActive]     = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const { language, toggleLanguage, reduceMotion: reduce } = useLanguage();
   const dur = (seconds: number) => (reduce ? 0 : seconds);
   const t        = translations[language];
-  const pathname = usePathname() ?? "";
+  const pathname = useStablePathname(prerenderedPaths);
   const onHome   = pathname === "/";
   const onBlog   = pathname === "/blog" || pathname.startsWith("/blog/");
 
