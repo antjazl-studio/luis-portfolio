@@ -168,7 +168,8 @@ date and "owner".
   .NET 8); the technology arrays of Hero and Projects stay as constants for the same reason;
   brand names (LinkedIn, WhatsApp); certification names (Azure Developer Associate); technical
   loanwords used unchanged in Spanish technical writing (Blog, Backend, Frontend, DevOps); place
-  names (Quito, Ecuador); the time-zone token UTC−5; and numerals and years. This list is complete: any other EN/ES pair that
+  names (Quito, Ecuador); the time-zone token UTC−5; contact addresses (the email address and the
+  LinkedIn address); code identifiers and shell commands inside blog code blocks; the language codes EN and ES; and numerals, numeral abbreviations (30k+) and years. This list is complete: any other EN/ES pair that
   is identical is a defect.
 - **FR-011**: Every other user-facing string MUST live in the shared translation table with both
   languages; components MUST NOT contain user-facing prose.

@@ -5,30 +5,17 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
 
+// Titles and descriptions come from t.projects.items (same order); the technology names are
+// language-neutral (spec FR-010) and stay here.
 type Project = {
-  title:     string;
-  description: string;
   tech:      string[];
   featured?: boolean;
 };
 
 const PROJECTS: Project[] = [
-  {
-    title:       "MyWork — Workforce Management Platform",
-    description: "Enterprise platform managing daily operations for 30,000+ field workers. Built with .NET, Angular, and Azure from the ground up.",
-    tech:        [".NET Core", "Angular", "Azure", "SQL Server", "CI/CD"],
-    featured:    true,
-  },
-  {
-    title:       "Azure Functions Migration",
-    description: "Migrated a monolithic .NET Framework app to isolated Azure Functions model with zero downtime deployment.",
-    tech:        ["Azure Functions", ".NET 8", "Docker", "Azure DevOps"],
-  },
-  {
-    title:       "Dynamic Forms Engine",
-    description: "Built a configurable form engine allowing non-technical teams to create operational workflows — DVIR inspections, checklists, and field reports.",
-    tech:        ["Angular", "TypeScript", ".NET", "SQL Server"],
-  },
+  { tech: [".NET Core", "Angular", "Azure", "SQL Server", "CI/CD"], featured: true },
+  { tech: ["Azure Functions", ".NET 8", "Docker", "Azure DevOps"] },
+  { tech: ["Angular", "TypeScript", ".NET", "SQL Server"] },
 ];
 
 export function Projects() {
@@ -67,15 +54,17 @@ export function Projects() {
 
             {/* Flat, non-interactive panels: no hover lift, shadow or accent. */}
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {PROJECTS.map((project, i) => (
+              {PROJECTS.map((project, i) => {
+                const text = t.projects.items[i];
+                return (
                 <motion.div
-                  key={project.title}
+                  key={text.title}
                   {...anim(0.1 + i * 0.07)}
                   className="flex flex-col rounded-[10px] border border-border bg-surface p-6"
                 >
                   <div className="mb-3 flex items-start justify-between gap-3">
                     <h3 className="text-sm font-semibold leading-snug text-foreground">
-                      {project.title}
+                      {text.title}
                     </h3>
                     {project.featured && (
                       <span className="shrink-0 text-xs text-muted">{t.projects.featured}</span>
@@ -83,12 +72,13 @@ export function Projects() {
                   </div>
 
                   <p className="mb-5 flex-1 text-sm leading-relaxed text-muted">
-                    {project.description}
+                    {text.description}
                   </p>
 
                   <p className="text-xs text-muted">{project.tech.join(" · ")}</p>
                 </motion.div>
-              ))}
+                );
+              })}
 
             </div>
           </motion.div>
