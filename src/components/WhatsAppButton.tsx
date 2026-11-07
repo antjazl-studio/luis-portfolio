@@ -3,16 +3,12 @@
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
 
-const MESSAGES = {
-  en: "Hi Luis! I saw your portfolio and I'd like to talk.",
-  es: "Hola Luis! Vi tu portafolio y me gustaría conversar.",
-};
-
 export function WhatsAppButton() {
   const { language } = useLanguage();
   const label = translations[language].a11y.whatsapp;
+  const message = translations[language].contact.whatsappMessage;
 
-  const href = `https://wa.me/593960138279?text=${encodeURIComponent(MESSAGES[language])}`;
+  const href = `https://wa.me/593960138279?text=${encodeURIComponent(message)}`;
 
   return (
     <div className="group fixed bottom-4 right-4 z-50 flex items-center gap-3 sm:bottom-6 sm:right-6">

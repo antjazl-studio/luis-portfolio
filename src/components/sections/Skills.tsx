@@ -5,16 +5,6 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
 
-const PRIMARY_SKILLS = [
-  { category: "Backend",        items: ["C#", ".NET Core", ".NET Framework", "REST APIs", "Microservices", "Azure Functions"] },
-  { category: "Frontend",       items: ["Angular", "TypeScript", "JavaScript"] },
-  { category: "Cloud & DevOps", items: ["Microsoft Azure", "Azure DevOps", "Docker", "CI/CD", "App Services"] },
-  { category: "Databases",      items: ["SQL Server", "PostgreSQL"] },
-  { category: "Tools & Methods",items: ["Git", "Agile/Scrum", "Layered Architecture"] },
-];
-
-const SECONDARY_SKILLS = ["React", "Node.js", "MongoDB", "MySQL", "Power BI"];
-
 const SEPARATOR = " · ";
 
 export function Skills() {
@@ -22,6 +12,13 @@ export function Skills() {
   const isInView = useInView(ref, { once: true, amount: 0.1 });
   const { language, reduceMotion: reduce } = useLanguage();
   const t = translations[language];
+  const groups = [
+    t.skills.groups.backend,
+    t.skills.groups.frontend,
+    t.skills.groups.cloud,
+    t.skills.groups.databases,
+    t.skills.groups.tools,
+  ];
 
   // Reduced motion: no entrance animation at all, content is simply present.
   const anim = (delay = 0) =>
@@ -52,13 +49,13 @@ export function Skills() {
             </motion.h2>
 
             <dl className="space-y-6">
-              {PRIMARY_SKILLS.map((group, i) => (
+              {groups.map((group, i) => (
                 <motion.div
-                  key={group.category}
+                  key={group.name}
                   {...anim(0.1 + i * 0.06)}
                   className="grid gap-1 md:grid-cols-[12rem_1fr] md:gap-8"
                 >
-                  <dt className="text-sm font-medium text-foreground">{group.category}</dt>
+                  <dt className="text-sm font-medium text-foreground">{group.name}</dt>
                   <dd className="text-sm leading-relaxed text-muted">
                     {group.items.join(SEPARATOR)}
                   </dd>
@@ -66,12 +63,12 @@ export function Skills() {
               ))}
 
               <motion.div
-                {...anim(0.1 + PRIMARY_SKILLS.length * 0.06)}
+                {...anim(0.1 + groups.length * 0.06)}
                 className="grid gap-1 md:grid-cols-[12rem_1fr] md:gap-8"
               >
                 <dt className="text-sm font-medium text-muted">{t.skills.also}</dt>
                 <dd className="text-sm leading-relaxed text-muted">
-                  {SECONDARY_SKILLS.join(SEPARATOR)}
+                  {t.skills.secondary.join(SEPARATOR)}
                 </dd>
               </motion.div>
             </dl>

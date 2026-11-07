@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { BlogCard, type BlogCardData } from "@/components/BlogCard";
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
@@ -7,8 +8,14 @@ import translations from "@/lib/translations";
 export type BlogIndexItem = { slug: string; en: BlogCardData; es: BlogCardData };
 
 export function BlogIndex({ posts }: { posts: BlogIndexItem[] }) {
-  const { language } = useLanguage();
+  const { language, setPageTitle } = useLanguage();
   const t = translations[language].blog;
+  const title = translations[language].meta.blog;
+
+  useEffect(() => {
+    setPageTitle(title);
+    return () => setPageTitle(null);
+  }, [title, setPageTitle]);
 
   return (
     <main id="main" tabIndex={-1} className="min-h-svh bg-background pb-20 pt-24 focus:outline-none">
