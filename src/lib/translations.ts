@@ -10,12 +10,15 @@ type Translation = {
     blog:       string;
   };
   hero: {
-    badge:    string;
-    subtitle: string;
-    impact:   string;
-    bio:      string;
-    cta_work: string;
-    cta_cv:   string;
+    title:       string;
+    subline:     string;
+    who:         string;
+    impact:      string;
+    availability: string;
+    timezone:    string;
+    portraitAlt: string;
+    cta_work:    string;
+    cta_cv:      string;
   };
   about: {
     label:       string;
@@ -86,17 +89,20 @@ const translations: Record<Language, Translation> = {
       blog:       "Blog",
     },
     hero: {
-      badge:    "Available for freelance projects",
-      subtitle: "Senior Full Stack Developer",
-      impact:   "Reduced release downtime ~60% with CI/CD automation · Architected Azure systems for 30,000+ users.",
-      bio:      "8+ years building enterprise platforms at scale. Led development of a workforce management platform serving 30,000+ active users.",
-      cta_work: "View My Work",
-      cta_cv:   "Download CV",
+      title:       "Senior .NET & Azure engineer.",
+      subline:     "Nine years shipping for US teams. Now building AI agents.",
+      who:         "Luis Antonio Jacho Zambrano · Quito, Ecuador",
+      impact:      "Reduced release downtime ~60% with CI/CD automation. Architected Azure systems for 30,000+ users.",
+      availability: "Open to senior remote roles and consulting",
+      timezone:    "Quito, UTC−5 year-round: fully overlapping US Eastern and Central business hours.",
+      portraitAlt: "Portrait of Luis Antonio Jacho Zambrano",
+      cta_work:    "View My Work",
+      cta_cv:      "Download CV",
     },
     about: {
       label:       "About me",
       heading:     "Building scalable systems, leading teams, shipping products.",
-      p1:          "I'm a Senior Full Stack Developer based in Quito, Ecuador with 8+ years of experience building enterprise-grade web applications.",
+      p1:          "I'm a Senior Full Stack Developer based in Quito, Ecuador with 9 years of experience building enterprise-grade web applications.",
       p2:          "At MyWork, I led the full-stack development of a workforce management platform serving 30,000+ active users — owning everything from API architecture and Azure infrastructure to CI/CD pipelines and frontend delivery.",
       p3:          "I specialize in .NET, Angular, and Azure, with a strong focus on system performance, clean architecture, and mentoring engineering teams.",
       azure_badge: "Azure Developer Associate",
@@ -164,17 +170,20 @@ const translations: Record<Language, Translation> = {
       blog:       "Blog",
     },
     hero: {
-      badge:    "Disponible para proyectos freelance",
-      subtitle: "Desarrollador Full Stack Senior",
-      impact:   "Reduje el downtime en releases ~60% con CI/CD · Arquitecté sistemas Azure para 30,000+ usuarios.",
-      bio:      "Más de 8 años construyendo plataformas empresariales a escala. Lideré el desarrollo de una plataforma de gestión de personal con más de 30,000 usuarios activos.",
-      cta_work: "Ver mi trabajo",
-      cta_cv:   "Descargar CV",
+      title:       "Ingeniero senior .NET y Azure.",
+      subline:     "Nueve años entregando software para equipos de EE. UU. Ahora construyendo agentes de IA.",
+      who:         "Luis Antonio Jacho Zambrano · Quito, Ecuador",
+      impact:      "Reduje el downtime en releases ~60% con CI/CD. Arquitecté sistemas Azure para 30,000+ usuarios.",
+      availability: "Disponible para puestos remotos senior y consultoría",
+      timezone:    "Quito, UTC−5 todo el año: horario laboral totalmente superpuesto con el este y el centro de EE. UU.",
+      portraitAlt: "Retrato de Luis Antonio Jacho Zambrano",
+      cta_work:    "Ver mi trabajo",
+      cta_cv:      "Descargar CV",
     },
     about: {
       label:       "Sobre mí",
       heading:     "Construyendo sistemas escalables, liderando equipos, entregando productos.",
-      p1:          "Soy un Desarrollador Full Stack Senior con sede en Quito, Ecuador, con más de 8 años de experiencia construyendo aplicaciones web empresariales.",
+      p1:          "Soy un Desarrollador Full Stack Senior con sede en Quito, Ecuador, con 9 años de experiencia construyendo aplicaciones web empresariales.",
       p2:          "En MyWork, lideré el desarrollo full-stack de una plataforma de gestión de personal con más de 30,000 usuarios activos — a cargo de todo, desde la arquitectura de APIs e infraestructura en Azure hasta pipelines de CI/CD y entrega frontend.",
       p3:          "Me especializo en .NET, Angular y Azure, con un fuerte enfoque en el rendimiento del sistema, arquitectura limpia y mentoría de equipos de ingeniería.",
       azure_badge: "Azure Developer Associate",

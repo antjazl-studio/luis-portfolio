@@ -18,7 +18,7 @@ export function About() {
   });
 
   const STATS = [
-    { value: "8+",   label: t.about.stat1_label },
+    { value: "9",    label: t.about.stat1_label },
     { value: "30k+", label: t.about.stat2_label },
     { value: "1",    label: t.about.stat3_label },
   ];
