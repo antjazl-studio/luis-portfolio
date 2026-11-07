@@ -24,7 +24,7 @@ export function About() {
   ];
 
   return (
-    <section id="about" ref={ref} className="border-t border-white/5 bg-[#0f0f0f] py-24">
+    <section id="about" ref={ref} className="border-t border-border bg-background py-24">
       <div className="relative mx-auto max-w-6xl px-6">
         <AnimatePresence mode="popLayout">
           <motion.div
@@ -38,24 +38,21 @@ export function About() {
 
               {/* Left */}
               <div>
-                <motion.p {...anim(0)} className="mb-3 text-xs font-medium uppercase tracking-widest text-cyan-400">
-                  {t.about.label}
-                </motion.p>
                 <motion.h2
                   {...anim(0.05)}
-                  className="mb-8 bg-gradient-to-b from-white to-white/70 bg-clip-text text-2xl font-semibold text-transparent sm:text-3xl"
+                  className="mb-8 text-2xl font-semibold text-foreground sm:text-3xl"
                 >
                   {t.about.heading}
                 </motion.h2>
 
                 <div className="space-y-4">
-                  <motion.p {...anim(0.1)} className="text-sm leading-relaxed text-zinc-400">{t.about.p1}</motion.p>
-                  <motion.p {...anim(0.15)} className="text-sm leading-relaxed text-zinc-400">{t.about.p2}</motion.p>
-                  <motion.p {...anim(0.2)} className="text-sm leading-relaxed text-zinc-400">{t.about.p3}</motion.p>
+                  <motion.p {...anim(0.1)} className="text-sm leading-relaxed text-muted">{t.about.p1}</motion.p>
+                  <motion.p {...anim(0.15)} className="text-sm leading-relaxed text-muted">{t.about.p2}</motion.p>
+                  <motion.p {...anim(0.2)} className="text-sm leading-relaxed text-muted">{t.about.p3}</motion.p>
                 </div>
 
                 <motion.div {...anim(0.25)} className="mt-8">
-                  <span className="inline-flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-1.5 text-xs text-neutral-400">
+                  <span className="inline-flex items-center gap-2 text-sm text-muted">
                     <AzureIcon />
                     {t.about.azure_badge}
                   </span>
@@ -63,15 +60,15 @@ export function About() {
               </div>
 
               {/* Right — stat cards */}
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-6">
                 {STATS.map(({ value, label }, i) => (
                   <motion.div
                     key={label}
                     {...anim(0.1 + i * 0.08)}
-                    className="rounded-xl border border-white/10 bg-white/5 p-6"
+                    className="border-t border-border pt-5"
                   >
-                    <p className="mb-1 text-5xl font-bold text-cyan-400">{value}</p>
-                    <p className="text-sm uppercase tracking-wider text-zinc-500">{label}</p>
+                    <p className="mb-1 text-5xl font-semibold text-foreground">{value}</p>
+                    <p className="text-sm text-muted">{label}</p>
                   </motion.div>
                 ))}
               </div>

@@ -9,7 +9,7 @@ export function Footer() {
   const t = translations[language];
 
   return (
-    <footer className="border-t border-white/5 bg-[#0a0a0a] py-8">
+    <footer className="border-t border-border bg-background py-8">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 sm:flex-row">
 
         <AnimatePresence mode="popLayout">
@@ -19,10 +19,10 @@ export function Footer() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="text-xs text-neutral-600"
+            className="text-xs text-muted"
           >
             © {new Date().getFullYear()} Luis Jacho
-            <span className="mx-2 text-neutral-800">·</span>
+            <span className="mx-2">·</span>
             {t.footer}
           </motion.p>
         </AnimatePresence>
@@ -33,14 +33,14 @@ export function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
-            className="text-neutral-700 transition-colors duration-150 hover:text-neutral-400"
+            className="inline-flex h-11 w-11 items-center justify-center text-muted transition-colors duration-150 hover:text-foreground"
           >
             <LinkedInIcon />
           </a>
           <a
             href="mailto:antjazl@gmail.com"
             aria-label="Email"
-            className="text-neutral-700 transition-colors duration-150 hover:text-neutral-400"
+            className="inline-flex h-11 w-11 items-center justify-center text-muted transition-colors duration-150 hover:text-foreground"
           >
             <EmailIcon />
           </a>

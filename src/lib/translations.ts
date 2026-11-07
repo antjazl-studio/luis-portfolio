@@ -21,7 +21,6 @@ type Translation = {
     cta_cv:      string;
   };
   about: {
-    label:       string;
     heading:     string;
     p1:          string;
     p2:          string;
@@ -32,7 +31,6 @@ type Translation = {
     stat3_label: string;
   };
   experience: {
-    label:   string;
     heading: string;
     present: string;
     logiztik: {
@@ -42,17 +40,14 @@ type Translation = {
     };
   };
   skills: {
-    label:   string;
     heading: string;
     also:    string;
   };
   projects: {
-    label:    string;
     heading:  string;
     featured: string;
   };
   contact: {
-    label:        string;
     heading:      string;
     sub:          string;
     button:       string;
@@ -100,7 +95,6 @@ const translations: Record<Language, Translation> = {
       cta_cv:      "Download CV",
     },
     about: {
-      label:       "About me",
       heading:     "Building scalable systems, leading teams, shipping products.",
       p1:          "I'm a Senior Full Stack Developer based in Quito, Ecuador with 9 years of experience building enterprise-grade web applications.",
       p2:          "At MyWork, I led the full-stack development of a workforce management platform serving 30,000+ active users — owning everything from API architecture and Azure infrastructure to CI/CD pipelines and frontend delivery.",
@@ -111,7 +105,6 @@ const translations: Record<Language, Translation> = {
       stat3_label: "Azure certification",
     },
     experience: {
-      label:   "Experience",
       heading: "Where I've worked",
       present: "Present",
       logiztik: {
@@ -124,17 +117,14 @@ const translations: Record<Language, Translation> = {
       },
     },
     skills: {
-      label:   "Skills",
       heading: "What I work with",
       also:    "Also experienced with:",
     },
     projects: {
-      label:    "Projects",
       heading:  "Selected work",
       featured: "Featured",
     },
     contact: {
-      label:        "Contact",
       heading:      "Let's work together",
       sub:          "I'm currently available for freelance projects and full-time remote positions. Let's talk.",
       button:       "Send me an email",
@@ -181,7 +171,6 @@ const translations: Record<Language, Translation> = {
       cta_cv:      "Descargar CV",
     },
     about: {
-      label:       "Sobre mí",
       heading:     "Construyendo sistemas escalables, liderando equipos, entregando productos.",
       p1:          "Soy un Desarrollador Full Stack Senior con sede en Quito, Ecuador, con 9 años de experiencia construyendo aplicaciones web empresariales.",
       p2:          "En MyWork, lideré el desarrollo full-stack de una plataforma de gestión de personal con más de 30,000 usuarios activos — a cargo de todo, desde la arquitectura de APIs e infraestructura en Azure hasta pipelines de CI/CD y entrega frontend.",
@@ -192,7 +181,6 @@ const translations: Record<Language, Translation> = {
       stat3_label: "Certificación Azure",
     },
     experience: {
-      label:   "Experiencia",
       heading: "Dónde he trabajado",
       present: "Presente",
       logiztik: {
@@ -205,17 +193,14 @@ const translations: Record<Language, Translation> = {
       },
     },
     skills: {
-      label:   "Habilidades",
       heading: "Con qué trabajo",
       also:    "También con experiencia en:",
     },
     projects: {
-      label:    "Proyectos",
       heading:  "Trabajo seleccionado",
       featured: "Destacado",
     },
     contact: {
-      label:        "Contacto",
       heading:      "Trabajemos juntos",
       sub:          "Actualmente estoy disponible para proyectos freelance y posiciones remotas a tiempo completo. Hablemos.",
       button:       "Envíame un correo",

@@ -24,15 +24,15 @@ export function BlogCard({ slug, post }: { slug: string; post: BlogCardData }) {
   return (
     <Link
       href={`/blog/${slug}`}
-      className="group block border-b border-[var(--border)] py-6 first:pt-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+      className="group block border-b border-border py-6 first:pt-0"
     >
-      <p className="mb-2 text-xs text-[var(--muted)]">
+      <p className="mb-2 text-xs text-muted">
         {formatPostDate(post.date, t.dateLocale)} · {t.readingTime.replace("{n}", String(post.readingTime))}
       </p>
-      <h2 className="mb-2 text-lg font-medium text-white group-hover:text-neutral-300">
+      <h2 className="mb-2 text-lg font-medium text-foreground group-hover:underline group-hover:underline-offset-[3px]">
         {post.title}
       </h2>
-      <p className="text-sm leading-relaxed text-[var(--muted)]">{post.summary}</p>
+      <p className="text-sm leading-relaxed text-muted">{post.summary}</p>
     </Link>
   );
 }

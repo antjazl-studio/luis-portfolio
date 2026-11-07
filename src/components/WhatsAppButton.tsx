@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/hooks/useLanguage";
 
 const MESSAGES = {
@@ -16,60 +14,31 @@ const TOOLTIP = {
 
 export function WhatsAppButton() {
   const { language } = useLanguage();
-  const [hovered, setHovered] = useState(false);
 
   const href = `https://wa.me/593960138279?text=${encodeURIComponent(MESSAGES[language])}`;
 
   return (
-    <motion.div
-      className="fixed bottom-4 right-4 z-50 flex items-center gap-3 sm:bottom-6 sm:right-6"
-      initial={{ opacity: 0, x: 80 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5, delay: 2, ease: "easeOut" }}
-    >
-      {/* Tooltip — desktop only */}
-      <AnimatePresence>
-        {hovered && (
-          <motion.span
-            initial={{ opacity: 0, x: 6 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 6 }}
-            transition={{ duration: 0.15 }}
-            className="hidden whitespace-nowrap rounded-full border border-white/10 bg-neutral-900 px-3 py-1.5 text-sm text-white sm:block"
-          >
-            {TOOLTIP[language]}
-          </motion.span>
-        )}
-      </AnimatePresence>
+    <div className="group fixed bottom-4 right-4 z-50 flex items-center gap-3 sm:bottom-6 sm:right-6">
+      {/* Label: desktop only, shown on hover or keyboard focus. Flat, no shadow. */}
+      <span
+        aria-hidden
+        className="pointer-events-none hidden whitespace-nowrap rounded-md border border-border-strong bg-surface px-3 py-1.5 text-sm text-foreground opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100 sm:block"
+      >
+        {TOOLTIP[language]}
+      </span>
 
-      {/* Button wrapper — pulse ring + button */}
-      <div className="relative">
-        {/* Idle pulse ring */}
-        <motion.span
-          aria-hidden
-          className="absolute inset-0 rounded-full"
-          style={{ backgroundColor: "#25D366" }}
-          animate={{ scale: [1, 1.45], opacity: [0.45, 0] }}
-          transition={{ duration: 1.1, repeat: Infinity, repeatDelay: 2.5, ease: "easeOut" }}
-        />
-
-        {/* Button */}
-        <motion.a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={TOOLTIP[language]}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-          className="relative flex h-12 w-12 items-center justify-center rounded-full shadow-lg shadow-black/40 sm:h-14 sm:w-14"
-          style={{ backgroundColor: "#25D366" }}
-        >
-          <WhatsAppIcon />
-        </motion.a>
-      </div>
-    </motion.div>
+      {/* Third-party brand green kept as a documented exception (plan.md, Complexity Tracking). */}
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={TOOLTIP[language]}
+        className="flex h-12 w-12 items-center justify-center rounded-full sm:h-14 sm:w-14"
+        style={{ backgroundColor: "#25D366" }}
+      >
+        <WhatsAppIcon />
+      </a>
+    </div>
   );
 }
 

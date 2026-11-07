@@ -14,16 +14,16 @@ export function LocalizedPost({ en, es }: { en: Version; es: Version }) {
   const post = language === "en" ? en : es;
 
   return (
-    <main className="min-h-screen bg-[var(--background)] pb-20 pt-24">
+    <main className="min-h-screen bg-background pb-20 pt-24">
       <article className="mx-auto max-w-3xl px-6">
         <Link
           href="/blog"
-          className="mb-8 inline-block text-sm text-[var(--accent)] hover:text-[var(--accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+          className="mb-8 inline-block text-sm text-accent underline underline-offset-[3px] hover:text-accent-hover"
         >
           ← {t.back}
         </Link>
-        <h1 className="mb-3 text-3xl font-semibold text-white">{post.title}</h1>
-        <p className="mb-10 text-xs text-[var(--muted)]">
+        <h1 className="mb-3 text-3xl font-semibold text-foreground">{post.title}</h1>
+        <p className="mb-10 text-xs text-muted">
           {formatPostDate(post.date, t.dateLocale)} ·{" "}
           {t.readingTime.replace("{n}", String(post.readingTime))}
         </p>

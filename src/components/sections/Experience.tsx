@@ -71,7 +71,7 @@ export function Experience() {
   });
 
   return (
-    <section id="experience" ref={ref} className="border-t border-white/5 bg-[#0a0a0a] py-24">
+    <section id="experience" ref={ref} className="border-t border-border bg-background py-24">
       <div className="relative mx-auto max-w-6xl px-6">
         <AnimatePresence mode="popLayout">
           <motion.div
@@ -81,37 +81,29 @@ export function Experience() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
           >
-            <motion.p {...anim(0)} className="mb-3 text-xs font-medium uppercase tracking-widest text-cyan-400">
-              {t.experience.label}
-            </motion.p>
             <motion.h2
               {...anim(0.05)}
-              className="mb-14 bg-gradient-to-b from-white to-white/70 bg-clip-text text-2xl font-semibold text-transparent sm:text-3xl"
+              className="mb-14 text-2xl font-semibold text-foreground sm:text-3xl"
             >
               {t.experience.heading}
             </motion.h2>
 
-            <div className="relative border-l border-neutral-800 pl-8 space-y-12">
+            <div className="relative border-l border-border pl-8 space-y-12">
               {experience.map((entry, i) => (
                 <motion.div key={entry.company} {...anim(0.1 + i * 0.07)} className="relative">
 
-                  {i === 0 && (
-                    <div className="absolute -left-8 top-0 h-full w-0.5 bg-cyan-400/40" />
-                  )}
-
                   <span
-                    className={`absolute -left-[2.0625rem] top-[6px] h-[7px] w-[7px] rounded-full ring-4 ring-[#0a0a0a] ${
-                      i === 0 ? "bg-cyan-400" : "border border-neutral-700 bg-neutral-900"
+                    className={`absolute -left-[2.0625rem] top-[6px] h-[7px] w-[7px] rounded-full ring-4 ring-background ${
+                      i === 0 ? "bg-foreground" : "border border-border-strong bg-background"
                     }`}
-                    style={i === 0 ? { boxShadow: "0 0 8px rgba(34,211,238,0.55)" } : {}}
                   />
 
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <p className="text-sm font-medium text-white">{entry.role}</p>
-                      <p className="mt-0.5 text-sm text-cyan-400">{entry.company}</p>
+                      <p className="text-sm font-medium text-foreground">{entry.role}</p>
+                      <p className="mt-0.5 text-sm text-muted">{entry.company}</p>
                     </div>
-                    <p className="shrink-0 font-mono text-xs text-zinc-600">
+                    <p className="shrink-0 font-mono text-xs text-muted">
                       {entry.current
                         ? `${entry.start} – ${t.experience.present}`
                         : entry.period}
@@ -119,13 +111,13 @@ export function Experience() {
                   </div>
 
                   {entry.location && (
-                    <p className="mt-1 text-xs text-neutral-600">{entry.location}</p>
+                    <p className="mt-1 text-xs text-muted">{entry.location}</p>
                   )}
 
                   <ul className="mt-4 space-y-1.5">
                     {entry.bullets.map((bullet) => (
-                      <li key={bullet} className="flex gap-2 text-sm text-zinc-400">
-                        <span className="mt-px shrink-0 text-xs text-cyan-400/70">→</span>
+                      <li key={bullet} className="flex gap-2 text-sm text-muted">
+                        <span aria-hidden className="mt-px shrink-0 text-xs text-muted">→</span>
                         {bullet}
                       </li>
                     ))}

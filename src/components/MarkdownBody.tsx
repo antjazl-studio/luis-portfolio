@@ -9,14 +9,14 @@ export function MarkdownBody({ source }: { source: string }) {
     <div
       className={[
         "prose prose-invert max-w-none",
-        "prose-headings:font-medium prose-headings:text-white",
-        "prose-p:text-neutral-400 prose-li:text-neutral-400 prose-strong:text-neutral-200",
-        "prose-blockquote:border-white/10 prose-blockquote:text-neutral-400",
-        "prose-a:text-[var(--accent)] prose-a:no-underline hover:prose-a:text-[var(--accent-hover)]",
-        "prose-code:rounded prose-code:bg-white/5 prose-code:px-1 prose-code:text-neutral-200",
+        "prose-headings:font-medium prose-headings:text-foreground",
+        "prose-p:text-muted prose-li:text-muted prose-strong:text-foreground",
+        "prose-blockquote:border-border prose-blockquote:text-muted",
+        "prose-a:text-accent prose-a:underline prose-a:underline-offset-[3px] hover:prose-a:text-accent-hover",
+        "prose-code:rounded prose-code:bg-surface prose-code:px-1 prose-code:text-foreground",
         "prose-code:before:content-none prose-code:after:content-none",
-        "prose-pre:overflow-x-auto prose-pre:border prose-pre:border-white/[0.07] prose-pre:bg-[var(--surface)]",
-        "prose-hr:border-white/10",
+        "prose-pre:overflow-x-auto prose-pre:border prose-pre:border-border prose-pre:bg-surface",
+        "prose-hr:border-border",
       ].join(" ")}
     >
       <ReactMarkdown
