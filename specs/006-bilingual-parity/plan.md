@@ -39,9 +39,8 @@ and no drop greater than 3 points versus the pre-change baseline (best of 3)
 ES strings from 005 unchanged; facts identical across languages; no layout or design change; no
 horizontal overflow at 360px in ES
 
-**Scale/Scope**: about 45 new ES/EN string pairs (8 experience bullets plus 2 roles and a
-location, 3 project pairs, 5 skill groups with about 24 labels, location, WhatsApp message, 2 titles);
-10 source files touched
+**Scale/Scope**: 50 new translation keys (25 Spanish prose strings for the owner to review, 24
+language-neutral, the WhatsApp message moved unchanged); 10 source files touched
 
 ## Constitution Check
 

@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-06
 
-**Status**: Draft
+**Status**: Implemented, pending the owner's review of the Spanish copy (2026-11-06)
 
 **Input**: User description: "006 EN/ES parity: every user-facing string exists in both languages per Principle VI, including experience, project and skill-group text that is currently English-only. Facts stay identical across languages; only translation changes. Owner reviews all ES copy before merge. Also record in spec.md: Owner Decision (2026-11-06) from 005: keep the full-name wordmark, flat Projects cards and inline skills text."
 

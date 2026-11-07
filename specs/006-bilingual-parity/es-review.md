@@ -3,7 +3,7 @@
 Generated from `src/lib/translations.ts` against `upstream/master` on 2026-11-06. Every string below is a **draft written by the assistant**: faithful to the English, same facts, following the glossary in `research.md` R5 (the owner's own wording from feature 005). **Approve or correct each one before merge** (spec FR-031).
 
 - English strings changed: **0**. Spanish strings already on `master` changed: **0**.
-- New strings: **50** (26 to review, 24 identical and language-neutral).
+- New strings: **50** (25 to review, 24 identical and language-neutral, 2 moved with unchanged text).
 
 ## Things to decide
 
