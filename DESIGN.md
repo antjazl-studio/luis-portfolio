@@ -85,7 +85,7 @@ Shipped on branch `005-design-refresh`. Everything above holds except these deli
 - **Selection:** text selection is a neutral white highlight, not the mock's blue, because the accent is for links and focus rings only.
 - **Motion:** the hero has one CSS fade-in (0.5s, 8px rise) and nothing loops; the previous float animation and the WhatsApp pulse were removed. All animation is disabled under `prefers-reduced-motion`.
 - **Portrait:** `public/pic.png` is 1086x1448 (3:4) shown in a 4:5 frame with `object-cover object-top`.
-- **Color exceptions, now in the constitution (v1.1.1, owner decision 2026-11-06):** the availability dot is the `--status-available` token (`#34D399`); the WhatsApp brand green `#25D366` and the Azure logo's own SVG gradient are third-party brand marks exempt from the token table. The accent rule is unchanged: `--status-available` never colors text, buttons or borders.
+- **Color exceptions, now in the constitution (v1.2.0, owner decision 2026-11-06):** the availability dot is the `--status-available` token (`#34D399`); the WhatsApp brand green `#25D366` and the Azure logo's own SVG gradient are third-party brand marks exempt from the token table. The accent rule is unchanged: `--status-available` never colors text, buttons or borders.
 - **Not changed:** section content, the experience and project prose, and the skill group names remain English-only in both languages (pre-existing; out of scope for this feature).
 
 # Design System: Luis Jacho Portfolio

@@ -1,8 +1,8 @@
 <!--
 Sync Impact Report
-- Version change: 1.1.0 -> 1.1.1 (PATCH, as designated by the owner on 2026-11-06 for PR #8:
-  clarification, one token added, brand-mark exemption). Note: under the versioning rules below,
-  adding a token could also be read as MINOR; the owner's PATCH designation is followed.
+- Version change: 1.1.0 -> 1.2.0 (MINOR: new theme token `--status-available` and new
+  third-party brand-marks exemption, materially expanded guidance in Principle V; owner decision
+  2026-11-06 for PR #8, replacing an earlier PATCH 1.1.1 designation)
 - Modified principles: V only. (1) New token `--status-available` (#34D399) in the table, with a
   usage rule: static availability status dot only, always with adjacent plain text. (2) New
   "third-party brand marks" exemption: the WhatsApp button fill (#25D366) and the Azure logo's own
@@ -11,10 +11,10 @@ Sync Impact Report
 - Modified sections: none other than Principle V and the version line
 - Added sections: none
 - Removed sections: none
-- Follow-up (outside this file, NOT done by this command): src/app/globals.css (add
-  `--status-available`), tailwind.config.ts (map `status-available`), Hero.tsx and Contact.tsx
-  (use the token instead of the literal #34D399), DESIGN.md (token table and exceptions),
-  CLAUDE.md (theme table), specs/005-design-refresh (plan Complexity Tracking, spec decisions)
+- Follow-up (outside this file, applied in the same PR, not by this command): src/app/globals.css
+  (`--status-available`), tailwind.config.ts (`status-available`), Hero.tsx and Contact.tsx (use
+  the token), DESIGN.md (token table, exceptions, version references), CLAUDE.md (theme table),
+  specs/005-design-refresh (plan Complexity Tracking, spec Owner Decisions)
 - Deferred TODOs: none
 -->
 # Luis Portfolio Constitution
@@ -149,4 +149,4 @@ system reference) are subordinate to this constitution: they MAY refine it but M
 contradict it, and a conflict is resolved by amending this file first via `/speckit-constitution`,
 never by following the subordinate document.
 
-**Version**: 1.1.1 | **Ratified**: 2026-11-05 | **Last Amended**: 2026-11-06
+**Version**: 1.2.0 | **Ratified**: 2026-11-05 | **Last Amended**: 2026-11-06

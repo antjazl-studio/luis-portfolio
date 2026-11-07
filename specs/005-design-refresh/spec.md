@@ -166,7 +166,7 @@ superseded marker pointing to spec 002.
 
 **US1: tokens and hero**
 
-- **FR-001**: The site theme values MUST equal the constitution v1.1.1 table (background
+- **FR-001**: The site theme values MUST equal the constitution v1.2.0 table (background
   `#050505`, foreground `#FFFFFF`, accent `#548CFF`, accent hover `#7DA8FF`, surface `#0E0E10`,
   surface 2 `#18181B`, muted `#A1A1AA`, border `#27272A`, strong border `#71717A`, focus ring
   `#548CFF`, status available `#34D399`), and no page may use the previous palette values.
@@ -233,7 +233,7 @@ superseded marker pointing to spec 002.
   drop no more than 3 points versus the pre-change baseline (best of 3 runs for both).
 - **FR-042**: Documents that mirror theme values (`CLAUDE.md`, `DESIGN.md`) MUST remain
   consistent with the shipped values; `DESIGN.md` is updated if shipped values differ in detail.
-  The constitution is amended only through the owner-approved v1.1.1 PATCH (Owner Decision 1).
+  The constitution is amended only through the owner-approved v1.2.0 amendment (Owner Decision 1).
 - **FR-043**: The Contact section MUST use the same availability and timezone wording as the hero:
   "Open to senior remote roles and consulting" and "UTC−5", in EN and ES (Owner Decision 2).
 
@@ -275,14 +275,14 @@ superseded marker pointing to spec 002.
   timezone line). Their ES wording follows the owner-supplied ES availability line; other ES
   strings are translations of the EN wording and are flagged for the owner's confirmation.
 - The static availability dot uses the `--status-available` token (`#34D399`, from the approved
-  mock), added to the constitution in v1.1.1 (Owner Decision 1); it is not the accent.
+  mock), added to the constitution in v1.2.0 (Owner Decision 1); it is not the accent.
 - Where the mock and a requirement differ, the requirement wins: FR-024 (44px targets) overrides the mock's 28px language buttons, and the selection highlight is neutral because the accent is only for links and focus rings (FR-012). The proof line keeps the existing facts with the mock's punctuation.
 - Sections other than the hero (About, Experience, Skills, Projects, Contact, Footer, Navbar,
   blog) keep their content and structure; only styling, banned patterns and accessibility change.
   Exception: the Contact availability and timezone wording follows the hero (Owner Decision 2).
 - The pre-change Lighthouse baseline is captured before implementation.
 - Constitution v1.1.0, PRODUCT.md and DESIGN.md were already committed on this branch. This feature
-  then amended the constitution to v1.1.1 (Owner Decision 1) and updated DESIGN.md and `CLAUDE.md`
+  then amended the constitution to v1.2.0 (Owner Decision 1) and updated DESIGN.md and `CLAUDE.md`
   to match (FR-042).
 
 ## Out of Scope
@@ -291,7 +291,7 @@ superseded marker pointing to spec 002.
 - An Open Graph / social share image.
 - New content, copy beyond the strings listed above, case studies, testimonials or new blog posts.
 - New dependencies, a light theme or theme toggle, constitution amendments other than the
-  owner-approved v1.1.1 PATCH (Owner Decision 1).
+  owner-approved v1.2.0 amendment (Owner Decision 1).
 - Changes to blog content or blog behavior beyond styling and accessibility.
 
 ## Owner Decisions
@@ -299,14 +299,17 @@ superseded marker pointing to spec 002.
 Decisions made by the owner (Luis) on PR #8 and recorded here on 2026-11-06.
 
 1. **Status color and third-party brand marks (owner, 2026-11-06).** Accept `#34D399` for the
-   availability dot and the WhatsApp and Azure brand colors. Amend the constitution to v1.1.1
-   (PATCH): add a `--status-available` token (`#34D399`) to Principle V and a "third-party brand
+   availability dot and the WhatsApp and Azure brand colors. Amend the constitution to v1.2.0
+   (MINOR, per the constitution's versioning rules): add a `--status-available` token (`#34D399`) to Principle V and a "third-party brand
    marks" exemption (WhatsApp `#25D366`, Azure logo gradient). Hero and Contact use the token
    instead of the literal hex; `DESIGN.md` and `CLAUDE.md` updated to match.
 2. **Contact copy (owner, 2026-11-06).** Align the Contact section with the hero: "Open to senior
    remote roles and consulting" and "UTC−5", in EN and ES (FR-043).
 3. **`AGENTS.md` ignored (owner, 2026-11-06).** `AGENTS.md`, which `next dev` generates, is added
    to `.gitignore`.
+4. **Amendment version is 1.2.0, not 1.1.1 (owner, 2026-11-06).** Adding a token and an exemption
+   is materially expanded guidance, which the constitution's own versioning rules classify as
+   MINOR. The earlier PATCH 1.1.1 designation is replaced.
 
 Still open: the owner's confirmation of the ES strings drafted for the hero title, subline,
 timezone line, portrait alt text and accessibility labels (task T044).

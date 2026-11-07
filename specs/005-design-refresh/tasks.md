@@ -126,7 +126,7 @@ localized labels, `svh`.
 - [x] T041 Use browser tooling if available to check quickstart V13 to V19 (first screen at both viewports in EN and ES, keyboard and skip link, reduced-motion emulation, 360px, language and `html lang`, 44px targets); list what could not be run (FR-002, FR-007, FR-021 to FR-025, FR-028)
 - [x] T042 Update `DESIGN.md`: replace the DRAFT comment with a short "Implemented 005" note (shipped tokens, hero as built, exceptions); confirm `CLAUDE.md` theme table equals the shipped `:root`; do NOT edit `.specify/memory/constitution.md` (FR-042)
 - [x] T043 Write the final exception list (status dot green, WhatsApp green, Azure SVG gradient, ES translations) into `plan.md` Complexity Tracking with date, for the PR body
-- [ ] T044 [OWNER] Confirm the ES translations flagged in T008 (title, subline, name line, timezone line, portrait alt, a11y labels). The color exceptions of T043 were decided by the owner on 2026-11-06 (Owner Decision 1, constitution v1.1.1); only the ES confirmation is still open
+- [ ] T044 [OWNER] Confirm the ES translations flagged in T008 (title, subline, name line, timezone line, portrait alt, a11y labels). The color exceptions of T043 were decided by the owner on 2026-11-06 (Owner Decision 1, constitution v1.2.0); only the ES confirmation is still open
 - [ ] T045 [OWNER] On the Vercel preview (authorize it for the fork PR), run quickstart V13 to V19 on a real phone and a laptop; report anything off
 
 **Checkpoint**: Commit: `docs: record verification results and design notes (005)`.
@@ -185,7 +185,7 @@ T014 to T022 each edit different files and can run together; T023 runs after all
 
 ## Phase 8: Owner decisions follow-up (2026-11-06)
 
-- [x] T046 Amend the constitution to v1.1.1 through `/speckit-constitution`: `--status-available` token and third-party brand-marks exemption (Owner Decision 1)
+- [x] T046 Amend the constitution to v1.2.0 through `/speckit-constitution`: `--status-available` token and third-party brand-marks exemption (Owner Decision 1)
 - [x] T047 [P] Add `--status-available: #34d399` to `src/app/globals.css` and `status-available` to `tailwind.config.ts`; use `bg-status-available` in `src/components/sections/Hero.tsx` and `src/components/sections/Contact.tsx`; no literal `#34D399` left in `src/` (FR-001, FR-004)
 - [x] T048 [P] Update `DESIGN.md` (token frontmatter, token table, exceptions note) and the `CLAUDE.md` theme table to include `--status-available` (FR-042)
 - [x] T049 [P] Align Contact copy with the hero in `src/lib/translations.ts` (EN and ES: sub, open_to, timezone) and `src/components/sections/Contact.tsx` (location line "UTC−5") (FR-043, Owner Decision 2)

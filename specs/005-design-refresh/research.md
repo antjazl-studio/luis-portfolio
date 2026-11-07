@@ -160,7 +160,7 @@ Found by grep survey of `src/`:
 
 Decorative only (no requirement): border #27272A on background = 1.37
 
-- **Status dot** (`--status-available` `#34D399`, constitution v1.1.1) on `#050505` is above 3:1 (graphic) and the adjacent text is the
+- **Status dot** (`--status-available` `#34D399`, constitution v1.2.0) on `#050505` is above 3:1 (graphic) and the adjacent text is the
   accessible name, so the dot is decorative.
 
 ## R13. Years of experience
@@ -194,4 +194,4 @@ Decorative only (no requirement): border #27272A on background = 1.37
 ## R16. Docs consistency
 
 - **Decision**: `CLAUDE.md` already contains the v1.1.0 table. After build, add a short
-  "Implemented" note to `DESIGN.md`. The constitution was amended to v1.1.1 on the owner's decision of 2026-11-06 (see spec.md, Owner Decisions).
+  "Implemented" note to `DESIGN.md`. The constitution was amended to v1.2.0 on the owner's decision of 2026-11-06 (see spec.md, Owner Decisions).

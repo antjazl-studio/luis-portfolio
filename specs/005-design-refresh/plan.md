@@ -39,7 +39,7 @@ Vercel
 and no drop greater than 3 points versus the pre-change baseline (best of 3 runs)
 
 **Constraints**: Dark-only theme; accent only on links and focus rings; neutral CTAs; no
-horizontal overflow at 360px; all strings EN and ES; the constitution is amended only by the owner-approved v1.1.1 PATCH
+horizontal overflow at 360px; all strings EN and ES; the constitution is amended only by the owner-approved v1.2.0 amendment
 
 **Scale/Scope**: 1 home page (6 sections), blog index, blog post, 404; about 20 source files
 touched
@@ -54,7 +54,7 @@ touched
 | II. Component Conventions | PASS | Functional components, named exports; `"use client"` unchanged in kind. No new files in `src/`, so the structure list in the constitution and `CLAUDE.md` stays accurate (skip link lives in `Navbar.tsx`; `MotionConfig` lives in `LanguageContext.tsx`) |
 | III. Mobile-First | PASS | Hero stacks below 800px, two columns from 800px; 360px overflow check in quickstart |
 | IV. Minimal UI (NON-NEGOTIABLE) | PASS | Feature removes all current violations. The hero float animation is dropped (Principle IV marks it approved, not required; DESIGN.md says no float). See research.md R2 |
-| V. Theme Through CSS Variables | PASS | Tokens match the table exactly (v1.1.1, incl. `--status-available`). Brand marks are exempt under the v1.1.1 clause; remaining small literals listed in Complexity Tracking |
+| V. Theme Through CSS Variables | PASS | Tokens match the table exactly (v1.2.0, incl. `--status-available`). Brand marks are exempt under the v1.2.0 clause; remaining small literals listed in Complexity Tracking |
 | VI. Bilingual Parity | PASS | All new and changed strings added to EN and ES; a11y labels moved into translations |
 | VII. Resilient Integrations | PASS | No external calls touched |
 | Accessibility constraints (reduced motion MUST, WCAG AA) | PASS | Implemented by US3 |
@@ -108,15 +108,15 @@ changes would require a constitution amendment, which is out of scope.
 
 ## Complexity Tracking
 
-Resolved by the owner on 2026-11-06 (Owner Decision 1 in spec.md): constitution v1.1.1 added the
+Resolved by the owner on 2026-11-06 (Owner Decision 1 in spec.md): constitution v1.2.0 added the
 `--status-available` token and a third-party brand-marks exemption. What remains outside the token
 table is listed here so the reviewer can see it; none adds scope.
 
 | Item | Status | Why |
 |------|--------|-----|
-| Availability dot `#34D399` | Now the `--status-available` token (constitution v1.1.1); used via `bg-status-available` in `Hero.tsx` and `Contact.tsx` | Owner-approved mock; Principle IV approves a static status dot with plain text |
-| WhatsApp button fill `#25D366` | Exempt: third-party brand mark (constitution v1.1.1) | Recognizable brand affordance, pre-existing |
-| `linearGradient` inside the Azure logo SVG in `About.tsx` | Exempt: artwork inside a third-party brand mark (constitution v1.1.1); Principle IV is not relaxed for the site's own UI | Redrawing a flat logo would change a third-party mark |
+| Availability dot `#34D399` | Now the `--status-available` token (constitution v1.2.0); used via `bg-status-available` in `Hero.tsx` and `Contact.tsx` | Owner-approved mock; Principle IV approves a static status dot with plain text |
+| WhatsApp button fill `#25D366` | Exempt: third-party brand mark (constitution v1.2.0) | Recognizable brand affordance, pre-existing |
+| `linearGradient` inside the Azure logo SVG in `About.tsx` | Exempt: artwork inside a third-party brand mark (constitution v1.2.0); Principle IV is not relaxed for the site's own UI | Redrawing a flat logo would change a third-party mark |
 | Neutral selection highlight `rgba(255,255,255,.2)` in `globals.css` | Remains a documented literal: white at low alpha, the same family as the approved `ring-white/[0.07]` | A token for it would add surface area for no benefit |
 | Skip link `bg-white text-neutral-900` | Approved neutral primary pair of Principle IV | Same pair as the primary CTA |
 

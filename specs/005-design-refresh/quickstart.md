@@ -76,7 +76,7 @@ Scripts live in `.tmp/` (gitignored): `lh.sh`, `verify.mjs`, `firstscreen.mjs`, 
 | B1 / V12 Lighthouse (best of 3) | Baseline mobile Perf 92, A11y 96; desktop 100 / 96. After (final code, best of 3): mobile 100 / 100; desktop 100 / 100. Meets "at least 90 and no drop greater than 3" |
 | V1 lint and build | pass (`npm run lint`, `npm run build`) |
 | V2 old palette, V3 hard-coded greys, V4 "8+", V7 literal aria-labels, V8 vh | no matches |
-| V5 banned patterns | only the Azure logo SVG gradient stops (third-party brand mark, exempt under constitution v1.1.1) |
+| V5 banned patterns | only the Azure logo SVG gradient stops (third-party brand mark, exempt under constitution v1.2.0) |
 | V20 status token and Contact copy | no literal `#34D399` in `src/` (only `--status-available` in `globals.css`); the dot renders `rgb(52, 211, 153)` from the token; Contact reads "Open to senior remote roles and consulting" and "UTC−5" in EN and ES; no "GMT-5", "freelance" or "full-time" left in `src/` (owner decisions 1 and 2, 2026-11-06) |
 | V6 accent usage | only link elements (hero, contact, blog back links, Markdown links) and the focus ring |
 | V9 EN/ES key parity | 59 keys, none missing; 5 identical strings are proper nouns |
