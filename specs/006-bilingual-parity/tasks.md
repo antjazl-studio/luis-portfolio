@@ -68,10 +68,10 @@ and is a draft for the owner.
 
 **Independent Test**: quickstart V2, V3, V4.
 
-- [ ] T019 [US2] Run `.tmp/i18n-parity.mjs` (T003): key sets identical and every identical EN/ES pair is on the FR-010 allowlist; fix any untranslated string (quickstart V2; FR-010, FR-011, FR-012)
-- [ ] T020 [US2] Demonstrate the build guarantee (SC-003): delete one ES string, run `npx tsc --noEmit`, record that it fails naming the missing property; delete one ES bullet from a tuple, record that it fails on the tuple length; restore both and confirm `npx tsc --noEmit` passes. Record the outputs in `specs/006-bilingual-parity/research.md` R2 (quickstart V3; FR-012)
-- [ ] T021 [US2] Search the edited components for sentence-like string literals outside `translations.ts` (3 or more words of letters and spaces, excluding class names, imports, URLs and comments); only the FR-010 neutral constants may remain; list them in `research.md` R3 (quickstart V4; FR-011)
-- [ ] T022 [US2] Remove any now-unused keys or constants left behind (for example the old `MESSAGES` map, `PRIMARY_SKILLS`) and confirm `npm run lint` reports no unused variable (FR-011)
+- [x] T019 [US2] Run `.tmp/i18n-parity.mjs` (T003): key sets identical and every identical EN/ES pair is on the FR-010 allowlist; fix any untranslated string (quickstart V2; FR-010, FR-011, FR-012)
+- [x] T020 [US2] Demonstrate the build guarantee (SC-003): delete one ES string, run `npx tsc --noEmit`, record that it fails naming the missing property; delete one ES bullet from a tuple, record that it fails on the tuple length; restore both and confirm `npx tsc --noEmit` passes. Record the outputs in `specs/006-bilingual-parity/research.md` R2 (quickstart V3; FR-012)
+- [x] T021 [US2] Search the edited components for sentence-like string literals outside `translations.ts` (3 or more words of letters and spaces, excluding class names, imports, URLs and comments); only the FR-010 neutral constants may remain; list them in `research.md` R3 (quickstart V4; FR-011)
+- [x] T022 [US2] Remove any now-unused keys or constants left behind (for example the old `MESSAGES` map, `PRIMARY_SKILLS`) and confirm `npm run lint` reports no unused variable (FR-011)
 
 **Checkpoint**: lint and build pass. Commit: `docs(006): record build-failure demonstration and allowlist` (documentation of results only; code commit if T019 to T022 changed source: `refactor(i18n): remove leftovers (006)`).
 

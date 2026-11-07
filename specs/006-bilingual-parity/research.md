@@ -26,6 +26,11 @@ Everything else visible is already served through `translations.ts`.
   is what "same number of bullets" (FR-007) needs.
 - **Alternatives**: a runtime check script in CI (rejected: new tooling and files); arrays without
   tuple types (rejected: counts could drift silently).
+- **Demonstrated (T020, 2026-11-06)**: with one ES string property removed, `npx tsc --noEmit` exits 2
+  and `npm run build` exits 1 with `TS2741: Property 'location' is missing in type ...`. With one ES
+  bullet removed from the six-bullet MyWork list it fails with `TS2322: Type '[string, string,
+  string, string, string]' is not assignable to type 'Six<string>'. Source has 5 element(s) but target
+  requires 6.` The unmodified file passes and the restored file passes (tree clean afterwards).
 - **Limit of the guarantee**: the type system cannot tell "translated" from "copied English". That
   is checked by the `.tmp` scan (every identical EN/ES pair must be on the FR-010 allowlist).
 
@@ -38,6 +43,14 @@ years. Today's identical EN/ES pairs in `translations.ts` (`nav.blog`, `blog.tit
 `about.azure_badge`, `a11y.linkedin`) are all covered by it. Hero `TECH_STACK`, Projects `tech` arrays, the "Jun 2020" start and
 the IESS period "2017 – 2019" stay as constants. Neutral names are repeated inside each language's
 skill list so each language is one self-contained list.
+
+**Result of the prose search (T021)**: a script searched `src/components`, `src/app`, `src/context` and
+`src/hooks` for literals of 3 or more words outside `translations.ts`. Of 18 hits: 9 are Tailwind class
+strings, a `sizes` attribute or an empty `alt` fallback; 2 are organization names (Logiztik Alliance
+Group, IESS and its Spanish name); 1 is a template that already uses `t.experience.present`; 6 are the
+static page metadata in `layout.tsx` and `blog/page.tsx` (title, description, author name), covered by
+the accepted Principle VI deviation and, for the title, followed on the client by the tab-title logic
+(R4). No user-facing prose remains in components.
 
 ## R4. Tab title
 
