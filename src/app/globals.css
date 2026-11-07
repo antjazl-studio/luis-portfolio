@@ -2,15 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Dark token set, constitution v1.1.0 (Principle V). DESIGN.md has the derivations and ratios. */
 :root {
-  --background: #0d1117;
-  --foreground: #e6edf3;
-  --accent: #0078d4;
-  --accent-hover: #106ebe;
-  --surface: #161b22;
-  --surface-2: #21262d;
-  --muted: #8b949e;
-  --border: #30363d;
+  color-scheme: dark;
+  --background: #050505;
+  --foreground: #ffffff;
+  --accent: #548cff;
+  --accent-hover: #7da8ff;
+  --surface: #0e0e10;
+  --surface-2: #18181b;
+  --muted: #a1a1aa;
+  --border: #27272a;
+  --border-strong: #71717a;
+  --focus-ring: #548cff;
 }
 
 * {
@@ -26,10 +30,41 @@ body {
   background: var(--background);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  scrollbar-color: var(--border-strong) var(--background);
+}
+
+/* Neutral highlight: the accent is reserved for links and focus rings. */
+::selection {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--foreground);
+}
+
+/* One visible keyboard focus indicator for every interactive element.
+   Uses outline (not box-shadow) so it also survives forced-colors mode. */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+/* Reduced motion is a MUST (constitution). Framer Motion is handled by MotionConfig in
+   LanguageContext; this block covers CSS animations, transitions and smooth scrolling. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

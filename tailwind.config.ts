@@ -18,6 +18,8 @@ const config: Config = {
         "surface-2": "var(--surface-2)",
         muted: "var(--muted)",
         border: "var(--border)",
+        "border-strong": "var(--border-strong)",
+        "focus-ring": "var(--focus-ring)",
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],

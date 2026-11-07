@@ -21,9 +21,9 @@ must pass, then commit with a Conventional Commit message ending with the attrib
 
 **Purpose**: capture the baseline before any source change.
 
-- [ ] T001 Confirm `.tmp/` is gitignored (`git check-ignore .tmp`); if not, add `.tmp/` to `.gitignore`
-- [ ] T002 Build the UNMODIFIED site (`npm run build`, `npm run start`) and run Lighthouse (Performance and Accessibility, mobile and desktop) 3 times against `http://localhost:3000/`; keep the best of 3 per category; save results to `.tmp/lighthouse-baseline.json` (quickstart B1, FR-041). Stop only the PID/port you started
-- [ ] T003 [P] Write a WCAG contrast script `.tmp/contrast.mjs` that takes pairs of hex colors and prints ratios (used by T039; quickstart V10, FR-020)
+- [x] T001 Confirm `.tmp/` is gitignored (`git check-ignore .tmp`); if not, add `.tmp/` to `.gitignore`
+- [x] T002 Build the UNMODIFIED site (`npm run build`, `npm run start`) and run Lighthouse (Performance and Accessibility, mobile and desktop) 3 times against `http://localhost:3000/`; keep the best of 3 per category; save results to `.tmp/lighthouse-baseline.json` (quickstart B1, FR-041). Stop only the PID/port you started
+- [x] T003 [P] Write a WCAG contrast script `.tmp/contrast.mjs` that takes pairs of hex colors and prints ratios (used by T039; quickstart V10, FR-020)
 
 **Checkpoint**: baseline numbers recorded. No commit needed (nothing tracked changed).
 
@@ -33,10 +33,10 @@ must pass, then commit with a Conventional Commit message ending with the attrib
 
 **Purpose**: the token layer every story depends on.
 
-- [ ] T004 Replace `:root` in `src/app/globals.css` with the 10 constitution v1.1.0 values (`--background #050505`, `--foreground #FFFFFF`, `--accent #548CFF`, `--accent-hover #7DA8FF`, `--surface #0E0E10`, `--surface-2 #18181B`, `--muted #A1A1AA`, `--border #27272A`, `--border-strong #71717A`, `--focus-ring #548CFF`); add `color-scheme: dark` and a `::selection` rule using a neutral highlight (`rgba(255,255,255,.2)`, NOT the accent, because the accent is for links and focus rings only; this deliberately differs from the mock's blue selection and `caret-color`) (FR-001, FR-012; R1)
-- [ ] T005 Add `border-strong` and `focus-ring` colors (mapped to the CSS variables) to `tailwind.config.ts` (FR-001; R1)
-- [ ] T006 Add the global `:focus-visible` rule in `src/app/globals.css`: `outline: 2px solid var(--focus-ring); outline-offset: 2px;` and make sure no component keeps `outline-none` or `focus:outline-none` without a replacement ring; use `outline` (not `box-shadow`) so the ring survives forced-colors/high-contrast mode (FR-021; R1; spec edge case)
-- [ ] T007 Add the `@media (prefers-reduced-motion: reduce)` block to `src/app/globals.css`: `scroll-behavior: auto` and near-zero `animation-duration`, `transition-duration`, `animation-iteration-count: 1` for all elements (FR-022; R7)
+- [x] T004 Replace `:root` in `src/app/globals.css` with the 10 constitution v1.1.0 values (`--background #050505`, `--foreground #FFFFFF`, `--accent #548CFF`, `--accent-hover #7DA8FF`, `--surface #0E0E10`, `--surface-2 #18181B`, `--muted #A1A1AA`, `--border #27272A`, `--border-strong #71717A`, `--focus-ring #548CFF`); add `color-scheme: dark` and a `::selection` rule using a neutral highlight (`rgba(255,255,255,.2)`, NOT the accent, because the accent is for links and focus rings only; this deliberately differs from the mock's blue selection and `caret-color`) (FR-001, FR-012; R1)
+- [x] T005 Add `border-strong` and `focus-ring` colors (mapped to the CSS variables) to `tailwind.config.ts` (FR-001; R1)
+- [x] T006 Add the global `:focus-visible` rule in `src/app/globals.css`: `outline: 2px solid var(--focus-ring); outline-offset: 2px;` and make sure no component keeps `outline-none` or `focus:outline-none` without a replacement ring; use `outline` (not `box-shadow`) so the ring survives forced-colors/high-contrast mode (FR-021; R1; spec edge case)
+- [x] T007 Add the `@media (prefers-reduced-motion: reduce)` block to `src/app/globals.css`: `scroll-behavior: auto` and near-zero `animation-duration`, `transition-duration`, `animation-iteration-count: 1` for all elements (FR-022; R7)
 
 **Checkpoint**: lint and build pass. Commit: `feat(theme): apply dark token set and global focus and motion rules (005)`.
 
