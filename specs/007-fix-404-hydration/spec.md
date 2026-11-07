@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-07
 
-**Status**: Draft
+**Status**: Implemented (verified locally 2026-11-07; owner checks on the Vercel preview pending)
 
 **Input**: User description: "007 Fix the hydration mismatch (React error #418) on unknown /blog/* URLs, closing waiver W-1 of specs/004-upgrade-nextjs-16/spec.md (research R-14). The prerendered 404 is built without the requested URL, but the navigation bar and the 404 message depend on the current URL in the browser, so the server HTML and the first client render differ and a console error appears. After the fix: no console errors on unknown URLs; correct Blog tab state and wording after the page is interactive (EN and ES); no regression on other routes; routes stay statically prerendered."
 
@@ -21,9 +21,9 @@ A visitor (or the owner checking the site) opens a blog address that does not ex
 **Acceptance Scenarios**:
 
 1. **Given** the language is English, **When** the visitor opens `/blog/nope` directly (full page load), **Then** the console shows zero errors and zero hydration warnings.
-2. **Given** the visitor has selected Spanish on another page, **When** they follow a link to `/blog/nope` (client-side navigation), **Then** the console shows zero errors and zero hydration warnings, and the 404 is in Spanish. (A direct page load always starts in English because the language choice is not stored; that is existing behavior and out of scope.)
+2. **Given** the visitor is on `/blog/nope` and switches the language to Spanish, **When** the page updates, **Then** the console still shows zero errors and zero hydration warnings, and the 404 is in Spanish. (A page load always starts in English because the language choice is not stored; that is existing behavior and out of scope.)
 3. **Given** any language, **When** the visitor opens `/nope` directly, **Then** the console shows zero errors and zero hydration warnings.
-4. **Given** the visitor is on the home page, **When** they follow a link to an unknown blog URL (client-side navigation), **Then** the console shows zero errors.
+4. **Given** the visitor is on the home page, **When** they navigate to an unknown blog URL from within the page, **Then** the console shows zero errors. (The browser reloads the page for such a navigation, so it behaves like a direct load.)
 
 ---
 
@@ -64,9 +64,9 @@ Every other page behaves as it does today: the home page, the blog index and exi
 
 - A blog URL with a trailing slash or nested segments (`/blog/nope/`, `/blog/a/b`) is treated as an unknown blog URL: the Blog item is marked current and the post-not-found wording applies after the page is interactive.
 - A URL that only starts with the same letters, such as `/blogger` or `/blog-old`, is not a blog URL: generic wording, no Blog item marked.
-- The visitor selects Spanish, then reaches an unknown URL by client-side navigation: no console error; the page stays in Spanish.
+- The visitor selects Spanish on one page and then navigates to an unknown URL: the browser reloads the page, so the language starts again in English (existing behavior, out of scope). Switching to Spanish on the 404 itself gives Spanish wording and no console error.
 - Slow connection or JavaScript disabled: the visitor still sees a readable 404 (the generic wording is acceptable before the page becomes interactive). The post-specific wording and the Blog state are not required without JavaScript.
-- The visitor navigates between an unknown URL and a valid page in the same session (client-side): the navigation state follows the current page, with no stale highlight.
+- The visitor follows the link on the 404 page back to `/blog` or `/`: the navigation state follows the new page, with no stale highlight.
 
 ## Requirements *(mandatory)*
 
@@ -91,7 +91,7 @@ Not applicable: this feature changes no data.
 
 ### Measurable Outcomes
 
-- **SC-001**: On `/blog/nope` and `/nope`, with the console open, the number of console errors and hydration warnings is 0 across 3 consecutive fresh loads each (EN, direct load), and 0 after a client-side navigation to each in ES.
+- **SC-001**: On `/blog/nope` and `/nope`, with the console open, the number of console errors and hydration warnings is 0 across 3 consecutive fresh loads each (EN, direct load), and 0 after switching to Spanish and back on each page.
 - **SC-002**: After load, 100% of the checks in User Story 2 pass in both languages (heading, body, link text and target, and which navigation item is marked current).
 - **SC-003**: `/`, `/blog` and at least one existing post show 0 console errors in EN and ES, and the navigation highlight matches the page on each.
 - **SC-004**: The production build route table is unchanged from the pre-feature build (same static routes, none dynamic), and lint and build pass with no errors.

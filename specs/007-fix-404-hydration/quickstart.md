@@ -20,11 +20,11 @@ on the port you started.
 
 **V3. Server HTML unchanged for known routes.** Re-fetch the three pages; `/blog` and the post still contain `aria-current="page"` on the Blog link, byte-for-byte equal to the baseline apart from build hashes; `/blog/nope` still has none. Compare the `<header>` nav markup and the 404 `<h1>`, not whole files (build hashes and the Flight payload for the new prop differ by design) (FR-002, FR-006).
 
-**V4. Console, production server (SC-001, SC-003).** Headless Chrome via DevTools protocol (or an available browser tool) collects console messages and page errors for direct loads of `/`, `/blog`, `/blog/ai-agent-workflow-portfolio`, `/blog/nope`, `/nope`, `/blogger`; 3 fresh loads for each unknown URL. Expected: zero errors and zero warnings.
+**V4. Console, production server (SC-001, SC-003).** (The browser's own "Failed to load resource ... 404" line for the 404 document is not counted, spec FR-001.) Headless Chrome via DevTools protocol (or an available browser tool) collects console messages and page errors for direct loads of `/`, `/blog`, `/blog/ai-agent-workflow-portfolio`, `/blog/nope`, `/nope`, `/blogger`; 3 fresh loads for each unknown URL. Expected: zero errors and zero warnings.
 
 **V5. After-hydration state (SC-002).** On `/blog/nope`: heading and body are the post-not-found wording, link text "back to blog" and `href="/blog"`, Blog link has `aria-current="page"`. On `/nope` and `/blogger`: generic wording, link `href="/"`, no `aria-current` on Blog (FR-003, FR-004).
 
-**V6. Client-side navigation in ES.** From `/`, click ES, then navigate (in-app) to an unknown blog URL: console clean, Spanish post-not-found wording, Blog marked current; follow the link back to `/blog` (US2 scenarios 3 and 4; US1 scenario 4).
+**V6. Spanish on the 404.** Load `/blog/nope` and `/nope`, switch to ES (one visible switcher), then back to EN: console clean, Spanish then English wording correct for the context, Blog highlight unchanged. Also probe that an in-app navigation to an unknown URL is a full page load (`window.next.router.push`, marker lost). Follow the 404 link back to `/blog` (US2 scenarios 3 and 4; US1 scenario 4).
 
 **V7. Dev mode.** Repeat V4 on `next dev` (React dev hydration diagnostics are stricter).
 
