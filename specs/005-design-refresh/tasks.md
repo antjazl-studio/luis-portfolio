@@ -109,8 +109,8 @@ localized labels, `svh`.
 
 **Independent Test**: quickstart V11.
 
-- [ ] T034 [US4] Read `specs/001-baseline-current-portfolio/spec.md` in full and list every blog-related item (User Story 5, blog edge cases, blog mentions in FR-002/FR-021/FR-022, FR-110 to FR-120, blog deviations including D-001, D-004, D-005, D-040, D-050, D-052, D-062, D-071, SC-005 and the input line) (FR-030; R15)
-- [ ] T035 [US4] Add a one-line note "Superseded by spec 002 (native blog)." to each listed item in `specs/001-baseline-current-portfolio/spec.md`, preserving the original text; do not change non-blog lines. Confirm with `git diff` that the diff contains only added lines (FR-030)
+- [x] T034 [US4] Read `specs/001-baseline-current-portfolio/spec.md` in full and list every blog-related item (User Story 5, blog edge cases, blog mentions in FR-002/FR-021/FR-022, FR-110 to FR-120, blog deviations including D-001, D-004, D-005, D-040, D-050, D-052, D-062, D-071, SC-005 and the input line) (FR-030; R15)
+- [x] T035 [US4] Add a one-line note "Superseded by spec 002 (native blog)." to each listed item in `specs/001-baseline-current-portfolio/spec.md`, preserving the original text; do not change non-blog lines. Confirm with `git diff` that the diff contains only added lines (FR-030)
 
 **Checkpoint**: Commit: `docs(specs): mark spec 001 blog sections superseded by 002 (005)`.
 

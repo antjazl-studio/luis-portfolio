@@ -145,12 +145,18 @@ Found by grep survey of `src/`:
 
 ## R15. Spec 001 supersession (US4)
 
-- **Decision**: Add a one-line "Superseded by spec 002" note to each blog-related section,
-  requirement, deviation and success criterion in `specs/001-baseline-current-portfolio/spec.md`
-  (User Story 5, blog edge cases, blog mentions in FR-002/FR-021/FR-022, FR-110 to FR-120,
-  blog deviations D-001, D-004, D-005, D-040, D-050, D-052, D-062, D-071, and SC-005). Original
-  text is preserved. The exact list is confirmed by reading the file during implementation; any
-  blog item not on this list is also marked.
+- **Decision**: Insert a "Superseded by spec 002 (native blog)" note line under each blog-related
+  item of `specs/001-baseline-current-portfolio/spec.md`, preserving all original text (diff is
+  additions only: 33 insertions, 0 deletions), plus a dated banner at the top.
+- **Marked**: User Story 5; the three blog edge cases; the Article entity; FR-110 to FR-113 and
+  FR-120 to FR-121; D-001, D-004, D-005, D-040, D-050 to D-054, D-056, D-071, SC-005; and the
+  blog-only parts of D-002, D-014, D-031, D-062 (noted as partial).
+- **Left unmarked on purpose**: FR-002, FR-021, FR-022 and the blog-navigation scenarios of User
+  Stories 2 and 3. They describe the navbar and language state on `/blog`, which still hold.
+  D-055 (no agent API) is not about the blog.
+- **Verified against the code** that the superseded claims no longer hold: blog pages have no
+  `"use client"`, have per-page metadata and `dynamicParams = false`, and the source has no
+  `rss2json`, `dangerouslySetInnerHTML` or `localStorage`.
 
 ## R16. Docs consistency
 
