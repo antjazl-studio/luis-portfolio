@@ -51,6 +51,7 @@ src/
     LanguageContext.tsx   # EN/ES language state (React Context)
   hooks/
     useLanguage.ts
+    useStablePathname.ts      # Hydration-safe pathname (neutral on the prerendered 404 shell until hydrated)
   lib/
     translations.ts       # All EN/ES strings
     blog.ts               # Loads/validates content/blog (build fails on errors)

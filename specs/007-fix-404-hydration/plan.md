@@ -33,7 +33,7 @@ alternatives: [research.md](research.md).
 
 **Constraints**: All routes stay static; server HTML of known routes unchanged; zero console errors on `/`, `/blog`, posts, `/blog/<unknown>`, `/<unknown>`
 
-**Scale/Scope**: 3 source files touched (`Navbar.tsx`, `BlogNotFound.tsx`, `layout.tsx`) plus 004 documentation
+**Scale/Scope**: 3 source files touched (`Navbar.tsx`, `BlogNotFound.tsx`, `layout.tsx`) and 1 added (`hooks/useStablePathname.ts`), plus `CLAUDE.md`, the constitution amendment (1.3.0) and 004 documentation
 
 ## Constitution Check
 
@@ -42,7 +42,7 @@ alternatives: [research.md](research.md).
 | Principle | Status | Note |
 |-----------|--------|------|
 | I. Stack Fidelity | PASS | No dependency added; React `useSyncExternalStore` and `next/navigation` already in use |
-| II. Component Conventions | PASS | Functional components, named exports, no `any`. `layout.tsx` stays a server component and only passes a serializable prop. `"use client"` stays only on the two existing client components. The stable-pathname helper is exported from `Navbar.tsx` instead of a new `src/hooks/` file, because the constitution's structure list names `hooks/useLanguage.ts` explicitly and a new file would require an amendment (owner-only). If the owner prefers a separate hook file, that is a follow-up amendment, not a blocker |
+| II. Component Conventions | PASS | Functional components, named exports, no `any`. `layout.tsx` stays a server component and only passes a serializable prop. `"use client"` stays only on the two existing client components. The stable-pathname helper is a new file in the existing `src/hooks/` folder (`hooks/useStablePathname.ts`, named export, no `"use client"` needed, same as `useLanguage.ts`). Since constitution 1.3.0 (owner decision 2026-11-07, amendment of Principle II) a new file inside an existing folder needs no amendment; it is added to the `CLAUDE.md` tree in this PR as the principle requires |
 | III. Mobile-First | PASS | No style changes |
 | IV. Minimal UI | PASS | No visual change (FR-009) |
 | V. Theme Through CSS Variables | PASS | No color or token change |
@@ -73,9 +73,14 @@ No `data-model.md` (no data) and no `contracts/` (no external interface) are cre
 src/
 ├── app/
 │   └── layout.tsx              # computes prerendered paths (server) and passes them to Navbar
+├── hooks/
+│   └── useStablePathname.ts    # NEW: hydration-safe pathname hook (named export)
 └── components/
-    ├── Navbar.tsx              # uses and exports useStablePathname(prerenderedPaths)
+    ├── Navbar.tsx              # uses useStablePathname(prerenderedPaths)
     └── BlogNotFound.tsx        # uses useStablePathname([]) for its isPost decision
+
+CLAUDE.md                       # tree lists hooks/useStablePathname.ts
+.specify/memory/constitution.md # 1.3.0: Principle II no longer needs an amendment for new files in existing folders
 
 specs/004-upgrade-nextjs-16/
 ├── spec.md                     # W-1 marked closed by 007
@@ -87,7 +92,7 @@ pathname-dependent markup. No new directories, no change to the layout list in t
 
 ## Design
 
-1. `useStablePathname(prerenderedPaths: readonly string[]): string` (in `Navbar.tsx`, named export):
+1. `useStablePathname(prerenderedPaths: readonly string[]): string` (in `src/hooks/useStablePathname.ts`, named export):
    reads `usePathname() ?? ""`; reads a `hydrated` flag with `useSyncExternalStore(noopSubscribe, () => true, () => false)`
    (the pattern `LanguageContext` already uses for `reduceMotion`); returns the real pathname if `hydrated` or if
    it is in `prerenderedPaths`, else `""`.

@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { useStablePathname } from "@/components/Navbar";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useStablePathname } from "@/hooks/useStablePathname";
 import translations from "@/lib/translations";
 
 /** Localized 404. Shows the "post not found" wording for /blog/* URLs. */

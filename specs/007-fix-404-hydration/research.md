@@ -32,9 +32,9 @@ production build (Next.js 16.4.5, `npm run build` then `next start`).
 
 ## R4. Where the helper lives
 
-- **Decision**: export `useStablePathname` from `src/components/Navbar.tsx` and import it in `BlogNotFound.tsx`.
-- **Rationale**: the constitution's Principle II structure list names `hooks/useLanguage.ts`; adding `hooks/useStablePathname.ts` is a structural change that would need an amendment (owner-only, via `/speckit-constitution`). Co-locating avoids it.
-- **Alternative**: a new `src/hooks/useStablePathname.ts` with an amendment to the structure list: acceptable later if the owner prefers, no behavior change.
+- **Decision (owner, 2026-11-07)**: `src/hooks/useStablePathname.ts`, imported by `Navbar.tsx` and `BlogNotFound.tsx`, and added to the `CLAUDE.md` tree.
+- **History**: the first version of this feature (commit `fc14e25`) exported the hook from `src/components/Navbar.tsx`, because constitution 1.2.0 listed `hooks/useLanguage.ts` by name and a new file would have required an amendment. The owner then amended Principle II (constitution 1.3.0, 2026-11-07): new files inside existing folders need no amendment and must be added to the `CLAUDE.md` tree in the same PR. With that rule the natural location is `hooks/`, and the coupling between `BlogNotFound` and `Navbar` is gone.
+- **Alternative rejected now**: keeping the hook in `Navbar.tsx` (coupled two client components for no remaining reason).
 
 ## R5. Documentation
 
@@ -67,3 +67,15 @@ Two facts found while verifying that changed the spec wording (spec FR-001 note,
 2. An in-app navigation to an unknown URL is a full page load (a `window` marker set before `router.push('/blog/nope')` is lost, and the language returns to EN). Spanish on a 404 is therefore reached by switching the language on the 404 itself, which was verified.
 
 Not verified: Vercel preview behavior (owner checks O1 to O4), browsers other than Chrome, real-device widths, pre-JavaScript rendering beyond reading the server HTML, and the Vercel production build log. In the dev-mode client-navigation script run, the two lines reported as failures contain only the `?_rsc=` 404 status line above (the script filter was not extended for it); no other message appeared.
+
+## R7. Re-verification after moving the hook to `src/hooks/` (2026-11-07)
+
+After constitution 1.3.0 (owner amendment of Principle II) the hook moved from `Navbar.tsx` to `src/hooks/useStablePathname.ts`; `Navbar.tsx` and `BlogNotFound.tsx` import it from there; `CLAUDE.md` lists it. No behavior change was intended. Production build, same scripts as R6:
+
+- `npm run lint` exit 0; `npm run build` passes; route table identical to the baseline.
+- Server HTML `<header>` for `/blog`, the post and `/blog/nope`: md5 equal to the baseline (before and after the move).
+- `/blog/nope` 3 of 3 direct loads: 0 console issues; `/nope` 3 of 3: 0; `/`, `/blog`, the post, `/blogger`, `/blog/nope/`, `/blog/a/b`: 0.
+- After hydration: `/blog/nope` "Post not found", link to `/blog`, Blog `aria-current="page"`; `/nope` and `/blogger` "Page not found", link to `/`, no highlight.
+- ES toggle on `/blog/nope` and `/nope`: correct wording both ways, console clean.
+- Home section highlight on scroll and 404 overflow at 360px and 1280px: 9 PASS, 0 FAIL.
+- Not re-run after the move: Lighthouse and `next dev` (no markup, style or dependency change; the code path is identical). The in-app navigation probe still reports the browser's `?_rsc=` 404 status line, as in R6.
