@@ -88,6 +88,7 @@ Scripts live in `.tmp/` (gitignored): `lh.sh`, `verify.mjs`, `firstscreen.mjs`, 
 | Hydration (dev server, console) | No hydration warnings on `/` and `/blog`, with and without `prefers-reduced-motion` (a first version had one under reduced motion; fixed, see research.md R7) |
 | V16 360px overflow | 0px on `/`, `/blog`, a blog post, and a 404 |
 | V17 language | `html lang` en to es to en; ES skip link, language group, footer and WhatsApp labels; ES availability line is the owner's exact text |
+| ES copy review (owner, 2026-11-06) | 14 ES strings replaced; ES first screen above the fold at 1280x800 and 390x844 (buttons end at y=600); 0px overflow at 360px in ES on `/`, `/blog`, a post and a 404; 18/18 browser checks |
 | V18 touch targets | every link and button at least 44x44 at 1280 and at 390 (menu open) |
 
 Not verified by the supervisor: a real phone with a collapsing address bar (V19, the `svh` behavior),

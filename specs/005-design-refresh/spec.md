@@ -310,6 +310,4 @@ Decisions made by the owner (Luis) on PR #8 and recorded here on 2026-11-06.
 4. **Amendment version is 1.2.0, not 1.1.1 (owner, 2026-11-06).** Adding a token and an exemption
    is materially expanded guidance, which the constitution's own versioning rules classify as
    MINOR. The earlier PATCH 1.1.1 designation is replaced.
-
-Still open: the owner's confirmation of the ES strings drafted for the hero title, subline,
-timezone line, portrait alt text and accessibility labels (task T044).
+5. **ES copy review (owner, 2026-11-06).** The owner reviewed the Spanish strings and replaced 14 of them in `src/lib/translations.ts` (hero title, subline, proof line and timezone line; About heading, first and second paragraphs; one Logiztik bullet; skills "also" label; projects heading; Contact "open to" and response lines; WhatsApp label; footer). English is unchanged. Task T044 is done.
