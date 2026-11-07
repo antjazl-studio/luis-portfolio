@@ -68,7 +68,7 @@ Scripts live in `.tmp/` (gitignored). Baseline = unmodified `upstream/master` bu
 |-------|--------|
 | B1 / V10 Lighthouse (best of 3) | Baseline mobile Perf 100 / A11y 100, desktop 100 / 100. After: mobile 100 / 100, desktop 100 / 100. Meets "at least 90 and no drop greater than 3" |
 | V1 lint, `tsc --noEmit`, build | pass |
-| V2 key parity and allowlist | 108 keys in each language, none missing; every identical EN/ES pair is on the FR-010 list |
+| V2 key parity and allowlist | 110 keys in each language, none missing; every identical EN/ES pair is on the FR-010 list |
 | V3 compile-time guarantee (SC-003) | demonstrated: missing ES property fails `tsc` (TS2741) and `npm run build` (exit 1); a 5-bullet ES list where 6 are required fails (TS2322, "Source has 5 element(s) but target requires 6"); file restored (research.md R2) |
 | V4 prose outside the table | 18 hits, none is user-facing prose that belongs in the table (class strings, organization names, static metadata); research.md R3 |
 | V5 facts invariants (SC-002) | numbers, years, percentages and list shapes identical between EN and ES for Experience, Projects and Skills ("30,000+" equals "más de 30.000", "~60%" equals "~60 %") |
@@ -86,7 +86,7 @@ review (`es-review.md`, tasks T038 to T040).
 
 ### After the owner's decisions on PR #9 (2026-11-06)
 
-Re-run on a fresh production build: lint, `tsc --noEmit` and build pass; key parity passes (108 keys);
+Re-run on a fresh production build: lint, `tsc --noEmit` and build pass; key parity passes (110 keys);
 facts invariants pass; title tests 14/14 with the effect only (the observer was removed); ES scan 4/4;
 English text identical to the baseline on the 4 page types; ES overflow at 360px and ES first screen pass;
 005 regression 18/18 and token/Contact 6/6; US4 UI checks 6/6; "+30 mil" and "Desarrollador full stack"
