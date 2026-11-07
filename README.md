@@ -2,7 +2,7 @@
 
 Bilingual (EN/ES) portfolio of Luis Antonio Jacho Zambrano, Senior Full Stack Developer (.NET · Angular · Azure).
 
-**Live site:** [luis-jacho.vercel.app](https://luis-jacho.vercel.app)
+**Live site:** [luisjacho.dev](https://luisjacho.dev)
 
 [![CI](https://github.com/antjazl-studio/luis-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/antjazl-studio/luis-portfolio/actions/workflows/ci.yml)
 

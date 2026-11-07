@@ -32,7 +32,7 @@ beyond the upgraded ones (the one exception, `@eslint/eslintrc`, is **not** need
 
 **Constraints**: Zero visual / behavioral change; draft gating via `VERCEL_ENV=production` preserved; no new dependencies; Constitution Principles I, II, IV, V, VI untouched
 
-**Scale/Scope**: ~25 source files, 2 locales, 1 blog post. Files touched by the upgrade: `package.json`, lockfile, `src/app/blog/[slug]/page.tsx`, ESLint config, `.github/workflows/ci.yml`, `tsconfig.json` (auto-edited by Next), docs (`CLAUDE.md`, `README.md`)
+**Scale/Scope**: ~25 source files, 2 locales, 1 blog post. Files touched by the upgrade: `package.json`, lockfile, `src/app/blog/[slug]/page.tsx`, ESLint config, `.github/workflows/ci.yml`, `tsconfig.json` (auto-edited by Next), docs (`CLAUDE.md`, `README.md`). Added during implementation (not in the original plan; justified in research.md R-15/R-16, tasks.md T041): `src/app/layout.tsx` (`data-scroll-behavior`), `src/components/Navbar.tsx` (`setActive(null)` moved into the effect cleanup), `tailwind.config.ts` (`import` instead of `require`), `src/lib/blog.ts` (`turbopackIgnore` markers)
 
 ## Constitution Check
 
@@ -41,7 +41,7 @@ beyond the upgraded ones (the one exception, `@eslint/eslintrc`, is **not** need
 | Principle | Status | Note |
 |-----------|--------|------|
 | I. Stack Fidelity | PASS | Still Next.js App Router, TypeScript, Tailwind, Framer Motion. Constitution says the exact Next version lives in `package.json`, so **no constitution edit is needed** (FR-010). No UI-kit or duplicate libraries added |
-| II. Component Conventions | PASS | Only `blog/[slug]/page.tsx` signature changes (server component stays server). Structure list unchanged, except if a new `eslint.config.mjs` at repo root is considered "structure" (it is not under `src/`) |
+| II. Component Conventions | PASS | Planned: only `blog/[slug]/page.tsx` signature changes (server component stays server). Shipped: also the `layout.tsx`, `Navbar.tsx`, `tailwind.config.ts` and `blog.ts` edits listed in Scale/Scope; no convention broken (server/client split and named exports unchanged). Structure list unchanged, except if a new `eslint.config.mjs` at repo root is considered "structure" (it is not under `src/`) |
 | III. Mobile-first | PASS | No style changes |
 | IV. Minimal UI | PASS | No UI changes |
 | V. Theme via CSS vars | PASS | `globals.css` untouched |
@@ -49,6 +49,8 @@ beyond the upgraded ones (the one exception, `@eslint/eslintrc`, is **not** need
 | VII. Resilient integrations | PASS | No external calls |
 
 Post-design re-check (after Phase 1): all PASS; no violations to justify.
+
+Post-implementation re-check (2026-11-06): Principles I, II, III, V, VI, VII still PASS. Principle IV: no UI redesign, but a hydration mismatch on unknown `/blog/*` URLs was accepted as a waiver (spec.md W-1, feature 006). The constitution's accessibility rules (visible focus, reduced motion) were not re-verified; reduced motion was already not respected before the upgrade (spec.md W-3, feature 005 US3).
 
 ## Project Structure
 
