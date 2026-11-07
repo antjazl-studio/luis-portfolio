@@ -13,8 +13,8 @@
 ### User Story 1 - A Spanish visitor reads the whole site in Spanish (Priority: P1)
 
 A visitor from Ecuador or Latin America selects ES. Today the hero, About and Contact are Spanish,
-but the Experience, Projects and Skills sections, the Contact location line and the browser tab
-title stay in English. After this feature, selecting ES makes every sentence on every page Spanish,
+but the Experience, Projects and Skills sections and the browser tab title stay in English (the
+Contact location line and the WhatsApp message also sit outside the shared translation table). After this feature, selecting ES makes every sentence on every page Spanish,
 and selecting EN makes it English again. Names of people, companies, technologies and places are
 not translated. Every fact (employers, dates, numbers, what was done) is identical in both
 languages.
@@ -34,8 +34,9 @@ in both languages side by side.
    description is in Spanish, and technology names are unchanged.
 3. **Given** ES is selected, **When** the visitor reads Skills, **Then** the group names and the
    translatable skill labels are in Spanish, and technology names are unchanged.
-4. **Given** ES is selected, **When** the visitor reads Contact, **Then** the location line is
-   served in the active language and the WhatsApp prefilled message is Spanish.
+4. **Given** ES is selected, **When** the visitor reads Contact, **Then** the WhatsApp prefilled
+   message is Spanish, and the location line is served from the shared table (it reads the same in
+   both languages because it contains only a place name and a time-zone token).
 5. **Given** either language, **When** the same entry is compared across languages, **Then** the
    employer, dates, numbers (for example 30,000+ users, ~60% downtime reduction, a 4-person team),
    number of bullets and their order are identical.
@@ -73,8 +74,8 @@ components for user-facing prose outside the shared table: only the language-neu
 
 Owner decision (2026-11-06): the tab title changes with the language. A visitor who selects ES
 sees a Spanish tab title on the home page, `/blog` and blog posts. The meta description and the
-text used for social previews stay English because they are read before any script runs; this is an
-accepted limitation.
+text used for social previews stay English because they are read before any script runs; the owner
+accepted this as a recorded deviation from Principle VI (Owner Decision 5).
 
 **Why this priority**: The tab title is visible text and is currently the most obvious English
 leftover in Spanish mode.
@@ -90,8 +91,11 @@ time; toggle back to EN.
    title in the active language.
 3. **Given** `/blog` or a missing URL, **When** the language changes, **Then** the tab title follows
    the language as well.
-4. **Given** the page source before scripts run, **When** the meta description is read, **Then** it
-   is the existing English text (accepted limitation).
+4. **Given** ES is selected, **When** the visitor navigates inside the site (home to `/blog` to a
+   post and back), **Then** the tab title is Spanish after every navigation and never settles on
+   English.
+5. **Given** the page source before scripts run, **When** the meta description and Open Graph text
+   are read, **Then** they are the existing English text (accepted deviation).
 
 ---
 
@@ -123,7 +127,8 @@ date and "owner".
   menu state do not jump.
 - A label that is the same word in both languages (for example Docker, Git, Backend) is allowed to
   be identical only if it is on the FR-010 list; any other identical EN/ES pair is a defect.
-- The tab title on the 404 page and on a post whose slug exists in only one language.
+- The tab title on the 404 page, and after client-side navigation (home to `/blog` to a post), when
+  Next rewrites the title from route metadata.
 - Fixed dates such as "Jun 2020 – Present": the word "Present" is already localized; month
   abbreviations that differ between languages must follow the active language.
 
@@ -142,7 +147,8 @@ date and "owner".
 - **FR-004**: Skills: the five group names and every skill label that is not a technology name
   (for example "Agile/Scrum", "Layered Architecture", "REST APIs", "Microservices") MUST be provided
   in both languages.
-- **FR-005**: The Contact location line MUST be provided in both languages.
+- **FR-005**: The Contact location line MUST be served from the shared table in both languages; it
+  is identical in both because it contains only a place name and a time-zone token (FR-010).
 - **FR-006**: The WhatsApp prefilled messages MUST be provided in both languages with the same
   meaning and wording as today.
 - **FR-007**: Facts MUST be identical across languages: names, employers, titles' meaning, dates,
@@ -158,10 +164,11 @@ date and "owner".
   Zambrano, Luis Jacho); organization names (MyWork, Logiztik Alliance Group, IESS and its Spanish
   full name, Cargo Plus); technology and product names (C#, .NET, .NET Core, .NET Framework,
   Angular, TypeScript, JavaScript, Microsoft Azure, Azure DevOps, Azure Functions, App Services,
-  Docker, SQL Server, PostgreSQL, MongoDB, MySQL, Power BI, React, Node.js, Git, CI/CD, DVIR);
+  Docker, SQL Server, PostgreSQL, MongoDB, MySQL, Power BI, React, Node.js, Git, CI/CD, DVIR,
+  .NET 8); the technology arrays of Hero and Projects stay as constants for the same reason;
   brand names (LinkedIn, WhatsApp); certification names (Azure Developer Associate); technical
   loanwords used unchanged in Spanish technical writing (Blog, Backend, Frontend, DevOps); place
-  names (Quito, Ecuador); and numerals and years. This list is complete: any other EN/ES pair that
+  names (Quito, Ecuador); the time-zone token UTC−5; and numerals and years. This list is complete: any other EN/ES pair that
   is identical is a defect.
 - **FR-011**: Every other user-facing string MUST live in the shared translation table with both
   languages; components MUST NOT contain user-facing prose.
@@ -170,10 +177,13 @@ date and "owner".
 **US3: tab title**
 
 - **FR-020**: The browser tab title MUST follow the active language on the home page, `/blog`, blog
-  posts and the 404 page, and update without reload when the language changes.
+  posts and the 404 page, update without reload when the language changes, and MUST NOT revert to
+  English when the route changes through client-side navigation (Next resets the title from route
+  metadata on navigation).
 - **FR-021**: On a blog post, the tab title MUST be that post's title in the active language.
-- **FR-022**: The meta description and social-preview text MAY remain English; this is an accepted
-  limitation and MUST be recorded in this spec.
+- **FR-022**: The meta description and the Open Graph (social-preview) text remain English. This is
+  an accepted deviation from constitution Principle VI, decided by the owner on 2026-11-06 and
+  recorded under Owner Decisions and in the plan's Constitution Check.
 
 **US4 and process**
 
@@ -210,8 +220,9 @@ date and "owner".
 - **SC-002**: 100% of numbers, names, dates, bullet counts and bullet order in Experience, Projects
   and Skills are identical between languages (side-by-side check).
 - **SC-003**: Removing any one string from either language makes the build fail (demonstrated once).
-- **SC-004**: The tab title is Spanish after selecting ES on 4 page types (home, `/blog`, a post,
-  a missing URL) and returns to English on EN.
+- **SC-004**: The tab title is Spanish after selecting ES on the home page, a post and a missing URL
+  (`/blog` reads "Blog — Luis Jacho Zambrano" in both languages, so it is checked for no reversion
+  only), stays Spanish after in-app navigation, and returns to English on EN.
 - **SC-005**: 0 horizontal scrollbars at 360px in Spanish on the 4 page types; the hero first screen
   holds at both reference viewports in Spanish.
 - **SC-006**: Home Lighthouse Performance and Accessibility are each at least 90 and no more than
@@ -225,9 +236,9 @@ date and "owner".
 - Spanish translations are drafted by the assistant, kept faithful to the English, and reviewed by
   the owner; where the English is a technical term with a common Spanish form (for example
   "Layered Architecture" as "Arquitectura en capas"), the common form is used.
-- The Spanish tab title for the home page is drafted as "Luis Jacho Zambrano — Desarrollador Full
-  Stack Senior" (the same job title used in the earlier Spanish copy) and is part of the owner's
-  review. `/blog` keeps "Blog — Luis Jacho Zambrano" in both languages (same words).
+- The Spanish tab title for the home page is drafted as "Luis Jacho Zambrano — Desarrollador full
+  stack senior" (lowercase "full stack senior", as the owner wrote it in About in feature 005) and is
+  part of the owner's review. `/blog` keeps "Blog — Luis Jacho Zambrano" in both languages (same words).
 - The language choice is held in memory only, as today; a full reload returns to English.
 - Blog post content is already bilingual and validated at build time; this feature only changes
   the tab title behavior for posts.
@@ -238,14 +249,28 @@ Decisions made by the owner (Luis) and recorded here on 2026-11-06.
 
 1. **Tab title follows the language (owner, 2026-11-06).** In answer to the scope question for this
    feature, the owner chose that the browser tab title follows the language (home, `/blog`, posts,
-   client-side) while the meta description and social-preview text stay English as an accepted
-   limitation. Per-language URLs (`/es`) are not part of this feature.
+   client-side) while the meta description and social-preview text stay English (see decision 5).
+   Per-language URLs (`/es`) are not part of this feature.
 2. **Keep the full-name wordmark (owner, 2026-11-06, carried over from feature 005).** The navigation
    bar keeps the "Luis Jacho Zambrano" wordmark instead of the earlier "LJ" monogram.
 3. **Keep flat Projects cards (owner, 2026-11-06, carried over from feature 005).** Projects cards
    stay flat and non-interactive (no hover effect, no link behavior).
 4. **Keep inline skills text (owner, 2026-11-06, carried over from feature 005).** Skills stay as
    inline text separated by `·`, not chips or pills.
+5. **Accepted Principle VI deviation: English-only meta description and Open Graph text (owner,
+   2026-11-06).** The page `<meta name="description">` and the Open Graph text stay English in both
+   languages. Rationale: the primary audience is US recruiters, and the text is served before any
+   script runs, so it cannot follow the client-side language switch. This is a recorded deviation
+   from the NON-NEGOTIABLE Principle VI, not an amendment of it. Spanish search and social metadata
+   would need per-language URLs, which go to the backlog (below).
+6. **The Spanish tab title must survive client-side navigation (owner, 2026-11-06).** Next resets the
+   title from route metadata on route changes; the feature must keep the Spanish title anyway
+   (FR-020, SC-004).
+
+## Backlog (separate features, not started)
+
+- **Per-language URLs (`/es`)** with Spanish search and social metadata. Not part of 006; proposed as
+  its own feature if the Spanish audience grows. Recorded by the owner's decision of 2026-11-06.
 
 ## Out of Scope
 

@@ -41,21 +41,34 @@ skill list so each language is one self-contained list.
 
 ## R4. Tab title
 
-- **Decision** (owner, 2026-11-06): `document.title` follows the language, set by effects in
-  components that already exist: `LanguageContext.tsx` for `/` (via `usePathname`), `BlogIndex.tsx`
-  for `/blog`, `LocalizedPost.tsx` for posts (the post title in the active language),
-  `BlogNotFound.tsx` for 404s (the site title, so the English 404 title is unchanged).
-- **Facts verified**: the home and blog titles are static `metadata`; post titles come from
-  `generateMetadata` using `post.en.title` only; the 404 renders `BlogNotFound` and inherits the root
-  title. Meta description and Open Graph stay English (accepted limitation, FR-022).
-- **Why effects**: a client effect cannot cause a hydration mismatch (the server HTML keeps the
-  existing English title), and it needs no new file or dependency.
-- **Risk, to be verified empirically**: Next may rewrite `document.title` from route metadata during
-  client navigation and race the effect. Test with a headless browser against `next start`: ES
-  selected, then home to `/blog` to a post through in-app links, and a language switch on each
-  page. Fallbacks, in order: key the effect on `[language, pathname]`; then use `useLayoutEffect`.
-  No dependency or file is added. The result is recorded here after implementation.
-- **Alternatives**: per-language URLs (rejected by the owner for this feature).
+- **Decision** (owner, 2026-11-06): the tab title follows the language and survives client-side
+  navigation (the owner noted Next resets `document.title` from metadata on route change).
+- **Design: one owner of the title, no race.** `LanguageProvider` (already in the root layout) holds a
+  `pageTitle` value and exposes `setPageTitle(title | null)` through the existing context. The
+  provider computes the desired title: the registered `pageTitle`, or `meta.home` when
+  `usePathname()` is `/`, or none. When a desired title exists it (1) sets `document.title`, and (2)
+  installs a `MutationObserver` on the `<title>` element / `document.head` that re-applies the desired
+  title whenever something else (Next's route-metadata update) changes it. The observer ignores
+  changes that already equal the desired title, so it cannot loop, and it is disconnected on
+  cleanup. Pages register in effects: `BlogIndex` (`meta.blog`), `LocalizedPost` (the post title in
+  the active language; cleanup resets to none), `BlogNotFound` (`meta.home`, so the English 404
+  title is unchanged), each with explicit dependencies (`[language]`, `[post.title]`, `[language]`).
+- **Facts verified in the repo**: home and blog titles are static `metadata`; post titles come from
+  `generateMetadata` with `post.en.title`; the 404 renders `BlogNotFound` and inherits the root title;
+  the initial language is `en`, so effects after hydration cannot cause a hydration mismatch.
+  Child effects run before the provider's effect, which is why registration goes through state in the
+  provider and not through direct `document.title` writes in children.
+- **Why not effects alone**: a late metadata update after the child's mount effect (for example
+  `/blog` to a post in ES) would overwrite the Spanish title and the effect would never re-run;
+  `useLayoutEffect` fires even earlier. The observer is the deterministic guarantee.
+- **Cost**: no new dependency and no new file; a short flicker of the English title during navigation
+  is possible and accepted; the steady state must be Spanish.
+- **Verification (mandatory, task T027)**: headless browser against `next start`: ES selected, home to
+  `/blog` to a post to `/blog` to home through in-app links, with the title sampled over time after
+  each navigation (it must settle on the Spanish value within 1 second and stay), a language switch
+  on each page, a missing URL, back to EN. The result is recorded here after implementation.
+- **Accepted deviation**: the meta description and Open Graph text stay English (Principle VI
+  deviation, owner 2026-11-06; plan.md Complexity Tracking). Per-language URLs are on the backlog.
 
 ## R5. Spanish glossary and style
 

@@ -35,10 +35,13 @@ and order.
 the home page, `/blog`, one post and a missing URL; compare element by element with EN; every
 identical pair must be on the allowlist; flag English sentences.
 
-**V7. Tab title (SC-004).** With ES selected: home, `/blog`, a post and a missing URL show the
-Spanish (or post-language) title and return to English on EN; test switching on each page and via
-in-app navigation home to `/blog` to a post (the R4 race risk). The meta description in the page
-source is unchanged English.
+**V7. Tab title (SC-004).** With ES selected: the home page, a post and a missing URL show the
+Spanish (or post-language) title and `/blog` keeps "Blog — Luis Jacho Zambrano"; all return to English
+on EN. Client-side navigation is mandatory: in-app links home to `/blog` to a post to `/blog` to home,
+sampling the title for 1.5 seconds after each navigation; it must settle on the expected value within
+1 second and stay (Next resets the title from metadata on route change; the provider re-applies it).
+The meta description and Open Graph text in the page source are unchanged English (accepted
+Principle VI deviation, owner 2026-11-06).
 
 **V8. Overflow and first screen in ES (SC-005).** 0px horizontal overflow at 360px on the 4 page
 types in ES; at 1280x800 and 390x844 in ES the title, subline, proof line and both buttons are above

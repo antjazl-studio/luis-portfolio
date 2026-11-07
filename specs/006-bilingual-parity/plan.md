@@ -10,7 +10,7 @@ Make the whole site Spanish when ES is selected (Principle VI). Experience, Proj
 Contact location line and the WhatsApp message move from component constants into
 `src/lib/translations.ts`, typed so a missing key or a different number of bullets or items fails
 the type check and therefore the build. The browser tab title follows the language through
-client-side effects in components that already exist. No new dependency and no new file under
+a title owner in the existing language provider that survives Next's title reset on navigation. No new dependency and no new file under
 `src/`. Decisions and the Spanish glossary are in [research.md](research.md); validation steps are
 in [quickstart.md](quickstart.md).
 
@@ -54,7 +54,7 @@ location, 3 project pairs, 5 skill groups with about 24 labels, location, WhatsA
 | III. Mobile-First | PASS | Spanish text is longer; 360px overflow check in ES is part of the plan |
 | IV. Minimal UI (NON-NEGOTIABLE) | PASS | No visual change |
 | V. Theme Through CSS Variables | PASS | No color change |
-| VI. Bilingual Parity (NON-NEGOTIABLE) | PASS (this feature delivers it) | All user-facing prose in `translations.ts` with both languages; build fails on a missing string; language-neutral list explicit in the spec |
+| VI. Bilingual Parity (NON-NEGOTIABLE) | PASS, with ONE recorded deviation | All visible prose in `translations.ts` with both languages; build fails on a missing string; language-neutral list explicit in the spec. Deviation: the meta description and Open Graph text stay English (see Complexity Tracking) |
 | VII. Resilient Integrations | PASS | No external calls touched |
 | Accessibility constraints | PASS | No change; `html lang` already follows the language |
 | Workflow (build, lint, Lighthouse, Conventional Commits) | PASS | Planned in quickstart |
@@ -71,6 +71,7 @@ specs/006-bilingual-parity/
 ├── research.md
 ├── quickstart.md
 ├── tasks.md             # Phase 2 output (/speckit-tasks)
+├── es-review.md         # generated at the end: every new ES string for the owner's review
 └── checklists/requirements.md
 ```
 
@@ -81,12 +82,12 @@ No `data-model.md` or `contracts/`: the feature has no new data model or externa
 ```text
 src/
 ├── lib/translations.ts                  # new typed groups (tuples); ES drafts for owner review
-├── context/LanguageContext.tsx          # tab title for "/"
+├── context/LanguageContext.tsx          # owns the tab title: registry + re-apply on route change
 ├── components/
 │   ├── WhatsAppButton.tsx               # message from translations
-│   ├── BlogIndex.tsx                    # tab title for "/blog"
-│   ├── LocalizedPost.tsx                # tab title = post title in active language
-│   ├── BlogNotFound.tsx                 # tab title = site title
+│   ├── BlogIndex.tsx                    # registers the "/blog" title
+│   ├── LocalizedPost.tsx                # registers the post title in the active language
+│   ├── BlogNotFound.tsx                 # registers the site title
 │   └── sections/
 │       ├── Experience.tsx               # reads t.experience.*
 │       ├── Projects.tsx                 # titles and descriptions from t.projects.items
@@ -99,6 +100,11 @@ types in the existing `Translation` type give the compile-time guarantee without
 
 ## Complexity Tracking
 
-No constitution violations to justify. One residual limitation is accepted by the owner
-(2026-11-06): meta description and social-preview text stay English because they are read before
-scripts run (spec FR-022).
+One deviation from a NON-NEGOTIABLE principle, accepted by the owner on 2026-11-06 (spec.md, Owner
+Decision 5). The constitution is not amended; the deviation is recorded here as Governance requires.
+
+| Deviation | Why accepted | Simpler alternative rejected because |
+|-----------|--------------|--------------------------------------|
+| Principle VI: the page meta description and the Open Graph text stay English in both languages | Primary audience is US recruiters; this text is served before any script runs, so the client-side language switch cannot change it | Making it follow the language needs per-language URLs (`/es`), a routing change and a separate feature, now on the backlog (spec.md, Backlog) |
+
+No other violations.
