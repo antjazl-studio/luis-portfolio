@@ -11,7 +11,7 @@ export function BlogIndex({ posts }: { posts: BlogIndexItem[] }) {
   const t = translations[language].blog;
 
   return (
-    <main className="min-h-screen bg-background pb-20 pt-24">
+    <main id="main" tabIndex={-1} className="min-h-svh bg-background pb-20 pt-24 focus:outline-none">
       <div className="mx-auto max-w-3xl px-6">
         <div className="mb-10">
           <h1 className="mb-2 text-3xl font-semibold text-foreground">{t.title}</h1>

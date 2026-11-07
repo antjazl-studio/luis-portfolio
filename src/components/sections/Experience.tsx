@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
 import type { Language } from "@/context/LanguageContext";
@@ -64,11 +64,16 @@ export function Experience() {
   const t = translations[language];
   const experience = buildExperience(t);
 
-  const anim = (delay = 0) => ({
-    initial:    { opacity: 0, y: 16 },
-    animate:    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
-    transition: { duration: 0.5, delay },
-  });
+  // Reduced motion: no entrance animation at all, content is simply present.
+  const reduce = useReducedMotion();
+  const anim = (delay = 0) =>
+    reduce
+      ? { initial: false as const, animate: { opacity: 1, y: 0 }, transition: { duration: 0 } }
+      : {
+          initial:    { opacity: 0, y: 16 },
+          animate:    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
+          transition: { duration: 0.5, delay },
+        };
 
   return (
     <section id="experience" ref={ref} className="border-t border-border bg-background py-24">
@@ -76,10 +81,10 @@ export function Experience() {
         <AnimatePresence mode="popLayout">
           <motion.div
             key={language}
-            initial={{ opacity: 0 }}
+            initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            exit={reduce ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: reduce ? 0 : 0.15 }}
           >
             <motion.h2
               {...anim(0.05)}

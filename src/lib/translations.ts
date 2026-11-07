@@ -70,6 +70,14 @@ type Translation = {
     pageNotFoundLink:  string;
     dateLocale:    string;
   };
+  a11y: {
+    skip:      string;
+    menu:      string;
+    language:  string;
+    linkedin:  string;
+    email:     string;
+    whatsapp:  string;
+  };
   footer: string;
 };
 
@@ -147,6 +155,14 @@ const translations: Record<Language, Translation> = {
       pageNotFoundLink:  "Back to home",
       dateLocale:    "en-US",
     },
+    a11y: {
+      skip:     "Skip to main content",
+      menu:     "Toggle menu",
+      language: "Language",
+      linkedin: "LinkedIn",
+      email:    "Email",
+      whatsapp: "Chat on WhatsApp",
+    },
     footer: "Built with Next.js & Tailwind",
   },
 
@@ -222,6 +238,14 @@ const translations: Record<Language, Translation> = {
       pageNotFoundBody:  "Esta página no existe.",
       pageNotFoundLink:  "Volver al inicio",
       dateLocale:    "es-EC",
+    },
+    a11y: {
+      skip:     "Saltar al contenido principal",
+      menu:     "Abrir o cerrar el menú",
+      language: "Idioma",
+      linkedin: "LinkedIn",
+      email:    "Correo electrónico",
+      whatsapp: "Chatea por WhatsApp",
     },
     footer: "Construido con Next.js & Tailwind",
   },

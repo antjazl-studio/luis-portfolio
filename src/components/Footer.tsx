@@ -1,12 +1,13 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
 
 export function Footer() {
   const { language } = useLanguage();
   const t = translations[language];
+  const reduce = useReducedMotion();
 
   return (
     <footer className="border-t border-border bg-background py-8">
@@ -15,10 +16,10 @@ export function Footer() {
         <AnimatePresence mode="popLayout">
           <motion.p
             key={language}
-            initial={{ opacity: 0 }}
+            initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            exit={reduce ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: reduce ? 0 : 0.15 }}
             className="text-xs text-muted"
           >
             © {new Date().getFullYear()} Luis Jacho
@@ -32,14 +33,14 @@ export function Footer() {
             href="https://linkedin.com/in/luis-jacho-zambrano-843558139"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="LinkedIn"
+            aria-label={t.a11y.linkedin}
             className="inline-flex h-11 w-11 items-center justify-center text-muted transition-colors duration-150 hover:text-foreground"
           >
             <LinkedInIcon />
           </a>
           <a
             href="mailto:antjazl@gmail.com"
-            aria-label="Email"
+            aria-label={t.a11y.email}
             className="inline-flex h-11 w-11 items-center justify-center text-muted transition-colors duration-150 hover:text-foreground"
           >
             <EmailIcon />

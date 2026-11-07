@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
 
@@ -11,11 +11,16 @@ export function About() {
   const { language } = useLanguage();
   const t = translations[language];
 
-  const anim = (delay = 0) => ({
-    initial:    { opacity: 0, y: 16 },
-    animate:    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
-    transition: { duration: 0.5, delay },
-  });
+  // Reduced motion: no entrance animation at all, content is simply present.
+  const reduce = useReducedMotion();
+  const anim = (delay = 0) =>
+    reduce
+      ? { initial: false as const, animate: { opacity: 1, y: 0 }, transition: { duration: 0 } }
+      : {
+          initial:    { opacity: 0, y: 16 },
+          animate:    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
+          transition: { duration: 0.5, delay },
+        };
 
   const STATS = [
     { value: "9",    label: t.about.stat1_label },
@@ -29,10 +34,10 @@ export function About() {
         <AnimatePresence mode="popLayout">
           <motion.div
             key={language}
-            initial={{ opacity: 0 }}
+            initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            exit={reduce ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: reduce ? 0 : 0.15 }}
           >
             <div className="grid grid-cols-1 gap-16 md:grid-cols-2 md:items-start">
 

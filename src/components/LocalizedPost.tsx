@@ -14,11 +14,11 @@ export function LocalizedPost({ en, es }: { en: Version; es: Version }) {
   const post = language === "en" ? en : es;
 
   return (
-    <main className="min-h-screen bg-background pb-20 pt-24">
+    <main id="main" tabIndex={-1} className="min-h-svh bg-background pb-20 pt-24 focus:outline-none">
       <article className="mx-auto max-w-3xl px-6">
         <Link
           href="/blog"
-          className="mb-8 inline-block text-sm text-accent underline underline-offset-[3px] hover:text-accent-hover"
+          className="mb-8 inline-flex min-h-11 items-center text-sm text-accent underline underline-offset-[3px] hover:text-accent-hover"
         >
           ← {t.back}
         </Link>

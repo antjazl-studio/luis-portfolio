@@ -7,7 +7,7 @@ import { Contact }    from "@/components/sections/Contact";
 
 export default function Home() {
   return (
-    <main>
+    <main id="main" tabIndex={-1} className="focus:outline-none">
       <Hero />
       <About />
       <Experience />

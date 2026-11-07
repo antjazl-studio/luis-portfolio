@@ -1,19 +1,16 @@
 "use client";
 
 import { useLanguage } from "@/hooks/useLanguage";
+import translations from "@/lib/translations";
 
 const MESSAGES = {
   en: "Hi Luis! I saw your portfolio and I'd like to talk.",
   es: "Hola Luis! Vi tu portafolio y me gustaría conversar.",
 };
 
-const TOOLTIP = {
-  en: "Chat on WhatsApp",
-  es: "Chatea por WhatsApp",
-};
-
 export function WhatsAppButton() {
   const { language } = useLanguage();
+  const label = translations[language].a11y.whatsapp;
 
   const href = `https://wa.me/593960138279?text=${encodeURIComponent(MESSAGES[language])}`;
 
@@ -24,7 +21,7 @@ export function WhatsAppButton() {
         aria-hidden
         className="pointer-events-none hidden whitespace-nowrap rounded-md border border-border-strong bg-surface px-3 py-1.5 text-sm text-foreground opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100 sm:block"
       >
-        {TOOLTIP[language]}
+        {label}
       </span>
 
       {/* Third-party brand green kept as a documented exception (plan.md, Complexity Tracking). */}
@@ -32,7 +29,7 @@ export function WhatsAppButton() {
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={TOOLTIP[language]}
+        aria-label={label}
         className="flex h-12 w-12 items-center justify-center rounded-full sm:h-14 sm:w-14"
         style={{ backgroundColor: "#25D366" }}
       >

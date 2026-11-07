@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
 import type { Language } from "@/context/LanguageContext";
@@ -11,11 +11,17 @@ import type { Language } from "@/context/LanguageContext";
 const NAV_IDS = ["about", "experience", "skills", "projects", "contact"] as const;
 type NavId = typeof NAV_IDS[number];
 
+// Smooth scrolling is motion: honour the visitor's reduced-motion preference.
+const scrollBehavior = (): ScrollBehavior =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+
 export function Navbar() {
   const [active,     setActive]     = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const { language, toggleLanguage } = useLanguage();
+  const reduce = useReducedMotion();
+  const dur = (seconds: number) => (reduce ? 0 : seconds);
   const t        = translations[language];
   const pathname = usePathname() ?? "";
   const onHome   = pathname === "/";
@@ -36,7 +42,7 @@ export function Navbar() {
     setMobileOpen(false);
     if (onHome && isPlainClick(e)) {
       e.preventDefault();
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      document.getElementById(id)?.scrollIntoView({ behavior: scrollBehavior() });
     }
   };
 
@@ -44,7 +50,7 @@ export function Navbar() {
     setMobileOpen(false);
     if (onHome && isPlainClick(e)) {
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: scrollBehavior() });
     }
   };
 
@@ -75,6 +81,14 @@ export function Navbar() {
   }, []);
 
   return (
+    <>
+    {/* First focusable element on every page: jumps past the navigation to <main id="main">. */}
+    <a
+      href="#main"
+      className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:inline-flex focus:min-h-11 focus:items-center focus:rounded-[10px] focus:bg-white focus:px-[22px] focus:text-sm focus:font-medium focus:text-neutral-900"
+    >
+      {t.a11y.skip}
+    </a>
     <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-6">
 
@@ -97,7 +111,7 @@ export function Navbar() {
                   key={id}
                   href={href}
                   onClick={(e) => handleSectionClick(e, id)}
-                  className={`inline-flex min-h-11 items-center text-sm font-medium transition-colors duration-150 ${
+                  className={`inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium transition-colors duration-150 ${
                     isActive ? "text-foreground" : "text-muted hover:text-foreground"
                   }`}
                 >
@@ -110,7 +124,7 @@ export function Navbar() {
             <Link
               href="/blog"
               aria-current={onBlog ? "page" : undefined}
-              className={`inline-flex min-h-11 items-center text-sm font-medium transition-colors duration-150 ${
+              className={`inline-flex min-h-11 min-w-11 items-center justify-center text-sm font-medium transition-colors duration-150 ${
                 onBlog ? "text-foreground" : "text-muted hover:text-foreground"
               }`}
             >
@@ -119,32 +133,32 @@ export function Navbar() {
           </nav>
 
           {/* Language switcher */}
-          <LangSwitcher language={language} onToggle={toggleLanguage} divided />
+          <LangSwitcher language={language} onToggle={toggleLanguage} label={t.a11y.language} divided />
         </div>
 
         {/* Mobile: language switcher + hamburger */}
         <div className="flex items-center gap-1 md:hidden">
-          <LangSwitcher language={language} onToggle={toggleLanguage} />
+          <LangSwitcher language={language} onToggle={toggleLanguage} label={t.a11y.language} />
 
           <button
             onClick={() => setMobileOpen((v) => !v)}
-            aria-label="Toggle menu"
+            aria-label={t.a11y.menu}
             aria-expanded={mobileOpen}
             className="flex h-11 w-11 flex-col items-center justify-center gap-[5px]"
           >
             <motion.span
               animate={mobileOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
-              transition={{ duration: 0.18 }}
+              transition={{ duration: dur(0.18) }}
               className="block h-px w-5 origin-center bg-muted"
             />
             <motion.span
               animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-              transition={{ duration: 0.12 }}
+              transition={{ duration: dur(0.12) }}
               className="block h-px w-5 bg-muted"
             />
             <motion.span
               animate={mobileOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
-              transition={{ duration: 0.18 }}
+              transition={{ duration: dur(0.18) }}
               className="block h-px w-5 origin-center bg-muted"
             />
           </button>
@@ -159,7 +173,7 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
+            transition={{ duration: dur(0.2), ease: "easeInOut" }}
             className="overflow-hidden border-t border-border bg-background md:hidden"
           >
             <nav className="flex flex-col px-6 py-3">
@@ -190,20 +204,25 @@ export function Navbar() {
         )}
       </AnimatePresence>
     </header>
+    </>
   );
 }
 
 function LangSwitcher({
   language,
   onToggle,
+  label,
   divided = false,
 }: {
   language: Language;
   onToggle: () => void;
+  label: string;
   divided?: boolean;
 }) {
   return (
     <div
+      role="group"
+      aria-label={label}
       className={`flex items-center ${divided ? "border-l border-border pl-4" : ""}`}
     >
       {(["en", "es"] as Language[]).map((lang) => (
