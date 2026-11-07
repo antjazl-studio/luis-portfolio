@@ -121,8 +121,8 @@ date and "owner".
   overflow at 360px, and the hero first screen must not lose content.
 - The visitor switches language while scrolled far down or with the mobile menu open: position and
   menu state do not jump.
-- A technology label that is the same word in both languages (for example Docker, Git) is allowed
-  to be identical; any other identical EN/ES pair is a defect unless listed as language-neutral.
+- A label that is the same word in both languages (for example Docker, Git, Backend) is allowed to
+  be identical only if it is on the FR-010 list; any other identical EN/ES pair is a defect.
 - The tab title on the 404 page and on a post whose slug exists in only one language.
 - Fixed dates such as "Jun 2020 – Present": the word "Present" is already localized; month
   abbreviations that differ between languages must follow the active language.
@@ -159,7 +159,10 @@ date and "owner".
   full name, Cargo Plus); technology and product names (C#, .NET, .NET Core, .NET Framework,
   Angular, TypeScript, JavaScript, Microsoft Azure, Azure DevOps, Azure Functions, App Services,
   Docker, SQL Server, PostgreSQL, MongoDB, MySQL, Power BI, React, Node.js, Git, CI/CD, DVIR);
-  place names (Quito, Ecuador); and numerals and years.
+  brand names (LinkedIn, WhatsApp); certification names (Azure Developer Associate); technical
+  loanwords used unchanged in Spanish technical writing (Blog, Backend, Frontend, DevOps); place
+  names (Quito, Ecuador); and numerals and years. This list is complete: any other EN/ES pair that
+  is identical is a defect.
 - **FR-011**: Every other user-facing string MUST live in the shared translation table with both
   languages; components MUST NOT contain user-facing prose.
 - **FR-012**: A string missing in either language MUST fail the build.

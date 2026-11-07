@@ -32,7 +32,10 @@ Everything else visible is already served through `translations.ts`.
 ## R3. What stays outside the table (language-neutral)
 
 Exactly the FR-010 list: the owner's name, organization names, technology and product names,
-place names, numerals and years. Hero `TECH_STACK`, Projects `tech` arrays, the "Jun 2020" start and
+brand names (LinkedIn, WhatsApp), certification names (Azure Developer Associate), technical
+loanwords used unchanged in Spanish (Blog, Backend, Frontend, DevOps), place names, numerals and
+years. Today's identical EN/ES pairs in `translations.ts` (`nav.blog`, `blog.title`, `hero.who`,
+`about.azure_badge`, `a11y.linkedin`) are all covered by it. Hero `TECH_STACK`, Projects `tech` arrays, the "Jun 2020" start and
 the IESS period "2017 – 2019" stay as constants. Neutral names are repeated inside each language's
 skill list so each language is one self-contained list.
 
