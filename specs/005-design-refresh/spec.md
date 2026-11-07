@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-06
 
-**Status**: Ready for implementation
+**Status**: Implemented, pending owner review (2026-11-06)
 
 **Input**: User description: "Design refresh (feature 005), applying constitution v1.1.0, PRODUCT.md, DESIGN.md and the approved dark hero mock at specs/005-design-refresh/mocks/hero-dark.html to the live site. US1 tokens + hero, US2 remove banned patterns, US3 accessibility, US4 mark spec 001 blog sections superseded. Out of scope: new photo, OG image, new content."
 

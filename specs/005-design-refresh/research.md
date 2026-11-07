@@ -43,7 +43,7 @@ Found by grep survey of `src/`:
 | About, Contact, Experience, Projects, Skills | cyan uppercase eyebrow labels, gradient-text `h2`, cyan stat numbers and icons | Remove eyebrows (DESIGN.md No Eyebrow Rule); `h2` white; stats `text-foreground`; icons `text-muted` |
 | Contact | cyan filled CTA, emerald glow dot | Neutral primary CTA; static dot |
 | Experience | cyan timeline line and dot | `border-border` line, neutral dots |
-| Projects | tinted "Featured" tag, gradient hairline, hover lift with shadow | Plain text tag; flat `hover:bg-surface-2` |
+| Projects | tinted "Featured" tag, gradient hairline, hover lift with shadow | Plain text tag; flat, non-interactive panels (no hover, the cards are not links) |
 | Skills | tinted pill chips, radial dot-grid background | Inline text separated by `·`; flat background |
 | WhatsApp | `shadow-lg shadow-black/40`, `rounded-full` pill tooltip | Flat; no shadow; tooltip as plain bordered label |
 | Footer | hard-coded `bg-[#0a0a0a]` | Token |
