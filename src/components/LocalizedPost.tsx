@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { formatPostDate } from "@/components/BlogCard";
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
@@ -9,9 +9,15 @@ import translations from "@/lib/translations";
 type Version = { title: string; date: string; readingTime: number; content: ReactNode };
 
 export function LocalizedPost({ en, es }: { en: Version; es: Version }) {
-  const { language } = useLanguage();
+  const { language, setPageTitle } = useLanguage();
   const t = translations[language].blog;
   const post = language === "en" ? en : es;
+  const postTitle = post.title;
+
+  useEffect(() => {
+    setPageTitle(postTitle);
+    return () => setPageTitle(null);
+  }, [postTitle, setPageTitle]);
 
   return (
     <main id="main" tabIndex={-1} className="min-h-svh bg-background pb-20 pt-24 focus:outline-none">

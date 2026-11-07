@@ -80,6 +80,20 @@ the accepted Principle VI deviation and, for the title, followed on the client b
   `/blog` to a post to `/blog` to home through in-app links, with the title sampled over time after
   each navigation (it must settle on the Spanish value within 1 second and stay), a language switch
   on each page, a missing URL, back to EN. The result is recorded here after implementation.
+- **Result (T027, 2026-11-06, headless Chrome against `next start`)**: all 16 title checks pass with
+  the provider design: ES home, in-app navigation home to `/blog` to a post to `/blog` to home (title
+  settled on the expected value at the first sample, no deviation afterwards), language switches on
+  each page, a missing URL and a missing post URL, back to EN, and the served HTML still carrying the
+  English meta description and post Open Graph title.
+- **What was and was not shown about the Next title reset**: with the `MutationObserver` temporarily
+  DISABLED (the effect alone), the same navigation sequence ALSO passed on this build, so I could not
+  reproduce Next overwriting the Spanish title in this environment; the observer is therefore a
+  defensive guarantee that the owner asked for (owner, 2026-11-06), not a proven necessity. The
+  mechanism itself is tested directly: a script overwrites `document.title` with the English title
+  while ES is selected (simulating a metadata reset). With the observer disabled that test FAILS
+  (control: the title stays English); with the observer enabled it passes on the home page and on a
+  post (corrected back to Spanish within the first samples). Not tested: a real device, Safari or
+  Firefox, `next dev`, or the Vercel deployment.
 - **Accepted deviation**: the meta description and Open Graph text stay English (Principle VI
   deviation, owner 2026-11-06; plan.md Complexity Tracking). Per-language URLs are on the backlog.
 

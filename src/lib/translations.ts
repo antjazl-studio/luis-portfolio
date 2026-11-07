@@ -97,6 +97,10 @@ type Translation = {
     pageNotFoundLink:  string;
     dateLocale:    string;
   };
+  meta: {
+    home: string;
+    blog: string;
+  };
   a11y: {
     skip:      string;
     menu:      string;
@@ -225,6 +229,12 @@ const translations: Record<Language, Translation> = {
       pageNotFoundLink:  "Back to home",
       dateLocale:    "en-US",
     },
+    // Browser tab titles. EN equals the static metadata in layout.tsx and blog/page.tsx; the page
+    // metadata itself stays English (accepted Principle VI deviation, owner 2026-11-06).
+    meta: {
+      home: "Luis Jacho Zambrano — Senior Full Stack Developer",
+      blog: "Blog — Luis Jacho Zambrano",
+    },
     a11y: {
       skip:     "Skip to main content",
       menu:     "Toggle menu",
@@ -351,6 +361,10 @@ const translations: Record<Language, Translation> = {
       pageNotFoundBody:  "Esta página no existe.",
       pageNotFoundLink:  "Volver al inicio",
       dateLocale:    "es-EC",
+    },
+    meta: {
+      home: "Luis Jacho Zambrano — Desarrollador full stack senior",
+      blog: "Blog — Luis Jacho Zambrano",
     },
     a11y: {
       skip:     "Saltar al contenido principal",
