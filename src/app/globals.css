@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Dark token set, constitution v1.1.0 (Principle V). DESIGN.md has the derivations and ratios. */
+/* Dark token set, constitution v1.1.1 (Principle V). DESIGN.md has the derivations and ratios. */
 :root {
   color-scheme: dark;
   --background: #050505;
@@ -15,6 +15,7 @@
   --border: #27272a;
   --border-strong: #71717a;
   --focus-ring: #548cff;
+  --status-available: #34d399; /* static availability dot only (Principle V) */
 }
 
 * {

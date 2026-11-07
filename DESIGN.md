@@ -16,6 +16,7 @@ colors:
   accent: "#548CFF"
   accent-hover: "#7DA8FF"
   focus-ring: "#548CFF"
+  status-available: "#34D399"
 typography:
   display:
     fontFamily: "Geist, system-ui, sans-serif"
@@ -84,7 +85,7 @@ Shipped on branch `005-design-refresh`. Everything above holds except these deli
 - **Selection:** text selection is a neutral white highlight, not the mock's blue, because the accent is for links and focus rings only.
 - **Motion:** the hero has one CSS fade-in (0.5s, 8px rise) and nothing loops; the previous float animation and the WhatsApp pulse were removed. All animation is disabled under `prefers-reduced-motion`.
 - **Portrait:** `public/pic.png` is 1086x1448 (3:4) shown in a 4:5 frame with `object-cover object-top`.
-- **Documented color exceptions** (not in the token table): the 6px availability dot `#34D399` (from the approved mock), the WhatsApp brand green `#25D366`, and the Azure logo's own SVG gradient. See `specs/005-design-refresh/plan.md`, Complexity Tracking.
+- **Color exceptions, now in the constitution (v1.1.1, owner decision 2026-11-06):** the availability dot is the `--status-available` token (`#34D399`); the WhatsApp brand green `#25D366` and the Azure logo's own SVG gradient are third-party brand marks exempt from the token table. The accent rule is unchanged: `--status-available` never colors text, buttons or borders.
 - **Not changed:** section content, the experience and project prose, and the skill group names remain English-only in both languages (pre-existing; out of scope for this feature).
 
 # Design System: Luis Jacho Portfolio
@@ -128,6 +129,7 @@ Ink and paper with a single cool accent. Contrast ratios are WCAG 2.x, computed 
 | Accent | `accent` | #548CFF | 6.38 / 6.04 / 5.54 | Links only |
 | Accent hover | `accent-hover` | #7DA8FF | 8.65 / 8.19 / n/a | Link hover |
 | Focus ring | `focus-ring` | #548CFF | 6.38 / 6.04 / n/a | 2px ring, 2px offset (needs 3:1) |
+| Status available | `status-available` | #34D399 | 10.60 / n/a / n/a | Static 6px availability dot only, next to plain text (graphic, needs 3:1) |
 | Border | `border` | #27272A | 1.37 / n/a / n/a | Decorative hairline dividers only |
 | Border strong | `border-strong` | #71717A | 4.22 / 3.99 / n/a | Outline of controls (needs 3:1) |
 

@@ -20,6 +20,7 @@ const config: Config = {
         border: "var(--border)",
         "border-strong": "var(--border-strong)",
         "focus-ring": "var(--focus-ring)",
+        "status-available": "var(--status-available)",
       },
       // One quiet entrance for the hero. The global prefers-reduced-motion block in
       // globals.css collapses its duration, so it needs no JS handling.

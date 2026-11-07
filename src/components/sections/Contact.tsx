@@ -62,7 +62,7 @@ export function Contact() {
                     linkedin.com/in/luis-jacho-zambrano-843558139
                   </a>
                   <span className="inline-flex min-h-11 items-center text-sm text-muted">
-                    Quito, Ecuador (GMT-5)
+                    Quito, Ecuador (UTC−5)
                   </span>
                 </motion.div>
 
@@ -81,7 +81,7 @@ export function Contact() {
                 <div className="rounded-[10px] border border-border bg-surface p-6">
                   <div className="mb-5 flex items-center gap-2">
                     {/* Static status dot (Principle IV). Decorative: the text carries the meaning. */}
-                    <span aria-hidden className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#34D399]" />
+                    <span aria-hidden className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-status-available" />
                     <span className="text-sm font-medium text-foreground">{t.contact.availability}</span>
                   </div>
                   <div className="space-y-2.5 text-sm text-muted">

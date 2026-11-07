@@ -74,7 +74,7 @@ export function Hero() {
           <div className="grid gap-1.5 border-t border-border pt-5 text-sm text-muted">
             <span className="inline-flex items-center gap-2 text-foreground">
               {/* Static status dot (Principle IV). Decorative: the text carries the meaning. */}
-              <span aria-hidden className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#34D399]" />
+              <span aria-hidden className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-status-available" />
               {t.hero.availability}
             </span>
             <span>{t.hero.timezone}</span>

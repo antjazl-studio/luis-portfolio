@@ -75,6 +75,7 @@ Reglas de gobierno completas en `.specify/memory/constitution.md`.
 | --border        | #27272A   | Divisores decorativos      |
 | --border-strong | #71717A   | Contorno de controles interactivos |
 | --focus-ring    | #548CFF   | Anillo de foco de teclado  |
+| --status-available | #34D399 | Punto de estado de disponibilidad (estático, solo junto a texto) |
 
 Referencia detallada de tokens, contrastes WCAG y tipografía: `DESIGN.md` (debe mantenerse
 consistente con la constitución; si hay conflicto, gana la constitución). `PRODUCT.md` y

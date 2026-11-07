@@ -134,12 +134,12 @@ const translations: Record<Language, Translation> = {
     },
     contact: {
       heading:      "Let's work together",
-      sub:          "I'm currently available for freelance projects and full-time remote positions. Let's talk.",
+      sub:          "Open to senior remote roles and consulting. Let's talk.",
       button:       "Send me an email",
       availability: "Available for work",
-      open_to:      "Open to: Freelance · Consulting",
+      open_to:      "Open to: Senior remote roles · Consulting",
       response:     "Response time: within 24h",
-      timezone:     "Timezone: GMT-5 (flexible)",
+      timezone:     "Timezone: UTC−5 year-round",
     },
     blog: {
       title:         "Blog",
@@ -218,12 +218,12 @@ const translations: Record<Language, Translation> = {
     },
     contact: {
       heading:      "Trabajemos juntos",
-      sub:          "Actualmente estoy disponible para proyectos freelance y posiciones remotas a tiempo completo. Hablemos.",
+      sub:          "Disponible para puestos remotos senior y consultoría. Hablemos.",
       button:       "Envíame un correo",
       availability: "Disponible para trabajar",
-      open_to:      "Abierto a: Freelance · Consultoría",
+      open_to:      "Abierto a: Puestos remotos senior · Consultoría",
       response:     "Tiempo de respuesta: dentro de 24h",
-      timezone:     "Zona horaria: GMT-5 (flexible)",
+      timezone:     "Zona horaria: UTC−5 todo el año",
     },
     blog: {
       title:         "Blog",
