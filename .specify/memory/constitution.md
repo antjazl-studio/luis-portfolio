@@ -1,21 +1,20 @@
 <!--
 Sync Impact Report
-- Version change: 1.0.1 -> 1.1.0 (MINOR: new theme token set, materially expanded accessibility
-  and governance guidance)
-- Modified principles: V (theme values replaced by the dark token set from DESIGN.md; DESIGN.md
-  named as the detailed token reference that must stay consistent; dark-only and accent rules
-  kept)
-- Modified sections: Stack & Design Constraints (prefers-reduced-motion SHOULD -> MUST; new WCAG
-  AA contrast requirement replaces "sufficient contrast"); Governance (PRODUCT.md and DESIGN.md
-  are subordinate to this constitution)
+- Version change: 1.1.0 -> 1.1.1 (PATCH, as designated by the owner on 2026-11-06 for PR #8:
+  clarification, one token added, brand-mark exemption). Note: under the versioning rules below,
+  adding a token could also be read as MINOR; the owner's PATCH designation is followed.
+- Modified principles: V only. (1) New token `--status-available` (#34D399) in the table, with a
+  usage rule: static availability status dot only, always with adjacent plain text. (2) New
+  "third-party brand marks" exemption: the WhatsApp button fill (#25D366) and the Azure logo's own
+  SVG gradient; any other brand mark needs an amendment. The accent rule and Principle IV are
+  unchanged.
+- Modified sections: none other than Principle V and the version line
 - Added sections: none
 - Removed sections: none
-- Checked, no change needed: the "8+ years" -> "9 years" fix has no target here, the constitution
-  never states an experience duration (the old wording lives in src/lib/translations.ts and the
-  baseline spec; copy work is out of scope for this amendment)
-- Follow-up (outside this file): CLAUDE.md theme table updated in the same change;
-  src/app/globals.css and components still use the old values until the design-refresh feature
-  implements them; `--focus-ring` is a new variable to add there
+- Follow-up (outside this file, NOT done by this command): src/app/globals.css (add
+  `--status-available`), tailwind.config.ts (map `status-available`), Hero.tsx and Contact.tsx
+  (use the token instead of the literal #34D399), DESIGN.md (token table and exceptions),
+  CLAUDE.md (theme table), specs/005-design-refresh (plan Complexity Tracking, spec decisions)
 - Deferred TODOs: none
 -->
 # Luis Portfolio Constitution
@@ -83,12 +82,21 @@ permitted by Principle IV. Core values (dark token set):
 | `--border` | `#27272A` | Decorative hairline dividers |
 | `--border-strong` | `#71717A` | Outline of interactive controls |
 | `--focus-ring` | `#548CFF` | Keyboard focus ring |
+| `--status-available` | `#34D399` | Static availability status dot (not text, not a CTA, not an accent) |
 
 `--accent` and `--accent-hover` MUST be used only for links and focus rings; CTAs MUST stay
-neutral per Principle IV. The theme is dark-only. `DESIGN.md` is the detailed token reference
+neutral per Principle IV. `--status-available` MUST be used only for the static availability
+status dot and only next to plain text that carries the meaning; it MUST NOT color text, buttons,
+borders or backgrounds, and it does not widen the accent rule. The theme is dark-only. `DESIGN.md` is the detailed token reference
 (derivations, contrast ratios, typography, components) and MUST stay consistent with this table;
 on any conflict, this constitution wins. Changes to theme values MUST update `globals.css`,
 `DESIGN.md`, `CLAUDE.md` and this constitution together.
+
+Third-party brand marks: as an exception to the first sentence of this principle, an official
+third-party brand mark MAY keep its own colors although they are not in the table. The complete
+list is: the WhatsApp button fill (`#25D366`) and the Azure logo's own SVG gradient (artwork
+inside the third-party mark). Any other brand mark requires an amendment. This exemption does not
+relax Principle IV: gradients, glows and shadows in the site's own UI remain banned.
 
 ### VI. Bilingual Parity (NON-NEGOTIABLE)
 Every user-facing string MUST exist in both English (EN) and Spanish (ES) and be served through
@@ -141,4 +149,4 @@ system reference) are subordinate to this constitution: they MAY refine it but M
 contradict it, and a conflict is resolved by amending this file first via `/speckit-constitution`,
 never by following the subordinate document.
 
-**Version**: 1.1.0 | **Ratified**: 2026-11-05 | **Last Amended**: 2026-11-06
+**Version**: 1.1.1 | **Ratified**: 2026-11-05 | **Last Amended**: 2026-11-06
