@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>009 launcher options (mock)</title>
+<style>
+/* Tokens only (constitution v1.3.0, Principle V). Flat: no shadows, glows, gradients, blur.
+   The only non-token colour is the WhatsApp brand fill #25D366 (documented exemption). */
+:root{--bg:#050505;--fg:#fff;--surface:#0e0e10;--surface2:#18181b;--muted:#a1a1aa;--border:#27272a;--bs:#71717a;--accent:#548cff;--wa:#25D366}
+*{box-sizing:border-box}
+body{margin:0;background:#111;color:var(--fg);font:14px/1.5 system-ui,sans-serif;padding:24px 24px 64px}
+h1{font-size:20px;font-weight:600;margin:0 0 4px}
+h2{font-size:17px;font-weight:600;margin:48px 0 4px;border-top:1px solid var(--border);padding-top:24px}
+p,li{color:#c9c9cf;max-width:78ch}
+.note{color:var(--muted)}
+.bar{display:flex;gap:12px;align-items:center;margin:12px 0 0}
+.bar button{background:var(--surface);color:var(--fg);border:1px solid var(--bs);border-radius:8px;padding:8px 14px;font:inherit;cursor:pointer}
+.row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start;margin-top:16px}
+figure{margin:0}
+figcaption{margin:8px 0 0;color:var(--muted);font-size:13px;max-width:360px}
+figure.wide figcaption{max-width:704px}
+
+/* ---------- 360px phone frame (real px) ---------- */
+.phone{position:relative;width:360px;height:640px;background:var(--bg);border:1px solid var(--bs);border-radius:14px;overflow:hidden}
+.nav{position:absolute;top:0;left:0;right:0;height:56px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;color:var(--muted);font-size:13px}
+.pg{position:absolute;top:56px;left:0;right:0;bottom:0;padding:20px 16px;overflow:hidden}
+.pg h3{margin:0 0 12px;font-size:22px;font-weight:600;color:var(--fg);letter-spacing:-.02em}
+.ln{height:8px;border-radius:4px;background:var(--surface2);margin:0 0 10px}
+.ln.s{width:70%}.ln.m{width:88%}
+.blk{border:1px solid var(--border);border-radius:10px;padding:12px;margin:16px 0}
+.cv{display:inline-block;background:#fff;color:#111;border-radius:10px;padding:10px 16px;font-weight:500;margin:6px 0 14px}
+
+/* ---------- desktop frame: 1280x720 scaled .55 ---------- */
+.dwrap{width:704px;height:396px;border:1px solid var(--bs);border-radius:10px;overflow:hidden;position:relative}
+.desk{position:absolute;left:0;top:0;width:1280px;height:720px;background:var(--bg);transform:scale(.55);transform-origin:0 0;overflow:hidden}
+.dnav{position:absolute;left:0;right:0;top:0;height:64px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 64px;color:var(--muted)}
+.dpg{position:absolute;left:64px;right:64px;top:96px;color:var(--muted)}
+.dpg h3{font-size:34px;margin:0 0 16px;color:var(--fg);font-weight:600;letter-spacing:-.02em}
+.dpg .ln{margin-bottom:14px;height:10px}
+.dfoot{position:absolute;left:0;right:0;bottom:0;border-top:1px solid var(--border);height:224px;padding:32px 64px 0;display:flex;justify-content:space-between;align-items:flex-start;color:var(--muted);font-size:12px}
+.dfoot .ic{display:flex;gap:16px}.dfoot .ic i{width:44px;height:44px;display:grid;place-items:center;border:1px dashed var(--border);border-radius:6px;font-style:normal}
+.pfoot{position:absolute;left:0;right:0;bottom:0;border-top:1px solid var(--border);height:144px;padding:32px 16px 0;text-align:center;color:var(--muted);font-size:12px;background:var(--bg)}
+.reserve{position:absolute;left:0;right:0;bottom:0;border-top:1px dashed var(--bs);color:var(--bs);font-size:11px;text-align:center}
+
+/* ---------- shared control atoms ---------- */
+.fl{position:absolute;display:flex;align-items:center;color:var(--fg);font-family:inherit}
+.ph .fl{right:16px;bottom:16px}
+.desk .fl{right:24px;bottom:24px}
+svg.i{width:20px;height:20px;flex:none}
+.desk svg.i{width:22px;height:22px}
+.ask{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;white-space:nowrap}
+.desk .ask{font-size:15px}
+.seg-div{width:1px;align-self:stretch;background:var(--bs)}
+
+/* A: dock */
+.dock{height:48px;border:1px solid var(--bs);background:var(--surface);border-radius:9999px;overflow:hidden}
+.desk .dock{height:56px}
+.dock .ask{padding:0 16px 0 16px;height:100%}
+.dock .wa{width:48px;height:100%;display:grid;place-items:center;color:var(--fg)}
+.desk .dock .wa{width:56px}
+.dock .wa svg{width:22px;height:22px}
+.dock.green .wa{background:var(--wa)}
+.dock.green .seg-div{display:none}
+
+/* B: input-like bar */
+.inp{height:48px;border:1px solid var(--bs);background:var(--surface);border-radius:10px;padding:0 6px 0 14px;gap:10px;justify-content:space-between}
+.ph .inp{left:16px;right:16px}
+.desk .inp{width:380px;height:56px;border-radius:10px}
+.inp .ph-t{color:var(--muted);font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+.desk .inp .ph-t{font-size:15px}
+.inp .send{width:36px;height:36px;border-radius:8px;background:#fff;color:#050505;display:grid;place-items:center;flex:none}
+.inp svg.i{color:var(--muted)}
+.inp .send svg{width:18px;height:18px;color:#050505}
+
+/* C: speed dial */
+.sd{flex-direction:column;align-items:flex-end;gap:12px}
+.pill{height:48px;border:1px solid var(--bs);background:var(--surface);border-radius:9999px;padding:0 16px;gap:10px}
+.desk .pill{height:56px}
+.wamark{width:24px;height:24px;border-radius:50%;background:var(--wa);display:grid;place-items:center;flex:none}
+.wamark svg{width:14px;height:14px;color:#fff}
+.fab{width:48px;height:48px;border-radius:9999px;border:1px solid var(--bs);background:var(--surface);display:grid;place-items:center}
+.desk .fab{width:56px;height:56px}
+.fab.on{background:#fff;color:#050505}
+.fab.on svg{color:#050505}
+.lbl{position:absolute;right:76px;bottom:32px;white-space:nowrap;border:1px solid var(--bs);background:var(--surface);border-radius:6px;padding:6px 12px;font-size:14px;color:var(--fg)}
+
+/* D: responsive hybrid, desktop wide segment */
+.dock.wide .ask{padding:0 18px;gap:12px;min-width:300px}
+.dock.wide .ask .ph-t{color:var(--muted);font-weight:400;font-size:15px}
+.dock.wide .hint{margin-left:auto;font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:2px 8px;font-weight:400}
+
+/* ---------- evaluation table ---------- */
+.ev{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:20px}
+.ev div{border:1px solid var(--border);border-radius:10px;padding:12px 16px;background:var(--surface)}
+.ev h4{margin:0 0 6px;font-size:13px;font-weight:600;color:var(--fg)}
+.ev ul{margin:0;padding-left:18px}
+.ev li{font-size:13px;margin:2px 0}
+.sum{width:100%;border-collapse:collapse;margin-top:24px;font-size:13px}
+.sum th,.sum td{border:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top;color:#c9c9cf}
+.sum th{color:var(--fg);background:var(--surface)}
+.rec{color:#fff;font-weight:600}
+</style></head><body>
+
+<h1>009 Chat launcher: entry-point options (mock)</h1>
+<p class="note">Static mock. 360px phone frames are real size; desktop frames are a 1280×720 viewport shown at 55%. Flat, tokens only, neutral controls; the only non-token colour is the WhatsApp brand green on the WhatsApp mark itself. Fonts are system-ui here (the site uses Geist), so text widths are close but not exact. The dashed line marks the Footer's bottom reserve (<code>pb-36</code> = 144px) that keeps Footer icons clear of floating controls.</p>
+<div class="bar">
+  <button id="lang" type="button">Language: EN (click for ES)</button>
+  <span class="note">Spanish strings are the longest case; check they fit at 360px.</span>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="spark" viewBox="0 0 24 24"><path d="M12 3.5l1.7 5.1 5.1 1.7-5.1 1.7L12 17.1l-1.7-5.1-5.1-1.7 5.1-1.7z M18.5 15.5l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="send" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="wa" viewBox="0 0 24 24"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></symbol>
+  </defs>
+</svg>
+
+<!-- CURRENT -->
+<h2>Today (for reference)</h2>
+<p>Outline "Ask about Luis" pill stacked 12px above a 48px green circle, same right margin. Two shapes, two weights, green dominates.</p>
+<div class="row">
+  <figure><div class="phone ph"><div class="nav"><span>Luis Jacho</span><span>EN · ES</span></div><div class="pg" data-page="mid"></div>
+    <div class="fl pill" style="bottom:76px;padding:0 16px;height:44px"><span class="ask"><span data-en="Ask about Luis" data-es="Pregunta sobre Luis">Ask about Luis</span></span></div>
+    <div class="fl" style="width:48px;height:48px;border-radius:50%;background:var(--wa);justify-content:center"><svg class="i" style="color:#fff"><use href="#wa"/></svg></div>
+  </div><figcaption>Current, 360px. Pill is 44px tall with no icon; WhatsApp is 48px solid green; the shapes and centres do not match.</figcaption></figure>
+</div>
+
+<!-- A -->
+<h2>A. One dock, two segments</h2>
+<p>A single pill: assistant segment (icon + "Ask about Luis") and a WhatsApp icon segment, separated by a hairline. One outline, one height, one anchor point. The assistant segment is ~3x wider than the WhatsApp segment, so it leads.</p>
+<div class="row">
+  <figure><div class="phone ph"><div class="nav"><span>Luis Jacho</span><span>EN · ES</span></div><div class="pg" data-page="mid"></div>
+    <div class="fl dock"><span class="ask"><svg class="i"><use href="#spark"/></svg><span data-en="Ask about Luis" data-es="Pregunta sobre Luis">Ask about Luis</span></span><span class="seg-div"></span><span class="wa"><svg><use href="#wa"/></svg></span></div>
+  </div><figcaption>A1, 360px, mid-page. WhatsApp glyph in neutral white (calmest; brand colour not used; glyph stays recognisable). Dock 48px tall, 16px from edges.</figcaption></figure>
+  <figure><div class="phone ph"><div class="nav"><span>Luis Jacho</span><span>EN · ES</span></div><div class="pg" data-page="mid"></div>
+    <div class="fl dock green"><span class="ask"><svg class="i"><use href="#spark"/></svg><span data-en="Ask about Luis" data-es="Pregunta sobre Luis">Ask about Luis</span></span><span class="wa"><svg><use href="#wa"/></svg></span></div>
+  </div><figcaption>A2, 360px. WhatsApp segment keeps the brand fill #25D366 (exempt by the constitution). More recognisable, but green pulls the eye again; smaller area than today.</figcaption></figure>
+  <figure class="wide"><div class="dwrap"><div class="desk"><div class="dnav"><span>Luis Jacho</span><span>About · Experience · Projects · Contact · EN · ES</span></div><div class="dpg" data-page="deskend"></div>
+    <div class="dfoot"><span>© 2026 Luis Jacho · Built with Next.js &amp; Tailwind</span><span class="ic"><i>in</i><i>@</i></span></div><div class="reserve" style="bottom:144px">Footer bottom reserve (pb-36 = 144px)</div>
+    <div class="fl dock"><span class="ask"><svg class="i"><use href="#spark"/></svg><span data-en="Ask about Luis" data-es="Pregunta sobre Luis">Ask about Luis</span></span><span class="seg-div"></span><span class="wa"><svg><use href="#wa"/></svg></span></div>
+  </div></div><figcaption>A1, desktop, end of page. Sits inside the Footer's reserved space; Footer icons stay clear.</figcaption></figure>
+</div>
+<div class="ev">
+  <div><h4>Pros</h4><ul><li>One element, one anchor, one outline: fixes the "improvised stack" directly.</li><li>Assistant leads by width, icon and position; WhatsApp stays one tap away, never hidden.</li><li>No panel change, no new page content, no contract change; reuses the current launcher click handler and lazy panel.</li><li>Smallest footprint of the options that keep both visible (~200px wide at 360px).</li></ul></div>
+  <div><h4>Cons</h4><ul><li>Reads as a label, not an invitation to type; weaker "input" cue than B.</li><li>A1 neutral glyph is less recognisable as WhatsApp than the green; A2 brings green back.</li><li>Two tap targets in one pill: the 1px divider must be clear and each segment ≥44px.</li></ul></div>
+  <div><h4>Discoverability / thumb / conflicts</h4><ul><li><b>Discoverability:</b> good: icon + words, bottom-right, always visible.</li><li><b>Thumb:</b> bottom-right, right-thumb zone; ask segment is the closest, WhatsApp the farthest-right corner target.</li><li><b>Content/Footer:</b> 64px of height at the bottom; fits inside the existing 144px reserve (no Footer change).</li></ul></div>
+</div>
+
+<!-- B -->
+<h2>B. Input-like "Ask anything about Luis…" bar</h2>
+<p>A prominent input-looking bar. Mobile: bottom, full width minus 16px gutters. Desktop: bottom-right, 380px. Tapping it opens the panel with the textarea focused (a real page-level input would raise the keyboard before the panel exists; see cons). WhatsApp leaves the floating layer: Contact section + panel.</p>
+<div class="row">
+  <figure><div class="phone ph"><div class="nav"><span>Luis Jacho</span><span>EN · ES</span></div><div class="pg" data-page="mid"></div>
+    <div class="fl inp"><svg class="i"><use href="#spark"/></svg><span class="ph-t" data-en="Ask anything about Luis…" data-es="Pregunta lo que quieras sobre Luis…">Ask anything about Luis…</span><span class="send"><svg class="i"><use href="#send"/></svg></span></div>
+  </div><figcaption>B, 360px, mid-page. The bar covers a full row of content (text lines pass behind it). Whole bar is the 48px tap target.</figcaption></figure>
+  <figure class="wide"><div class="dwrap"><div class="desk"><div class="dnav"><span>Luis Jacho</span><span>About · Experience · Projects · Contact · EN · ES</span></div><div class="dpg" data-page="deskend" data-wa="1"></div>
+    <div class="dfoot"><span>© 2026 Luis Jacho · Built with Next.js &amp; Tailwind</span><span class="ic"><i>in</i><i>@</i></span></div><div class="reserve" style="bottom:144px">Footer bottom reserve (pb-36 = 144px)</div>
+    <div class="fl inp"><svg class="i"><use href="#spark"/></svg><span class="ph-t" data-en="Ask anything about Luis…" data-es="Pregunta lo que quieras sobre Luis…">Ask anything about Luis…</span><span class="send"><svg class="i"><use href="#send"/></svg></span></div>
+  </div></div><figcaption>B, desktop, end of page. Note the new "WhatsApp" link in the Contact block: today the Contact section has no WhatsApp link, so B adds content there.</figcaption></figure>
+</div>
+<div class="ev">
+  <div><h4>Pros</h4><ul><li>Strongest "type here" invitation; closest to the pattern the owner likes.</li><li>Single element; the assistant is unmistakably primary.</li><li>Frees the corner of the green dot entirely.</li></ul></div>
+  <div><h4>Cons</h4><ul><li><b>WhatsApp is demoted to 2+ taps</b> (open panel first, or scroll to Contact). Recruiters who want WhatsApp lose the always-on shortcut.</li><li><b>Touches the panel</b>: a WhatsApp link in the panel footer changes the panel (today WhatsApp shows only in error states), against "the panel stays as is". Needs an owner exception, or WhatsApp only goes to Contact.</li><li><b>Contact section gains a WhatsApp link</b> (new content to design and translate).</li><li>Largest footprint: 328px wide on mobile, covers a row of content at all times.</li><li>A real input would summon the keyboard on the page, shift the viewport, and bypass the panel's lazy load; a look-alike button avoids that but is a "fake input" (fine when the tap opens a focused field).</li><li>Prefilled text needs a real input; the look-alike variant has nothing to prefill.</li></ul></div>
+  <div><h4>Discoverability / thumb / conflicts</h4><ul><li><b>Discoverability:</b> highest for the assistant; lowest for WhatsApp.</li><li><b>Thumb:</b> full-width bar is reachable one- or two-handed at the very bottom.</li><li><b>Content/Footer:</b> 64px tall like A, but 328px wide on mobile; overlaps more text.</li></ul></div>
+</div>
+
+<!-- C -->
+<h2>C. Assistant FAB with WhatsApp behind it</h2>
+<p>One round button. Tapping it reveals two actions above it: "Ask about Luis" and "WhatsApp"; the button becomes a close (X) control.</p>
+<div class="row">
+  <figure><div class="phone ph"><div class="nav"><span>Luis Jacho</span><span>EN · ES</span></div><div class="pg" data-page="mid"></div>
+    <div class="fl fab"><svg class="i"><use href="#spark"/></svg></div>
+  </div><figcaption>C collapsed, 360px. Icon only: the smallest footprint, the weakest cue.</figcaption></figure>
+  <figure><div class="phone ph"><div class="nav"><span>Luis Jacho</span><span>EN · ES</span></div><div class="pg" data-page="mid"></div>
+    <div class="fl sd"><span class="pill ask" style="display:flex"><svg class="i"><use href="#spark"/></svg><span data-en="Ask about Luis" data-es="Pregunta sobre Luis">Ask about Luis</span></span>
+      <span class="pill ask" style="display:flex"><span class="wamark"><svg><use href="#wa"/></svg></span><span>WhatsApp</span></span>
+      <span class="fab on"><svg class="i"><use href="#close"/></svg></span></div>
+  </div><figcaption>C expanded, 360px. 184px tall: taller than the Footer's 144px reserve, so it covers Footer icons while open.</figcaption></figure>
+  <figure class="wide"><div class="dwrap"><div class="desk"><div class="dnav"><span>Luis Jacho</span><span>About · Experience · Projects · Contact · EN · ES</span></div><div class="dpg" data-page="deskend"></div>
+    <div class="dfoot"><span>© 2026 Luis Jacho · Built with Next.js &amp; Tailwind</span><span class="ic"><i>in</i><i>@</i></span></div><div class="reserve" style="bottom:144px">Footer bottom reserve (pb-36 = 144px)</div>
+    <span class="lbl" data-en="Ask about Luis" data-es="Pregunta sobre Luis">Ask about Luis</span>
+    <div class="fl fab"><svg class="i"><use href="#spark"/></svg></div>
+  </div></div><figcaption>C collapsed, desktop, with a hover/focus label (like today's WhatsApp label). Touch users never get a label.</figcaption></figure>
+</div>
+<div class="ev">
+  <div><h4>Pros</h4><ul><li>Smallest resting footprint (48px circle); the least page cover and the calmest page.</li><li>Single anchor point; both channels remain reachable.</li><li>No panel change.</li></ul></div>
+  <div><h4>Cons</h4><ul><li><b>Hides the most valuable feature behind an icon</b> and then behind a second tap: assistant = 2 taps, WhatsApp = 2 taps. Opposite of "obvious primary entry point".</li><li>Icon-only on touch: no label until expanded; "AI sparkle" alone is ambiguous.</li><li>Expanded state needs open/close state, outside-click and Escape handling, focus management, and extra translated labels: the most new behaviour of the options.</li><li>Expanded stack overlaps Footer icons.</li></ul></div>
+  <div><h4>Discoverability / thumb / conflicts</h4><ul><li><b>Discoverability:</b> lowest for the assistant.</li><li><b>Thumb:</b> excellent; one fixed target, actions stack upward.</li><li><b>Content/Footer:</b> collapsed fits; expanded exceeds the reserve temporarily.</li></ul></div>
+</div>
+
+<!-- D -->
+<h2>D. Hybrid: A on mobile, an input-like wide segment on desktop</h2>
+<p>Same single dock as A. On mobile it is the compact A1 above. From the <code>md</code> breakpoint (768px) the assistant segment widens into an input-style field ("Ask anything about Luis…" with a hint chip) while the WhatsApp segment stays an icon. One component, no panel change, WhatsApp unchanged and always visible. The field is a button that opens the panel with the textarea focused.</p>
+<div class="row">
+  <figure class="wide"><div class="dwrap"><div class="desk"><div class="dnav"><span>Luis Jacho</span><span>About · Experience · Projects · Contact · EN · ES</span></div><div class="dpg" data-page="deskend"></div>
+    <div class="dfoot"><span>© 2026 Luis Jacho · Built with Next.js &amp; Tailwind</span><span class="ic"><i>in</i><i>@</i></span></div><div class="reserve" style="bottom:144px">Footer bottom reserve (pb-36 = 144px)</div>
+    <div class="fl dock wide"><span class="ask"><svg class="i"><use href="#spark"/></svg><span class="ph-t" data-en="Ask anything about Luis…" data-es="Pregunta lo que quieras sobre Luis…">Ask anything about Luis…</span><span class="hint" data-en="AI" data-es="IA">AI</span></span><span class="seg-div"></span><span class="wa"><svg><use href="#wa"/></svg></span></div>
+  </div></div><figcaption>D, desktop, end of page. 360px uses A1 (see A). Recruiters mostly browse on laptops (PRODUCT.md), where the typing invitation matters most; phones keep the compact dock.</figcaption></figure>
+</div>
+<div class="ev">
+  <div><h4>Pros</h4><ul><li>Gets the "invites typing" cue where recruiters actually are (desktop), without B's costs.</li><li>Keeps A's single element and always-visible WhatsApp; no panel, Contact or Footer change.</li><li>Mobile stays compact (64px of height, ~200px wide).</li></ul></div>
+  <div><h4>Cons</h4><ul><li>Two layouts to verify (mobile dock, desktop field). The "AI" chip is extra copy (EN "AI" / ES "IA") and must prove it earns its place under "when in doubt, remove decoration".</li><li>A button styled as an input is a small affordance trade-off; the tap opens a focused field, so it is honest in practice.</li><li>Desktop footprint ≈ 400px wide at the bottom-right: wider than A.</li></ul></div>
+  <div><h4>Discoverability / thumb / conflicts</h4><ul><li><b>Discoverability:</b> highest of the options that keep WhatsApp visible.</li><li><b>Thumb:</b> same as A on phones; desktop is mouse-driven.</li><li><b>Content/Footer:</b> fits the existing reserve on both.</li></ul></div>
+</div>
+
+<h2>Side by side</h2>
+<table class="sum">
+<tr><th></th><th>A Dock</th><th>B Input bar</th><th>C FAB</th><th class="rec">D Hybrid (recommended)</th></tr>
+<tr><th>Assistant is primary</th><td>Yes</td><td>Yes, strongest</td><td>No (2 taps)</td><td>Yes, strongest on desktop</td></tr>
+<tr><th>One element</th><td>Yes</td><td>Yes (WhatsApp moved)</td><td>Yes</td><td>Yes</td></tr>
+<tr><th>WhatsApp reachable</th><td>1 tap</td><td>2+ taps</td><td>2 taps</td><td>1 tap</td></tr>
+<tr><th>Invites typing</th><td>Weak</td><td>Strong</td><td>None</td><td>Strong (desktop)</td></tr>
+<tr><th>Panel change</th><td>None</td><td>Yes (WhatsApp in footer) or Contact-only</td><td>None</td><td>None</td></tr>
+<tr><th>New content/strings</th><td>None</td><td>Placeholder, Contact WhatsApp link</td><td>Open/close labels</td><td>Placeholder, "AI" chip</td></tr>
+<tr><th>Mobile footprint</th><td>~200×48</td><td>328×48</td><td>48×48 (184 tall open)</td><td>~200×48</td></tr>
+<tr><th>Footer reserve</th><td>Fits</td><td>Fits</td><td>Collapsed fits; open overlaps</td><td>Fits</td></tr>
+<tr><th>Implementation risk</th><td>Low</td><td>Medium</td><td>Medium-high</td><td>Low-medium</td></tr>
+</table>
+
+<script>
+// Shared page filler, so every frame shows realistic content behind the control.
+function mid(){return '<h3 data-en="Senior .NET &amp; Azure engineer" data-es="Ingeniero .NET y Azure senior">Senior .NET &amp; Azure engineer</h3><span class="cv">Download CV</span>'+
+ '<div class="ln m"></div><div class="ln"></div><div class="ln s"></div><div class="blk"><div class="ln m"></div><div class="ln s" style="margin:0"></div></div>'+
+ '<div class="ln"></div><div class="ln m"></div><div class="ln"></div><div class="ln s"></div><div class="ln m"></div><div class="ln"></div><div class="ln m"></div><div class="ln s"></div><div class="ln"></div><div class="ln m"></div>';}
+function deskend(wa){return '<h3>Contact</h3><div class="ln" style="width:52%"></div><div class="ln" style="width:44%"></div>'+
+ '<div style="margin-top:20px;display:flex;gap:28px;color:var(--fg);font-size:16px"><span>Email</span><span>LinkedIn</span>'+(wa?'<span style="border-bottom:1px solid var(--bs)">WhatsApp (new)</span>':'')+'<span>Download CV</span></div>';}
+document.querySelectorAll('[data-page]').forEach(function(el){
+  el.innerHTML = el.dataset.page==='mid' ? mid() : deskend(el.dataset.wa);
+});
+var es=false, btn=document.getElementById('lang');
+btn.addEventListener('click',function(){
+  es=!es; document.documentElement.lang=es?'es':'en';
+  document.querySelectorAll('[data-en]').forEach(function(n){n.textContent=es?n.dataset.es:n.dataset.en;});
+  btn.textContent='Language: '+(es?'ES':'EN')+' (click for '+(es?'EN':'ES')+')';
+});
+</script>
+</body></html>
