@@ -13,7 +13,9 @@ Tooling: Playwright 1.49.1 and Lighthouse 12.2.1, installed outside the repo. Pi
 
 Before the change: 0/5 on production, dev and `3ea5600` (research.md R1).
 
-Not scripted: the "second tap while the first scroll is running" edge case and touch hardware (real phone).
+Second tap while the first scroll is still running (production build; first tap, then reopen the menu and tap another section after 150 ms or 400 ms; 3 section pairs): 6/6 end on the last chosen section, menu closed, focus on it.
+
+Not verified: touch hardware (real phone), Safari/iOS and Firefox (Chromium only).
 
 ## T013 Titles and sharing tags (US2)
 
@@ -31,5 +33,5 @@ Runtime tab title (headless browser): home EN `Luis Jacho Zambrano`; after switc
 ## T007 / T012 / T014 Build, lint, Lighthouse
 
 - `npm run build`: passes; route table unchanged (`/`, `/blog` static, `/blog/[slug]` SSG, `/_not-found` static).
-- `npx eslint src`: no output, exit 0. Note: `npm run lint` (`eslint .`) also scans untracked scratch folders in this working copy (`.tmp-pre008`, `.tmp`); in CI (clean checkout) only `src` content applies.
+- `npm run lint` (project script, after removing the scratch worktree): exit 0, 0 errors, 5 warnings, all in the owner's gitignored `.tmp/verify/*.mjs` scratch files; `npx eslint src` is clean. (An earlier run with my temporary worktree present reported 247 errors, all in that worktree's copied files.)
 - Lighthouse after, 3 runs: Performance 92, 93, 91; Accessibility 100 x3. Best Performance 93 vs baseline 94: drop of 1 point (<= 3), >= 90. Accessibility 100 vs 100.
