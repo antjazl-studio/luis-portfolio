@@ -29,18 +29,39 @@ export function ChatPanel({ open, onClose, chat }: ChatPanelProps) {
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
-    if (open && !dialog.open) {
-      // Fade in (opacity only, <= 150 ms; the global reduced-motion rule collapses the transition).
-      dialog.style.opacity = "0";
-      dialog.showModal();
-      inputRef.current?.focus();
-      const raf = requestAnimationFrame(() => {
+    if (open) {
+      if (!dialog.open) {
+        // Fade in (opacity only, <= 150 ms; the global reduced-motion rule collapses the transition).
+        dialog.style.opacity = "0";
+        dialog.showModal();
+        inputRef.current?.focus();
+      }
+      // Not cancelled in a cleanup: StrictMode re-runs this effect and would otherwise leave opacity at 0.
+      requestAnimationFrame(() => {
         dialog.style.opacity = "1";
       });
-      return () => cancelAnimationFrame(raf);
+      return;
     }
     if (!open && dialog.open) dialog.close();
   }, [open]);
+
+  // Explicit Tab wrap-around: focus never leaves the panel, whatever the browser does at the dialog edge.
+  const onDialogKeyDown = (e: KeyboardEvent<HTMLDialogElement>) => {
+    if (e.key !== "Tab") return;
+    const focusable = Array.from(
+      e.currentTarget.querySelectorAll<HTMLElement>('button:not([disabled]), textarea:not([disabled]), a[href]'),
+    );
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const lastEl = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      lastEl.focus();
+    } else if (!e.shiftKey && document.activeElement === lastEl) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
 
   // Keep the newest text in view while streaming, unless the visitor scrolled up.
   useEffect(() => {
@@ -59,7 +80,7 @@ export function ChatPanel({ open, onClose, chat }: ChatPanelProps) {
       ? t.searching
       : t.answering
     : last?.role === "assistant"
-      ? last.content.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").replace(/[*_`]/g, "")
+      ? last.content.replace(/<[^>]*>/g, "").replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").replace(/[*_`]/g, "")
       : "";
 
   const busy = status === "streaming";
@@ -78,6 +99,7 @@ export function ChatPanel({ open, onClose, chat }: ChatPanelProps) {
       ref={dialogRef}
       aria-labelledby="chat-title"
       onClose={onClose}
+      onKeyDown={onDialogKeyDown}
       className={`fixed inset-0 m-0 h-[100dvh] max-h-none w-full max-w-none flex-col rounded-none bg-surface p-0 text-foreground transition-opacity duration-150 open:flex backdrop:bg-transparent md:inset-auto md:bottom-6 md:right-6 md:h-[min(640px,calc(100dvh-3rem))] md:w-[400px] md:rounded-[14px] md:border md:border-border-strong`}
     >
       <header className="flex items-center justify-between border-b border-border px-4 py-2">
