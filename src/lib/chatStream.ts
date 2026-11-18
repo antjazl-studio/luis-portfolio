@@ -78,8 +78,17 @@ export function isChatAvailable(hostname: string): boolean {
   return CHAT_HOSTS.includes(hostname);
 }
 
-/** Public service address (no secret). The literal env expression lets Next inline it at build time. */
-export function getApiUrl(): string {
-  const url = process.env.NEXT_PUBLIC_AGENT_API_URL || "http://127.0.0.1:8000";
-  return url.replace(/\/+$/, "");
+/**
+ * Resolves the service address. The localhost default exists only for `next dev`; a production build
+ * without the variable returns null so the widget never sends a request (visitors' browsers must not
+ * try to reach their own machine).
+ */
+export function resolveApiUrl(configured: string | undefined, nodeEnv: string | undefined): string | null {
+  const url = configured?.trim() || (nodeEnv === "development" ? "http://127.0.0.1:8000" : "");
+  return url ? url.replace(/\/+$/, "") : null;
+}
+
+/** Public service address (no secret), or null when unconfigured outside development. The literal env expressions let Next inline them at build time. */
+export function getApiUrl(): string | null {
+  return resolveApiUrl(process.env.NEXT_PUBLIC_AGENT_API_URL, process.env.NODE_ENV);
 }

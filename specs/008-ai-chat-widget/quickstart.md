@@ -30,9 +30,10 @@ available, otherwise listed for the owner; **[owner]** only the owner can do it 
 | C-14 [browser] | Non-production origin | Open a production build (`npm run build` then `npx next start`) through a non-allowed host such as `http://127.0.0.2:<port>` (`next dev` blocks non-localhost origins, so the page would not hydrate) | Opening the panel shows "Assistant available on luisjacho.dev" (and ES), no input, zero requests to the API in the network panel |
 | C-15 [browser] | Hydration | Open `/`, `/blog`, a post, `/blog/nope`, `/nope` | No console errors, no hydration warnings |
 | C-16 [auto] | Lighthouse | Home page, best of 3, after implementation | Performance >= 90 and Accessibility >= 90, and no drop > 3 points vs baseline |
-| C-17 [owner] | Vercel Production env | Set `NEXT_PUBLIC_AGENT_API_URL=https://api.luisjacho.dev` for Production before the production build | Without it production falls back to `127.0.0.1:8000` and shows "service unavailable" |
+| C-17 [owner] | Vercel Production env | Set `NEXT_PUBLIC_AGENT_API_URL=https://api.luisjacho.dev` for Production before the production build | Without it production shows "service unavailable" and sends no request (see C-20) |
 | C-18 [owner] | Preview | Open the Vercel preview of the PR (fork PRs need owner authorization) | Launcher visible; panel shows "Assistant available on luisjacho.dev"; page normal |
 | C-19 [owner] | Production, real API | After merge, on `https://luisjacho.dev`: ask each starter in EN and ES | Streams a real answer; answers are not verified by me (they come from the service) |
+| C-20 [auto + browser] | No localhost fallback in production | `node .tmp/check-apiurl.ts` (unit: `resolveApiUrl`); then `unset NEXT_PUBLIC_AGENT_API_URL`, `npm run build`, `npx next start -p 3107`, open the panel and send a message while watching requests | Default `http://127.0.0.1:8000` only when `NODE_ENV` is `development`; otherwise `null`. Production build without the variable: no `127.0.0.1:8000` in `.next/static`, the "service unavailable" state with Try again shows, and zero requests to `127.0.0.1:8000` or `/chat` |
 
 ## Notes
 

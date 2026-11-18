@@ -17,9 +17,9 @@ Date: 2026-11-17. Facts marked (verified) were checked in this repository or in 
 
 ## R3. API base URL
 
-- **Decision**: `process.env.NEXT_PUBLIC_AGENT_API_URL`, default `http://127.0.0.1:8000`, trailing slash stripped. The literal `process.env.NEXT_PUBLIC_AGENT_API_URL` expression must appear in source so Next.js inlines it (verified in `node_modules/next/dist/docs/01-app/02-guides/environment-variables.md`: inlined at build time; dynamic lookups are not inlined).
+- **Decision**: `process.env.NEXT_PUBLIC_AGENT_API_URL`, default `http://127.0.0.1:8000` only when `NODE_ENV` is `development` (a production build without the variable has no service address, shows "unavailable" and sends nothing), trailing slash stripped. The literal `process.env.NEXT_PUBLIC_AGENT_API_URL` expression must appear in source so Next.js inlines it (verified in `node_modules/next/dist/docs/01-app/02-guides/environment-variables.md`: inlined at build time; dynamic lookups are not inlined).
 - **Rationale**: matches the owner's contract. Public endpoint, no secret (Principle VII).
-- **Owner-only**: set `NEXT_PUBLIC_AGENT_API_URL=https://api.luisjacho.dev` for the Production environment in Vercel. If it is missing, production builds fall back to `127.0.0.1:8000` and the widget shows its "service unavailable" state (graceful, but useless). `.env.local` already exists locally and is gitignored (`.env*.local`).
+- **Owner-only**: set `NEXT_PUBLIC_AGENT_API_URL=https://api.luisjacho.dev` for the Production environment in Vercel. If it is missing, the widget shows its "service unavailable" state and sends no request (graceful, but useless). `.env.local` already exists locally and is gitignored (`.env*.local`).
 - **Preview builds**: do not need the variable; the widget never calls the API there (R5).
 
 ## R4. Content-Security-Policy

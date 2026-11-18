@@ -158,9 +158,16 @@ export function useChat() {
         }
       };
 
+      // No service configured (production build without NEXT_PUBLIC_AGENT_API_URL): show "unavailable", send nothing.
+      const apiUrl = getApiUrl();
+      if (apiUrl === null) {
+        finishAnswer("unavailable");
+        return;
+      }
+
       arm();
       try {
-        const response = await fetch(`${getApiUrl()}/chat`, {
+        const response = await fetch(`${apiUrl}/chat`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ messages: conversation.map(({ role, content }) => ({ role, content })) }),
