@@ -95,7 +95,7 @@ Every visible and accessible string of the widget exists in English and Spanish 
 
 **Acceptance Scenarios**:
 
-1. **Given** the panel is open, **When** the visitor switches language, **Then** all widget labels, starters, counter, disclaimer, status and error messages switch and the existing conversation is kept.
+1. **Given** a conversation exists, **When** the visitor switches language (the panel is a modal dialog, so the site language toggle is reachable with the panel closed) and reopens the panel, **Then** all widget labels, starters, counter, disclaimer, status and error messages are in the new language and the existing conversation is kept. *(Wording changed during implementation: see Assumptions.)*
 2. **Given** a completed conversation, **When** browser storage and cookies are inspected, **Then** no conversation content or identifier has been written.
 3. **Given** a conversation, **When** the visitor closes and reopens the panel without reloading, **Then** the conversation is still shown; **When** the page is reloaded, **Then** it is gone.
 
@@ -166,6 +166,8 @@ Every visible and accessible string of the widget exists in English and Spanish 
 - **SC-010**: On a non-production address, 0 requests are sent to the agent service and the message "Assistant available on luisjacho.dev" (or Spanish equivalent) is shown on opening.
 
 ## Assumptions
+
+- The panel is a native modal dialog (FR-005: focus kept inside), which makes the rest of the page, including the navbar language toggle, inert while it is open. The language is therefore switched with the panel closed; the conversation survives and the reopened panel is fully translated (verified). A language control inside the panel is not added; if the owner wants one it is a small follow-up (owner decision pending).
 
 - The agent service is already deployed and its behavior is fixed; this feature does not change it. It accepts only a conversation of at most 20 messages of at most 2000 characters each, streams its answer progressively, may report a "looking up" state, may replace the streamed answer with final text, and reports errors as short messages for invalid input, rate limiting (with a wait time), and daily budget.
 - The assistant replies in the language of the question; the widget does not translate answers. Only the widget's own strings follow the site language.

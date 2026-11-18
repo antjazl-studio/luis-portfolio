@@ -99,3 +99,12 @@ Date: 2026-11-17. Facts marked (verified) were checked in this repository or in 
 ## R14. Verification approach without a test framework
 
 - No test runner exists and none is added (not requested; Principle I minimalism). Pure logic (`chatStream.ts`) is exercised from a scratch script in `.tmp/` using Node 24 native TypeScript type stripping; the UI is driven against a local mock agent server in `.tmp/` that emits every event and error case. Both stay out of git (`.tmp/` is gitignored, verified). Details in `quickstart.md`.
+
+## R15. Implementation notes (decisions taken while building)
+
+- **Modal dialog makes the navbar inert**, so the language toggle is not reachable while the panel is open; see spec Assumptions. Conversation state lives in `ChatWidget` so it survives close, reopen and language switches.
+- **Tab wrap-around** is handled explicitly in `ChatPanel` (headless Chrome moved focus from the last control to the page's skip link); `showModal()` alone was not enough to guarantee FR-005 there.
+- **Fade-in** sets `dialog.style.opacity` from the effect without cancelling its animation frame, because React StrictMode re-runs the effect and a cleanup that cancels the frame left the panel at opacity 0 in dev.
+- **Draft text lives in `useChat`** (not the panel) so a 422 can return the rejected text to the input.
+- **429 UX**: the ticking number is visual only (`aria-hidden`); one `role="alert"` announces the initial wait.
+- **Contact pointers** in the budget and unavailable errors reuse the email, LinkedIn and WhatsApp targets already on the site (Footer, WhatsAppButton). The word "WhatsApp" is a brand name and is the same in EN and ES.

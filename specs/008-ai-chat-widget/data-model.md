@@ -46,7 +46,7 @@ hostname when the panel opens, and it never reaches the hook.
 ## Transitions
 
 ```text
-idle --send (valid)--> streaming
+idle --send (valid)--> streaming        (a failed, unanswered last visitor message is replaced by the new one)
 streaming --text/tool/replace--> streaming (answer updated)
 streaming --done, text non-empty--> idle (or full if messages.length == 20)
 streaming --done, text empty--> error(empty)
@@ -60,6 +60,7 @@ streaming --30 s with no bytes (idle timeout), no text--> error(timeout)    (kep
 streaming --30 s with no bytes (idle timeout), text--> error(incomplete)   (partial kept, marked)
 streaming --abort (new conversation / unmount)--> idle, no error shown
 rate-limited --countdown ends--> idle (Retry available)
+error(*) --send (valid)--> streaming  (error cleared; a failed last visitor message is replaced)
 error(*) --Retry--> streaming (resends the same conversation; no duplicate message)
 error(*) / idle / full --Start a new conversation--> idle, messages = []
 ```
