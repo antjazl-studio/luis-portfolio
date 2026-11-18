@@ -4,6 +4,7 @@ import {
   MAX_CHARS,
   MAX_MESSAGES,
   getApiUrl,
+  parseRetryAfter,
   parseSseChunk,
   type ChatEvent,
   type ChatRole,
@@ -19,8 +20,8 @@ export type ChatMessage = {
   incomplete?: boolean;
 };
 
-export type ChatStatus = "idle" | "streaming" | "error" | "full";
-export type ChatErrorKind = "unavailable" | "incomplete" | "empty" | "timeout";
+export type ChatStatus = "idle" | "streaming" | "rate-limited" | "error" | "full";
+export type ChatErrorKind = "invalid" | "budget" | "unavailable" | "incomplete" | "empty" | "timeout";
 export type ChatAnswer = { text: string; searching: boolean };
 
 export function useChat() {
@@ -28,12 +29,17 @@ export function useChat() {
   const [status, setStatus] = useState<ChatStatus>("idle");
   const [error, setError] = useState<ChatErrorKind | null>(null);
   const [answer, setAnswer] = useState<ChatAnswer | null>(null);
+  const [secondsLeft, setSecondsLeft] = useState(0);
+  const [waitSeconds, setWaitSeconds] = useState(0);
+  const [draft, setDraft] = useState("");
 
   const messagesRef = useRef<ChatMessage[]>([]);
   const statusRef = useRef<ChatStatus>("idle");
+  const draftRef = useRef("");
   const controllerRef = useRef<AbortController | null>(null);
   const runIdRef = useRef(0);
   const idRef = useRef(0);
+  const untilRef = useRef(0);
 
   const commitMessages = useCallback((next: ChatMessage[]) => {
     messagesRef.current = next;
@@ -42,6 +48,10 @@ export function useChat() {
   const commitStatus = useCallback((next: ChatStatus) => {
     statusRef.current = next;
     setStatus(next);
+  }, []);
+  const updateDraft = useCallback((next: string) => {
+    draftRef.current = next;
+    setDraft(next);
   }, []);
 
   const run = useCallback(
@@ -81,6 +91,13 @@ export function useChat() {
         }, IDLE_TIMEOUT_MS);
       };
 
+      const markLastFailed = (list: ChatMessage[]): ChatMessage[] => {
+        const last = list[list.length - 1];
+        if (!last || last.role !== "user") return list;
+        return [...list.slice(0, -1), { ...last, failed: true }];
+      };
+
+      /** Ends the turn. `kind` null = success. Server text is never read or shown (FR-017). */
       const finishAnswer = (kind: ChatErrorKind | null, incomplete = false) => {
         if (!current()) return;
         flush();
@@ -91,8 +108,17 @@ export function useChat() {
             ...next,
             { id: `m${++idRef.current}`, role: "assistant", content: final, ...(incomplete ? { incomplete: true } : {}) },
           ];
-          commitMessages(next);
+        } else if (kind === "invalid") {
+          // 422: the visitor message is removed and its text goes back to the input.
+          const last = next[next.length - 1];
+          if (last && last.role === "user") {
+            next = next.slice(0, -1);
+            updateDraft(draftRef.current.trim() === "" ? last.content : `${last.content}\n${draftRef.current}`);
+          }
+        } else if (kind) {
+          next = markLastFailed(next);
         }
+        commitMessages(next);
         setAnswer(null);
         if (kind) {
           setError(kind);
@@ -100,6 +126,18 @@ export function useChat() {
         } else {
           commitStatus(next.length >= MAX_MESSAGES ? "full" : "idle");
         }
+      };
+
+      const rateLimited = (seconds: number) => {
+        if (!current()) return;
+        flush();
+        commitMessages(markLastFailed(messagesRef.current));
+        setAnswer(null);
+        setError(null);
+        untilRef.current = Date.now() + seconds * 1000;
+        setSecondsLeft(seconds);
+        setWaitSeconds(seconds);
+        commitStatus("rate-limited");
       };
 
       let sawDone = false;
@@ -131,7 +169,15 @@ export function useChat() {
           signal: controller.signal,
         });
         arm();
-        if (!response.ok || !response.body) {
+        if (!response.ok) {
+          void response.body?.cancel().catch(() => {});
+          if (response.status === 422) finishAnswer("invalid");
+          else if (response.status === 429) rateLimited(parseRetryAfter(response.headers.get("Retry-After")));
+          else if (response.status === 503) finishAnswer("budget");
+          else finishAnswer("unavailable");
+          return;
+        }
+        if (!response.body) {
           finishAnswer("unavailable");
           return;
         }
@@ -162,7 +208,7 @@ export function useChat() {
         if (raf) cancelAnimationFrame(raf);
       }
     },
-    [commitMessages, commitStatus],
+    [commitMessages, commitStatus, updateDraft],
   );
 
   /** Sends a visitor message. Returns true when it was accepted. */
@@ -170,15 +216,59 @@ export function useChat() {
     (raw: string): boolean => {
       const text = raw.trim();
       if (text.length < 1 || text.length > MAX_CHARS) return false;
-      if (messagesRef.current.length > MAX_MESSAGES - 1) return false;
-      if (statusRef.current !== "idle") return false;
-      const next = [...messagesRef.current, { id: `m${++idRef.current}`, role: "user" as const, content: text }];
+      if (statusRef.current !== "idle" && statusRef.current !== "error") return false;
+      let base = messagesRef.current;
+      // A visitor message that never got an answer is replaced by the new one (keeps roles alternating).
+      const last = base[base.length - 1];
+      if (last && last.role === "user" && last.failed) base = base.slice(0, -1);
+      if (base.length > MAX_MESSAGES - 1) return false;
+      const next = [...base, { id: `m${++idRef.current}`, role: "user" as const, content: text }];
       commitMessages(next);
       void run(next);
       return true;
     },
     [commitMessages, run],
   );
+
+  /** Resends the same conversation without duplicating the visitor message. */
+  const retry = useCallback(() => {
+    if (statusRef.current !== "idle" && statusRef.current !== "error") return;
+    let conv = messagesRef.current;
+    const last = conv[conv.length - 1];
+    if (last && last.role === "assistant" && last.incomplete) conv = conv.slice(0, -1);
+    const user = conv[conv.length - 1];
+    if (!user || user.role !== "user") return;
+    conv = [...conv.slice(0, -1), { ...user, failed: false }];
+    commitMessages(conv);
+    void run(conv);
+  }, [commitMessages, run]);
+
+  /** Aborts any request and clears the whole conversation. */
+  const startNewConversation = useCallback(() => {
+    runIdRef.current += 1;
+    controllerRef.current?.abort();
+    commitMessages([]);
+    setAnswer(null);
+    setError(null);
+    setSecondsLeft(0);
+    updateDraft("");
+    commitStatus("idle");
+  }, [commitMessages, commitStatus, updateDraft]);
+
+  // Rate-limit countdown: ticks once per second and re-enables sending when it ends.
+  useEffect(() => {
+    if (status !== "rate-limited") return;
+    const id = setInterval(() => {
+      const left = Math.max(0, Math.ceil((untilRef.current - Date.now()) / 1000));
+      setSecondsLeft(left);
+      if (left === 0) {
+        clearInterval(id);
+        statusRef.current = "idle";
+        setStatus("idle");
+      }
+    }, 1000);
+    return () => clearInterval(id);
+  }, [status]);
 
   // Cancel any in-flight request and ignore its late results (used by unmount).
   const cancel = useCallback(() => {
@@ -189,5 +279,11 @@ export function useChat() {
   // Abort on unmount.
   useEffect(() => cancel, [cancel]);
 
-  return { messages, status, error, answer, send };
+  const last = messages[messages.length - 1];
+  const canRetry =
+    status === "error"
+      ? error !== "invalid"
+      : status === "idle" && last?.role === "user" && last.failed === true;
+
+  return { messages, status, error, answer, secondsLeft, waitSeconds, draft, setDraft: updateDraft, canRetry, send, retry, startNewConversation };
 }
