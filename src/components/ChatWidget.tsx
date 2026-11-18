@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useChat } from "@/hooks/useChat";
 import translations from "@/lib/translations";
+import { isChatAvailable } from "@/lib/chatStream";
 
 // Lazy: the panel (and react-markdown usage) loads only after the first open (SC-004, FR-001).
 const ChatPanel = dynamic(() => import("./ChatPanel").then((m) => m.ChatPanel), { ssr: false });
@@ -18,6 +19,7 @@ export function ChatWidget() {
   const chat = useChat();
   const [open, setOpen] = useState(false);
   const [everOpened, setEverOpened] = useState(false);
+  const [available, setAvailable] = useState(true);
   const launcherRef = useRef<HTMLButtonElement>(null);
 
   // On close, focus returns to the launcher once it is rendered again (FR-004). Never on first mount.
@@ -35,6 +37,8 @@ export function ChatWidget() {
           ref={launcherRef}
           type="button"
           onClick={() => {
+            // Read the hostname in the click handler, never during render (hydration safety, FR-018).
+            setAvailable(isChatAvailable(window.location.hostname));
             setEverOpened(true);
             setOpen(true);
           }}
@@ -47,7 +51,7 @@ export function ChatWidget() {
           {t.launcher}
         </button>
       )}
-      {everOpened && <ChatPanel open={open} onClose={() => setOpen(false)} chat={chat} />}
+      {everOpened && <ChatPanel open={open} onClose={() => setOpen(false)} chat={chat} available={available} />}
     </>
   );
 }

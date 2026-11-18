@@ -13,6 +13,8 @@ type ChatPanelProps = {
   open: boolean;
   onClose: () => void;
   chat: ChatState;
+  /** False on any site address other than production and local development (FR-018). */
+  available: boolean;
 };
 
 // Same contact targets the rest of the site already uses (Footer, WhatsAppButton).
@@ -25,7 +27,7 @@ const linkClass = "text-accent underline underline-offset-[3px] hover:text-accen
 const secondaryButton =
   "min-h-11 rounded-md border border-border-strong px-3 text-sm text-foreground hover:bg-surface-2";
 
-export function ChatPanel({ open, onClose, chat }: ChatPanelProps) {
+export function ChatPanel({ open, onClose, chat, available }: ChatPanelProps) {
   const { language } = useLanguage();
   const a11y = translations[language].a11y;
   const t = translations[language].chat;
@@ -33,6 +35,7 @@ export function ChatPanel({ open, onClose, chat }: ChatPanelProps) {
   const listRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
   const stickRef = useRef(true);
 
   // Native modal dialog: showModal() traps focus and handles Esc; the `close` event reports it to the parent.
@@ -44,7 +47,8 @@ export function ChatPanel({ open, onClose, chat }: ChatPanelProps) {
         // Fade in (opacity only, <= 150 ms; the global reduced-motion rule collapses the transition).
         dialog.style.opacity = "0";
         dialog.showModal();
-        inputRef.current?.focus();
+        // Unavailable view has no input: focus goes to the close control.
+        (inputRef.current ?? closeRef.current)?.focus();
       }
       // Not cancelled in a cleanup: StrictMode re-runs this effect and would otherwise leave opacity at 0.
       requestAnimationFrame(() => {
@@ -133,6 +137,7 @@ export function ChatPanel({ open, onClose, chat }: ChatPanelProps) {
       <header className="flex items-center justify-between border-b border-border px-4 py-2">
         <h2 id="chat-title" className="text-base font-semibold text-foreground">{t.title}</h2>
         <button
+          ref={closeRef}
           type="button"
           onClick={onClose}
           aria-label={t.close}
@@ -142,6 +147,10 @@ export function ChatPanel({ open, onClose, chat }: ChatPanelProps) {
         </button>
       </header>
 
+      {!available ? (
+        <p className="px-4 py-6 text-sm text-foreground">{t.unavailableHere}</p>
+      ) : (
+        <>
       <div ref={listRef} onScroll={onListScroll} role="group" aria-label={t.messagesLabel} className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-3">
         {messages.length === 0 && !answer && (
           <div>
@@ -263,6 +272,9 @@ export function ChatPanel({ open, onClose, chat }: ChatPanelProps) {
           </span>
         </div>
       </div>
+
+        </>
+      )}
 
       <div role="status" aria-live="polite" className="sr-only">
         {announcement}
