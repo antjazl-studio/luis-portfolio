@@ -9,7 +9,7 @@ export function Footer() {
   const t = translations[language];
 
   return (
-    <footer className="border-t border-border bg-background py-8">
+    <footer className="border-t border-border bg-background pt-8 pb-36">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 sm:flex-row">
 
         <AnimatePresence mode="popLayout">
