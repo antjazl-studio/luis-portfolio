@@ -117,7 +117,7 @@ Every visible and accessible string of the widget exists in English and Spanish 
 ### Functional Requirements
 
 - **FR-001**: The site MUST show a floating "Ask about Luis" launcher on every page, without blocking or delaying the initial page render.
-- **FR-002**: The launcher MUST NOT overlap or hide the existing WhatsApp contact button, and MUST NOT obscure page content that is otherwise reachable (including the Footer and Contact links) at 360px width. Arrangement (owner decision 2026-11-17, option B): the launcher is a neutral outline pill labelled "Ask about Luis", stacked directly above the WhatsApp button with the same right margin; the WhatsApp button keeps its current position.
+- **FR-002**: The launcher MUST NOT overlap or hide the existing WhatsApp contact button, and MUST NOT obscure page content that is otherwise reachable (including the Footer and Contact links) at 360px width. Arrangement (owner decision 2026-11-17, option B): the launcher is a neutral outline pill labelled "Ask about Luis", stacked directly above the WhatsApp button with the same right margin; the WhatsApp button keeps its current position. *(Arrangement superseded on 2026-11-17 by `specs/009-launcher-redesign`: one dock with an assistant segment and a WhatsApp segment; owner decision.)*
 - **FR-003**: Activating the launcher MUST open a chat panel: a side panel on desktop (from the `md` breakpoint) and a full-screen view on mobile.
 - **FR-004**: The panel MUST close on Esc and on a visible close control, and on close MUST return keyboard focus to the launcher.
 - **FR-005**: While open, the panel MUST keep keyboard focus inside it, expose appropriate dialog semantics and an accessible name, and announce new assistant output to screen readers without moving focus.
@@ -162,7 +162,7 @@ Every visible and accessible string of the widget exists in English and Spanish 
 - **SC-006**: 0 raw-HTML or script payloads placed in an assistant answer are executed or rendered as elements across the test set of hostile samples.
 - **SC-007**: 0 cookies and 0 browser-storage entries are created by using the widget through a full conversation.
 - **SC-008**: 100% of widget strings exist in both languages, and switching language never loses the conversation.
-- **SC-009**: At 360px width the open panel and the closed launcher plus WhatsApp button cause no horizontal overflow and no overlap between the two floating buttons.
+- **SC-009**: At 360px width the open panel and the closed launcher plus WhatsApp button cause no horizontal overflow and no overlap between the two floating buttons. *(Arrangement superseded on 2026-11-17 by `specs/009-launcher-redesign`: one dock with an assistant segment and a WhatsApp segment; owner decision.)*
 - **SC-010**: On a non-production address, 0 requests are sent to the agent service and the message "Assistant available on luisjacho.dev" (or Spanish equivalent) is shown on opening.
 
 ## Assumptions
