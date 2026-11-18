@@ -47,6 +47,12 @@ body {
   outline-offset: 2px;
 }
 
+/* Sections receive programmatic focus after a menu navigation (non-interactive target, like <main tabIndex={-1}>).
+   Interactive controls keep the visible focus ring above. */
+section[tabindex="-1"]:focus {
+  outline: none;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
