@@ -56,6 +56,8 @@ No violations; Complexity Tracking not needed. Risks to record (not violations):
 
 - The constitution's structure list describes `WhatsAppButton.tsx` as "(floating contact button)". After this feature the file is the WhatsApp segment of the launcher dock. The list is explicitly "key files, not an exhaustive inventory" and the file name, folder and role (WhatsApp contact) are unchanged, so no amendment is requested; the `CLAUDE.md` tree line is updated. The owner decided (2026-11-17) to leave the descriptor and note a waiver rather than amend in this PR.
 - Owner waiver 2026-11-17: the constitution descriptor "(floating contact button)" is left as is in this PR; the owner may reword it later through `/speckit-constitution` as a separate PATCH.
+- Stale mentions found by the diff review, left unchanged under the same owner waiver (2026-11-17, owner): the constitution and `DESIGN.md` still list the WhatsApp `#25D366` fill as an allowed third-party exception although no code uses it now (the exemption is permissive), and `PRODUCT.md` says "a floating WhatsApp button". Rewording is a possible later PATCH through `/speckit-constitution`.
+- The WhatsApp segment has no visible text label on any viewport (the old desktop hover label was removed; accessible name unchanged). This follows the owner-approved mock (2026-11-17).
 - Supersedes 008 FR-002 and SC-009 (launcher stacked above WhatsApp). A pointer note is added to the 008 spec; the rest of 008 stays in force.
 
 ## Project Structure
