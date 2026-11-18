@@ -112,6 +112,8 @@ type Translation = {
   };
   chat: {
     launcher:         string;
+    launcherInput:    string;
+    launcherHint:     string;
     title:            string;
     close:            string;
     starters:         Three<string>;
@@ -275,6 +277,8 @@ const translations: Record<Language, Translation> = {
     },
     chat: {
       launcher:        "Ask about Luis",
+      launcherInput:   "Ask anything about Luis…",
+      launcherHint:    "AI",
       title:           "Ask about Luis",
       close:           "Close chat",
       starters: [
@@ -439,6 +443,8 @@ const translations: Record<Language, Translation> = {
     },
     chat: {
       launcher:        "Pregunta sobre Luis",
+      launcherInput:   "Pregunta lo que quieras sobre Luis…",
+      launcherHint:    "IA",
       title:           "Pregunta sobre Luis",
       close:           "Cerrar el chat",
       starters: [
