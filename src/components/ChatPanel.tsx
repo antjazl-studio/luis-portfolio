@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type UIEvent } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
 import type { useChat } from "@/hooks/useChat";
 import translations from "@/lib/translations";
@@ -21,14 +21,46 @@ export function ChatPanel({ open, onClose, chat }: ChatPanelProps) {
   const { messages, status, answer, send } = chat;
   const [draft, setDraft] = useState("");
   const listRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const stickRef = useRef(true);
 
-  // Keep the newest text in view while streaming.
+  // Native modal dialog: showModal() traps focus and handles Esc; the `close` event reports it to the parent.
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (open && !dialog.open) {
+      // Fade in (opacity only, <= 150 ms; the global reduced-motion rule collapses the transition).
+      dialog.style.opacity = "0";
+      dialog.showModal();
+      inputRef.current?.focus();
+      const raf = requestAnimationFrame(() => {
+        dialog.style.opacity = "1";
+      });
+      return () => cancelAnimationFrame(raf);
+    }
+    if (!open && dialog.open) dialog.close();
+  }, [open]);
+
+  // Keep the newest text in view while streaming, unless the visitor scrolled up.
   useEffect(() => {
     const el = listRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
+    if (el && stickRef.current) el.scrollTop = el.scrollHeight;
   }, [messages, answer]);
+  const onListScroll = (e: UIEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    stickRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 48;
+  };
 
-  if (!open) return null;
+  // Short states and the final answer are announced politely; the message list itself is not a live region.
+  const last = messages[messages.length - 1];
+  const announcement = answer
+    ? answer.searching
+      ? t.searching
+      : t.answering
+    : last?.role === "assistant"
+      ? last.content.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").replace(/[*_`]/g, "")
+      : "";
 
   const busy = status === "streaming";
   const submit = (text: string) => {
@@ -42,12 +74,14 @@ export function ChatPanel({ open, onClose, chat }: ChatPanelProps) {
   };
 
   return (
-    <section
-      aria-label={t.title}
-      className="fixed inset-0 z-50 flex h-[100dvh] w-full flex-col bg-surface md:inset-auto md:bottom-6 md:right-6 md:h-[min(640px,calc(100dvh-3rem))] md:w-[400px] md:rounded-[14px] md:border md:border-border-strong"
+    <dialog
+      ref={dialogRef}
+      aria-labelledby="chat-title"
+      onClose={onClose}
+      className={`fixed inset-0 m-0 h-[100dvh] max-h-none w-full max-w-none flex-col rounded-none bg-surface p-0 text-foreground transition-opacity duration-150 open:flex backdrop:bg-transparent md:inset-auto md:bottom-6 md:right-6 md:h-[min(640px,calc(100dvh-3rem))] md:w-[400px] md:rounded-[14px] md:border md:border-border-strong`}
     >
       <header className="flex items-center justify-between border-b border-border px-4 py-2">
-        <h2 className="text-base font-semibold text-foreground">{t.title}</h2>
+        <h2 id="chat-title" className="text-base font-semibold text-foreground">{t.title}</h2>
         <button
           type="button"
           onClick={onClose}
@@ -58,7 +92,7 @@ export function ChatPanel({ open, onClose, chat }: ChatPanelProps) {
         </button>
       </header>
 
-      <div ref={listRef} role="log" aria-label={t.messagesLabel} className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-3">
+      <div ref={listRef} onScroll={onListScroll} role="group" aria-label={t.messagesLabel} className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-3">
         {messages.length === 0 && !answer && (
           <div>
             <p className="mb-2 text-sm text-muted">{t.startersLabel}</p>
@@ -103,6 +137,7 @@ export function ChatPanel({ open, onClose, chat }: ChatPanelProps) {
         <p className="mb-2 text-xs text-muted">{t.disclaimer}</p>
         <div className="flex items-end gap-2">
           <textarea
+            ref={inputRef}
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={onKeyDown}
@@ -122,6 +157,9 @@ export function ChatPanel({ open, onClose, chat }: ChatPanelProps) {
           </button>
         </div>
       </div>
-    </section>
+      <div role="status" aria-live="polite" className="sr-only">
+        {announcement}
+      </div>
+    </dialog>
   );
 }

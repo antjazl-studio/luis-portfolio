@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useChat } from "@/hooks/useChat";
@@ -18,6 +18,12 @@ export function ChatWidget() {
   const chat = useChat();
   const [open, setOpen] = useState(false);
   const [everOpened, setEverOpened] = useState(false);
+  const launcherRef = useRef<HTMLButtonElement>(null);
+
+  // On close, focus returns to the launcher once it is rendered again (FR-004). Never on first mount.
+  useEffect(() => {
+    if (!open && everOpened) launcherRef.current?.focus();
+  }, [open, everOpened]);
 
   return (
     <>
@@ -26,6 +32,7 @@ export function ChatWidget() {
           24+56+12 = 92px. If WhatsAppButton's size or offsets change, change these with them (research R7). */}
       {!open && (
         <button
+          ref={launcherRef}
           type="button"
           onClick={() => {
             setEverOpened(true);
