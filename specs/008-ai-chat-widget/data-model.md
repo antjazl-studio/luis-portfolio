@@ -10,7 +10,7 @@ All data is in-memory React state. Nothing is persisted (FR-011, FR-012).
 | `content` | `string` | 1 to 2000 characters after trimming for visitor messages; never empty for any message sent to the service |
 | `id` | `string` (client only) | Local React key; not sent to the service |
 | `failed` | `boolean` (client only, visitor messages) | True when the turn failed and a Retry is offered; not sent |
-| `incomplete` | `boolean` (client only, assistant messages) | True when the stream ended without `done`; not sent |
+| `incomplete` | `boolean` (client only, assistant messages) | True when the stream ended without `done`; the flag is not sent, but the partial text stays in the conversation and is sent as an assistant turn if the visitor writes a new message instead of using Retry (Retry drops it) |
 
 The request body contains only `{ role, content }` per message.
 

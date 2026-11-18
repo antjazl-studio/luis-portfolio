@@ -16,7 +16,7 @@ export type ChatMessage = {
   content: string;
   /** Visitor messages: the turn failed and a retry is offered. Never sent. */
   failed?: boolean;
-  /** Assistant messages: the stream ended without `done`. Never sent. */
+  /** Assistant messages: the stream ended without `done`. The flag is client-only; the partial text itself is sent as context if the visitor writes a new message instead of retrying. */
   incomplete?: boolean;
 };
 
@@ -186,7 +186,12 @@ export function useChat() {
         let buffer = "";
         for (;;) {
           const { done, value } = await reader.read();
-          if (done) break;
+          if (done) {
+            // Last line without a trailing newline: parse it too, so a final `done`/`replace` is not lost.
+            const tail = parseSseChunk(`${buffer}${decoder.decode()}\n`);
+            for (const event of tail.events) apply(event);
+            break;
+          }
           arm();
           const parsed = parseSseChunk(buffer + decoder.decode(value, { stream: true }));
           buffer = parsed.rest;
