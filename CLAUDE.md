@@ -70,7 +70,8 @@ Reglas de gobierno completas en `.specify/memory/constitution.md`.
 
 ## Chat widget ("Ask about Luis")
 - Consume la API del agente (`POST {NEXT_PUBLIC_AGENT_API_URL}/chat`, SSE). Contrato: `specs/008-ai-chat-widget/contracts/agent-api.md`.
-- `NEXT_PUBLIC_AGENT_API_URL` es una URL pública (sin secretos); por defecto `http://127.0.0.1:8000`.
+- `NEXT_PUBLIC_AGENT_API_URL` es una URL pública (sin secretos); el valor por defecto `http://127.0.0.1:8000` solo aplica con `NODE_ENV=development`;
+  un build de producción sin la variable muestra "servicio no disponible" y no envía ninguna petición.
   Debe valer `https://api.luisjacho.dev` en el entorno Production de Vercel antes del build de producción
   (sin eso producción muestra "servicio no disponible"). Es una variable de build: cambiarla exige un nuevo build.
 - Solo `luisjacho.dev`, `www.luisjacho.dev`, `localhost` y `127.0.0.1` hablan con el servicio; en cualquier otro
