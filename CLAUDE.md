@@ -34,8 +34,8 @@ src/
   components/
     Navbar.tsx                  # Fixed top navigation
     Footer.tsx                  # Site footer
-    WhatsAppButton.tsx          # Floating WhatsApp contact button
-    ChatWidget.tsx              # Client: "Ask about Luis" launcher (above WhatsApp), owns useChat, lazy-loads the panel
+    WhatsAppButton.tsx          # WhatsApp segment of the launcher dock (rendered by ChatWidget)
+    ChatWidget.tsx              # Client: single launcher dock (assistant segment + WhatsApp segment), owns useChat, lazy-loads the panel
     ChatPanel.tsx               # Client: native <dialog> chat panel (lazy, ssr: false)
     ChatMarkdown.tsx            # Client: safe markdown for assistant answers (allow-list, no raw HTML)
     BlogCard.tsx                # Blog post card (presentational)

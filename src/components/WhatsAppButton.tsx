@@ -3,6 +3,8 @@
 import { useLanguage } from "@/hooks/useLanguage";
 import translations from "@/lib/translations";
 
+// WhatsApp segment of the launcher dock (rendered by ChatWidget). Not positioned here: the dock owns
+// position, outline and height. Neutral glyph, no brand fill (spec 009, owner decision 2026-11-17).
 export function WhatsAppButton() {
   const { language } = useLanguage();
   const label = translations[language].a11y.whatsapp;
@@ -11,27 +13,15 @@ export function WhatsAppButton() {
   const href = `https://wa.me/593960138279?text=${encodeURIComponent(message)}`;
 
   return (
-    <div className="group fixed bottom-4 right-4 z-50 flex items-center gap-3 sm:bottom-6 sm:right-6">
-      {/* Label: desktop only, shown on hover or keyboard focus. Flat, no shadow. */}
-      <span
-        aria-hidden
-        className="pointer-events-none hidden whitespace-nowrap rounded-md border border-border-strong bg-surface px-3 py-1.5 text-sm text-foreground opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100 sm:block"
-      >
-        {label}
-      </span>
-
-      {/* Third-party brand green kept as a documented exception (plan.md, Complexity Tracking). */}
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={label}
-        className="flex h-12 w-12 items-center justify-center rounded-full sm:h-14 sm:w-14"
-        style={{ backgroundColor: "#25D366" }}
-      >
-        <WhatsAppIcon />
-      </a>
-    </div>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className="flex w-12 items-center justify-center rounded-r-full text-foreground hover:bg-surface-2 focus-visible:outline-offset-[-2px] sm:w-14"
+    >
+      <WhatsAppIcon />
+    </a>
   );
 }
 
@@ -39,7 +29,7 @@ function WhatsAppIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
-      fill="white"
+      fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
       className="h-6 w-6 sm:h-7 sm:w-7"
       aria-hidden
