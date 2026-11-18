@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar }           from "@/components/Navbar";
 import { Footer }           from "@/components/Footer";
 import { WhatsAppButton }   from "@/components/WhatsAppButton";
+import { ChatWidget }       from "@/components/ChatWidget";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { getVisiblePosts } from "@/lib/blog";
 
@@ -47,6 +48,7 @@ export default function RootLayout({
           {children}
           <Footer />
           <WhatsAppButton />
+          <ChatWidget />
         </LanguageProvider>
       </body>
     </html>

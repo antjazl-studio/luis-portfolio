@@ -35,6 +35,9 @@ src/
     Navbar.tsx                  # Fixed top navigation
     Footer.tsx                  # Site footer
     WhatsAppButton.tsx          # Floating WhatsApp contact button
+    ChatWidget.tsx              # Client: "Ask about Luis" launcher (above WhatsApp), owns useChat, lazy-loads the panel
+    ChatPanel.tsx               # Client: native <dialog> chat panel (lazy, ssr: false)
+    ChatMarkdown.tsx            # Client: safe markdown for assistant answers (allow-list, no raw HTML)
     BlogCard.tsx                # Blog post card (presentational)
     BlogIndex.tsx               # Client: picks language, lists cards / empty state
     LocalizedPost.tsx           # Client: shows the active language version of a post
@@ -52,9 +55,11 @@ src/
   hooks/
     useLanguage.ts
     useStablePathname.ts      # Hydration-safe pathname (neutral on the prerendered 404 shell until hydrated)
+    useChat.ts                # Chat state, SSE streaming, errors, 30 s idle timeout (no total timeout)
   lib/
     translations.ts       # All EN/ES strings
     blog.ts               # Loads/validates content/blog (build fails on errors)
+    chatStream.ts         # Pure chat helpers: SSE parser, Retry-After, host check, limits
 ```
 
 Contenido del blog: `content/blog/<slug>/en.md` y `es.md` (Markdown + frontmatter
@@ -62,6 +67,15 @@ Contenido del blog: `content/blog/<slug>/en.md` y `es.md` (Markdown + frontmatte
 `VERCEL_ENV=production`.
 
 Reglas de gobierno completas en `.specify/memory/constitution.md`.
+
+## Chat widget ("Ask about Luis")
+- Consume la API del agente (`POST {NEXT_PUBLIC_AGENT_API_URL}/chat`, SSE). Contrato: `specs/008-ai-chat-widget/contracts/agent-api.md`.
+- `NEXT_PUBLIC_AGENT_API_URL` es una URL pública (sin secretos); por defecto `http://127.0.0.1:8000`.
+  Debe valer `https://api.luisjacho.dev` en el entorno Production de Vercel antes del build de producción
+  (sin eso producción muestra "servicio no disponible"). Es una variable de build: cambiarla exige un nuevo build.
+- Solo `luisjacho.dev`, `www.luisjacho.dev`, `localhost` y `127.0.0.1` hablan con el servicio; en cualquier otro
+  origen (previews) el panel muestra "Assistant available on luisjacho.dev" y no envía nada.
+- Nada se persiste (sin cookies ni storage); la conversación vive solo en memoria de la página.
 
 ## Tema (CSS variables en globals.css)
 | Variable        | Valor     | Uso                        |

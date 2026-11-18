@@ -110,6 +110,34 @@ type Translation = {
     email:     string;
     whatsapp:  string;
   };
+  chat: {
+    launcher:         string;
+    title:            string;
+    close:            string;
+    starters:         Three<string>;
+    startersLabel:    string;
+    disclaimer:       string;
+    placeholder:      string;
+    send:             string;
+    counter:          string; // {used} {max}
+    overLimit:        string;
+    searching:        string;
+    answering:        string;
+    incomplete:       string;
+    emptyAnswer:      string;
+    timedOut:         string;
+    retry:            string;
+    newConversation:  string;
+    limitReached:     string;
+    rateLimited:      string; // {seconds}
+    budget:           string;
+    invalid:          string;
+    unavailable:      string;
+    unavailableHere:  string;
+    you:              string;
+    assistant:        string;
+    messagesLabel:    string;
+  };
   footer: string;
 };
 
@@ -245,6 +273,38 @@ const translations: Record<Language, Translation> = {
       email:    "Email",
       whatsapp: "Chat on WhatsApp",
     },
+    chat: {
+      launcher:        "Ask about Luis",
+      title:           "Ask about Luis",
+      close:           "Close chat",
+      starters: [
+        "What has Luis done with Azure?",
+        "Is he available for remote roles?",
+        "How can I contact him?",
+      ],
+      startersLabel:   "Suggested questions",
+      disclaimer:      "AI assistant · answers come from Luis's profile and may contain mistakes",
+      placeholder:     "Type your question",
+      send:            "Send message",
+      counter:         "{used} / {max}",
+      overLimit:       "Your message is too long. Please shorten it to {max} characters or fewer.",
+      searching:       "Searching Luis's profile…",
+      answering:       "Answering…",
+      incomplete:      "This answer is incomplete.",
+      emptyAnswer:     "No answer came back. Please try again.",
+      timedOut:        "The assistant took too long to respond. Please try again.",
+      retry:           "Try again",
+      newConversation: "Start a new conversation",
+      limitReached:    "This conversation reached its limit. Start a new one to keep asking.",
+      rateLimited:     "You are sending messages too fast. Please wait {seconds} seconds.",
+      budget:          "The assistant is unavailable until later today. You can reach Luis by email, LinkedIn or WhatsApp.",
+      invalid:         "That message could not be processed. Please shorten or rephrase it.",
+      unavailable:     "The assistant is not available right now. You can reach Luis by email, LinkedIn or WhatsApp.",
+      unavailableHere: "Assistant available on luisjacho.dev",
+      you:             "You",
+      assistant:       "Assistant",
+      messagesLabel:   "Conversation",
+    },
     footer: "Built with Next.js & Tailwind",
   },
 
@@ -376,6 +436,38 @@ const translations: Record<Language, Translation> = {
       linkedin: "LinkedIn",
       email:    "Correo electrónico",
       whatsapp: "Escríbeme por WhatsApp",
+    },
+    chat: {
+      launcher:        "Pregunta sobre Luis",
+      title:           "Pregunta sobre Luis",
+      close:           "Cerrar el chat",
+      starters: [
+        "¿Qué ha hecho Luis con Azure?",
+        "¿Está disponible para puestos remotos?",
+        "¿Cómo puedo contactarlo?",
+      ],
+      startersLabel:   "Preguntas sugeridas",
+      disclaimer:      "Asistente de IA · las respuestas provienen del perfil de Luis y pueden contener errores",
+      placeholder:     "Escribe tu pregunta",
+      send:            "Enviar mensaje",
+      counter:         "{used} / {max}",
+      overLimit:       "Tu mensaje es demasiado largo. Acórtalo a {max} caracteres o menos.",
+      searching:       "Buscando en el perfil de Luis…",
+      answering:       "Respondiendo…",
+      incomplete:      "Esta respuesta está incompleta.",
+      emptyAnswer:     "No llegó ninguna respuesta. Inténtalo de nuevo.",
+      timedOut:        "El asistente tardó demasiado en responder. Inténtalo de nuevo.",
+      retry:           "Reintentar",
+      newConversation: "Iniciar una conversación nueva",
+      limitReached:    "Esta conversación llegó a su límite. Inicia una nueva para seguir preguntando.",
+      rateLimited:     "Estás enviando mensajes muy rápido. Espera {seconds} segundos.",
+      budget:          "El asistente no está disponible hasta más tarde hoy. Puedes escribirle a Luis por correo, LinkedIn o WhatsApp.",
+      invalid:         "No se pudo procesar ese mensaje. Acórtalo o reformúlalo.",
+      unavailable:     "El asistente no está disponible en este momento. Puedes escribirle a Luis por correo, LinkedIn o WhatsApp.",
+      unavailableHere: "Asistente disponible en luisjacho.dev",
+      you:             "Tú",
+      assistant:       "Asistente",
+      messagesLabel:   "Conversación",
     },
     footer: "Hecho con Next.js y Tailwind",
   },
