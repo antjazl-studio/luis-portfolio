@@ -1,56 +1,227 @@
 ---
-title: "Cómo construí un flujo de trabajo con agentes de IA para mi portafolio"
-summary: "Cómo se modifica este portafolio mediante Spec Kit, una constitución, una cuenta bot con permisos mínimos, pull requests, CI y revisión humana."
+title: "Barreras en la configuración, no en los prompts: dejar que un agente de IA trabaje en mi portafolio público"
+summary: "Cómo un agente de IA trabaja en este portafolio público sin poder hacer push, fusionar ni borrar: una cuenta bot de solo lectura, reglas de denegación, un ruleset de ramas, CI, vistas previas y revisión humana, con los errores del camino."
 date: 2026-11-05
 ---
 
-Este portafolio se mantiene con la ayuda de un agente de programación con IA. No quería que eso
-significara "el agente edita lo que quiera", así que el flujo de trabajo se apoya en unas pocas
-barreras explícitas.
+Estoy migrando hacia la ingeniería de IA y quería que un agente hiciera trabajo real en este
+portafolio. El problema: el repositorio es público y fusionar a `master` despliega a producción.
 
-## Primero las especificaciones, con Spec Kit
+Con mis propias credenciales, un agente podría hacer push directo a `master`, un force-push,
+borrar ramas o publicar contenido a medio terminar. Un prompt que le pide que no lo haga es una
+petición, no una garantía. Quería un agente rápido y con los límites en la configuración.
 
-Cada funcionalidad empieza como una especificación escrita y no como un prompt. Uso Spec Kit,
-que divide el trabajo en pasos: una especificación de lo que debe hacer la funcionalidad, un plan
-de cómo construirla, una lista de tareas y, solo entonces, la implementación. Cada paso deja un
-archivo en el repositorio, de modo que el razonamiento detrás de un cambio se puede revisar junto
-con el cambio mismo.
+*Reescrito el 2026-11-19 con los detalles que la primera versión dejó fuera.*
 
-## Una constitución que el agente debe respetar
+## Qué podría hacer un agente con mis credenciales
 
-El repositorio contiene una constitución: un documento corto con las reglas que toda
-especificación, plan y cambio deben cumplir. Cubre aspectos como el stack tecnológico, las
-convenciones de componentes, el estilo visual y el requisito de que todo texto visible exista en
-inglés y en español. Cuando un plan entra en conflicto con la constitución, cambia el plan, no
-la regla.
+Cada riesgo de la tabla tiene al menos un control que no depende de que el agente se porte bien:
 
-## Una cuenta bot sin acceso al repositorio principal
+| Riesgo | Control |
+|---|---|
+| Push a `master` | La cuenta bot no tiene acceso de escritura al repo principal; un ruleset exige un pull request |
+| Force-push | El ruleset bloquea las actualizaciones que no son fast-forward; `git push --force` está denegado en la configuración del agente |
+| Borrar ramas | El ruleset bloquea borrar la rama protegida; `gh repo delete` está denegado |
+| Publicar contenido sin terminar | Un pull request necesita una aprobación y un build exitoso; los borradores del blog se ocultan en producción |
+| Fusionar | `gh pr merge` está denegado; fusionar me toca a mí |
 
-El agente no hace push al repositorio principal. Usa una cuenta bot separada que no tiene ningún
-acceso a él. Como el repositorio es público, el bot lo bifurca (fork), sube su trabajo a su propio
-fork y abre un pull request, igual que cualquier colaborador externo.
+El resto del artículo cuenta cómo se construyó cada control y dónde falló.
 
-## Integración continua
+## Una cuenta bot que solo puede pedir
 
-Cada pull request ejecuta un flujo de GitHub Actions que instala las dependencias con `npm ci`,
-ejecuta el linter y compila el sitio. Debe pasar para que el pull request pueda fusionarse.
+Creé una cuenta de GitHub aparte, `antjazlbot`, con acceso de solo lectura al repositorio de la
+organización. Se comporta como un colaborador externo: hace fork del repo, sube su trabajo a su
+fork (`origin`) y abre pull requests contra el repo principal (`upstream`). GitHub confirma qué
+puede hacer el bot:
 
-## Protección de ramas
+```
+$ gh api repos/antjazl-studio/luis-portfolio --jq .permissions
+{"admin":false,"maintain":false,"pull":true,"push":false,"triage":false}
+```
 
-Un ruleset de GitHub en la rama principal exige un pull request con una aprobación y exige que
-pase la verificación de compilación. También bloquea los force push y la eliminación de la rama,
-y su lista de excepciones está vacía, así que las reglas aplican a todos, incluido yo.
+El límite apareció la primera vez que lo usé mal. Intenté crear el repositorio en la
+organización mientras `gh` seguía con la sesión del bot, y el token del bot recibió un error de
+permisos de GraphQL: no tiene permiso para crear repositorios ahí. Justamente esa era la idea,
+así que cambié a mi cuenta de propietario y creé el repositorio yo mismo.
 
-## Despliegues de vista previa
+La segunda sorpresa fue la contraria. El bot recibió "permission denied" al hacer push a su
+propio fork. Lo resolví cambiando de cuenta con `gh auth switch` y ejecutando
+`gh auth setup-git`. Con dos cuentas en una misma máquina, cada comando se ejecuta como alguien,
+y es fácil ejecutarlo como la equivocada.
 
-Cada pull request recibe un despliegue de vista previa en Vercel. Como los pull requests del bot
-vienen de un fork, yo debo autorizar cada despliegue primero; es la protección de forks de Vercel.
-El contenido en borrador, como esta publicación, solo es visible en las vistas previas y nunca en
-producción, así que puedo revisarlo en un entorno realista antes de que sea público.
+## La herramienta se niega a decidir identidad y publicación, así que lo dejé escrito
 
-## Una persona revisa cada cambio
+El modo automático de Claude Code se negó a ejecutar por su cuenta dos comandos: `gh auth switch`
+("Identity Not Given") y `gh pr create` ("Create Public Surface"). Cambiar de identidad y publicar
+algo público son decisiones que deja a una persona. Ejecuté ambos yo mismo con el prefijo `!`,
+que corre un comando dentro de la sesión.
 
-Nada de esto saca a la persona del proceso. Solo yo apruebo y fusiono los pull requests, y
-fusionar a la rama principal es lo que dispara el despliegue a producción. El agente acelera el
-trabajo; las especificaciones, la constitución, las verificaciones y la revisión son lo que lo
-mantiene bajo control.
+Después convertí ese comportamiento en una política en `.claude/settings.json`, para que sea igual
+en cada ejecución (recortado):
+
+```json
+"allow": [
+  "Bash(npm run lint)",
+  "Bash(npm run build)",
+  "Bash(git push origin:*)",
+  "Bash(gh pr create:*)",
+  ...
+],
+"deny": [
+  "Bash(git push upstream:*)",
+  "Bash(git push --force:*)",
+  "Bash(gh pr merge:*)",
+  "Bash(gh auth switch:*)",
+  "Bash(gh repo delete:*)"
+],
+"ask": ["Edit(.specify/memory/constitution.md)"]
+```
+
+El agente puede ejecutar lint y build, hacer commit, subir a su propio fork y abrir un pull
+request, que es como propone trabajo. No puede hacer push a `upstream`, forzar un push, fusionar,
+cambiar de identidad ni borrar el repositorio, y debe preguntar antes de editar la constitución.
+
+Esta lista solo contiene los comandos que se me ocurrieron. Por eso los límites del lado de GitHub,
+en la siguiente sección, importan más.
+
+## Un ruleset que protegía la rama equivocada
+
+Un ruleset exige un pull request con una aprobación y un check `build` exitoso, y bloquea los
+force-push y el borrado. GitHub no informa de actores con permiso de omisión, así que las reglas
+también aplican para mí. Esto es lo que devuelve la API (recortado):
+
+```json
+"name": "protect-master",
+"enforcement": "active",
+"conditions": { "ref_name": { "include": ["~DEFAULT_BRANCH"] } },
+"rules": [
+  { "type": "deletion" },
+  { "type": "non_fast_forward" },
+  { "type": "pull_request",
+    "parameters": { "required_approving_review_count": 1, ... } },
+  { "type": "required_status_checks", ... }
+]
+```
+
+Mi primer ruleset no protegía `master`. Fíjate en la condición: `~DEFAULT_BRANCH` significa "la
+rama por defecto, sea cual sea". Mientras `chore/adopt-speckit`, la rama donde adopté Spec Kit,
+era la rama por defecto, `master` no estaba cubierta. La solución fue convertir `master` en la
+rama por defecto.
+
+El ruleset se llama `protect-master`, pero protege la rama por defecto, sea cual sea. Un ruleset
+puede verse bien y apuntar a la rama equivocada. Lee a qué apunta, no cómo se llama.
+
+## CI, vistas previas y una fricción deliberada
+
+Cada pull request ejecuta un flujo de GitHub Actions en Node 24:
+
+```yaml
+- run: npm ci
+- run: npm run lint
+- run: npm run build
+```
+
+Como los pull requests del bot vienen de un fork, Vercel no los compila por su cuenta. En cada
+pull request del bot tengo que autorizar el despliegue como propietario, y solo entonces se
+construye la vista previa. Es fricción. La mantengo porque la alternativa es que cualquiera que
+haga fork de un repositorio público pueda conseguir que se compile su código en mi cuenta de
+Vercel.
+
+La vista previa también es donde viven los borradores. El blog oculta las publicaciones con
+`draft: true` solo cuando `VERCEL_ENV` es `production`, así que las vistas previas las muestran.
+Esta reescritura siguió el mismo camino: la leí en la vista previa antes de que reemplazara la
+versión publicada.
+
+## Especificaciones, una constitución y un supervisor que solo me pregunta lo que me toca decidir
+
+Cada funcionalidad empieza como una especificación escrita con Spec Kit: specify, clarify, plan,
+tasks, analyze, implement. Una constitución reúne las reglas que toda especificación debe
+cumplir, incluida la de que todo texto visible exista en inglés y en español, y solo se puede
+cambiar con su propio comando.
+
+No conduzco cada paso. Una skill, `sdd-supervisor`, ejecuta el proceso y decide por sí sola solo
+las cosas pequeñas. Esta es su política de escalamiento (recortada):
+
+```
+ASK the owner:
+- Taste and brand: colors, theme, typography, ...
+- Facts about Luis or his work.
+- Scope changes: adding, dropping or splitting user stories ...
+- Constitution amendments.
+- Anything irreversible or public beyond a PR: ...
+DECIDE YOURSELF and log the decision in the hand-off:
+- Analyze findings that are consistency, wording, numbering or ordering fixes.
+```
+
+Un segundo agente, `sdd-reviewer`, revisa especificaciones y diffs. Tiene herramientas de lectura,
+búsqueda y shell, y sus instrucciones dicen que nunca edita archivos.
+
+En el widget de chat (funcionalidad 008) este ciclo se pagó solo:
+
+- El informe de análisis marcó 2 problemas CRITICAL y 2 HIGH antes de que existiera código. El
+  informe no está guardado en el repositorio.
+- También detectó un bug real fuera del repo que estaba revisando. Mi API de agente, separada, no
+  exponía `Retry-After` al JavaScript de otro origen, así que el navegador no podía leer el tiempo
+  de espera del límite de peticiones. Lo corregí allí con `Access-Control-Expose-Headers: Retry-After`.
+- Las pruebas en navegador real encontraron dos bugs en el widget: el foco se escapaba del diálogo
+  (en Chrome sin interfaz, Tab desde el último control saltaba al enlace de salto de la página) y el
+  panel quedaba invisible bajo React StrictMode.
+- El supervisor ejecutó 130 comprobaciones de navegador con scripts, y Lighthouse se mantuvo en
+  100/100 en móvil y escritorio.
+
+El primer commit de la funcionalidad es de las 21:42 y el pull request se fusionó a las 23:27
+(UTC-5). Son casi una hora y tres cuartos entre el primer commit y la fusión; el trabajo de
+pensar antes del primer commit no queda en el historial.
+
+## Cuando el agente se equivoca: un error de sintaxis y una suposición de latencia
+
+**Un error de sintaxis, commiteado.** Durante la 008, el revisor marcó un problema de severidad
+baja: el parser del stream perdía una última línea sin salto de línea final. La primera
+corrección del supervisor tenía un error de sintaxis, una cadena de texto partida en dos líneas, y
+la commiteó antes de ejecutar lint porque su cadena de comandos no dependía de lint. Lint y el
+build lo detectaron. El supervisor reportó el descuido por sí mismo, lo corrigió y enmendó el
+commit minuto y medio después, antes de subir nada. El commit roto nunca llegó a una rama remota.
+Este es el diff real entre los dos commits, en `src/hooks/useChat.ts`:
+
+```diff
+-  for (const event of parseSseChunk(buffer + decoder.decode() + "
+-").events) apply(event);
++  const tail = parseSseChunk(`${buffer}${decoder.decode()}\n`);
++  for (const event of tail.events) apply(event);
+```
+
+Acordarse de ejecutar lint es un hábito. Un hook lo convertiría en regla, y todavía no he
+agregado ese hook.
+
+**Un dato que el agente no podía saber.** El plan del widget de chat suponía que las respuestas
+llegan en unos 3 segundos. El agente real llama a una herramienta durante 3 a 10 segundos y luego
+transmite la respuesta, y las respuestas completas tardan de 10 a 45 segundos. Un tiempo límite
+total habría cortado respuestas normales, así que el widget usa un tiempo límite de inactividad de
+30 segundos y ninguno total. Debí darle al agente la latencia real antes de que planificara.
+
+## Qué cambiaría y qué puedes copiar
+
+Qué cambiaría:
+
+1. **Condicionar los commits a lint con un hook** desde el primer día, en vez de confiar en que el
+   agente se acuerde.
+2. **Versionar los scripts de ayuda.** Tenía un pequeño script de PowerShell que cambiaba a
+   `master`, traía `upstream`, subía el `master` del fork y borraba la rama ya fusionada. Nunca lo
+   commiteé y se perdió.
+3. **Darle al agente los datos del mundo real desde el principio**, como la latencia, en lugar de
+   dejar que el plan los adivine.
+
+Qué puedes copiar para tu propio proyecto:
+
+- Dale al agente su propia cuenta, sin acceso de escritura al repositorio principal, y que trabaje
+  con fork y pull request.
+- Pon los límites duros en la plataforma (permisos del token y un ruleset) y los hábitos en la
+  configuración del agente (allow, deny, ask). La configuración solo lista lo que se te ocurrió.
+- Comprueba a qué rama apunta el ruleset y pruébalo contra la rama que despliega.
+- Haz que tu fusión sea el único camino a producción y dale una vista previa a cada pull request.
+- Deja que el agente te pregunte solo lo que te toca decidir: gusto, datos sobre ti y cualquier
+  cosa pública o irreversible.
+
+Nada de esto impide que el agente proponga un mal cambio. Para eso está la revisión. El agente
+acelera el trabajo; los límites, las especificaciones y la persona que fusiona lo mantienen bajo
+control.
