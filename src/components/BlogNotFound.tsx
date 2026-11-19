@@ -15,7 +15,7 @@ export function BlogNotFound() {
   const isPost = pathname.startsWith("/blog/");
   const title = translations[language].meta.home;
 
-  // The 404 keeps today's English title in EN; in ES it follows the language like the rest of the site.
+  // The 404 reuses the home title (just the name), in both languages.
   useEffect(() => {
     setPageTitle(title);
     return () => setPageTitle(null);

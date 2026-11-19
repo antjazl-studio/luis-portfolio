@@ -24,7 +24,7 @@ const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Luis Jacho Zambrano — Senior Full Stack Developer",
+  title: "Luis Jacho Zambrano",
   description:
     "Senior Full Stack Developer with 9 years of experience in .NET, Angular, and Azure. Azure Developer Associate certified.",
   keywords: [".NET", "Angular", "Azure", "Full Stack", "TypeScript", "Ecuador"],

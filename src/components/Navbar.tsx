@@ -15,6 +15,15 @@ type NavId = typeof NAV_IDS[number];
 const scrollBehavior = (): ScrollBehavior =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
 
+// Moves keyboard focus to a section after a menu navigation, without scrolling again.
+// Sections are not focusable by default; tabindex="-1" makes them programmatic targets only.
+function focusSection(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
+  el.focus({ preventScroll: true });
+}
+
 export function Navbar({ prerenderedPaths }: { prerenderedPaths: readonly string[] }) {
   const [active,     setActive]     = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -42,6 +51,7 @@ export function Navbar({ prerenderedPaths }: { prerenderedPaths: readonly string
     if (onHome && isPlainClick(e)) {
       e.preventDefault();
       document.getElementById(id)?.scrollIntoView({ behavior: scrollBehavior() });
+      focusSection(id);
     }
   };
 
@@ -71,6 +81,14 @@ export function Navbar({ prerenderedPaths }: { prerenderedPaths: readonly string
       observers.forEach((o) => o.disconnect());
       setActive(null); // clear the highlight when leaving the home page
     };
+  }, [pathname]);
+
+  // Arriving on the home page with a section hash (menu tap from another route, or a direct link):
+  // Next scrolls to the section but leaves focus on <body>, so move it to the section.
+  useEffect(() => {
+    if (pathname !== "/") return;
+    const id = window.location.hash.slice(1);
+    if ((NAV_IDS as readonly string[]).includes(id)) focusSection(id);
   }, [pathname]);
 
   useEffect(() => {
@@ -166,13 +184,14 @@ export function Navbar({ prerenderedPaths }: { prerenderedPaths: readonly string
 
       </div>
 
-      {/* Mobile drawer */}
+      {/* Mobile drawer. Opacity only: animating height to/from "auto" makes Framer Motion measure the DOM and
+          call window.scrollTo(current position), which cancels the smooth scroll started by a section tap. */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: dur(0.2), ease: "easeInOut" }}
             className="overflow-hidden border-t border-border bg-background md:hidden"
           >

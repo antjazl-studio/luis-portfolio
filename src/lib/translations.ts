@@ -261,10 +261,11 @@ const translations: Record<Language, Translation> = {
       pageNotFoundLink:  "Back to home",
       dateLocale:    "en-US",
     },
-    // Browser tab titles. EN equals the static metadata in layout.tsx and blog/page.tsx; the page
+    // Browser tab titles. EN equals the static metadata in layout.tsx and blog/page.tsx
+    // (the role lives in the home sharing tags, page.tsx); the page
     // metadata itself stays English (accepted Principle VI deviation, owner 2026-11-06).
     meta: {
-      home: "Luis Jacho Zambrano — Senior Full Stack Developer",
+      home: "Luis Jacho Zambrano",
       blog: "Blog — Luis Jacho Zambrano",
     },
     a11y: {
@@ -430,7 +431,7 @@ const translations: Record<Language, Translation> = {
       dateLocale:    "es-EC",
     },
     meta: {
-      home: "Luis Jacho Zambrano — Desarrollador full stack senior",
+      home: "Luis Jacho Zambrano",
       blog: "Blog — Luis Jacho Zambrano",
     },
     a11y: {
