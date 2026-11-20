@@ -8,14 +8,14 @@ I am moving into AI engineering, and I wanted an agent to do real work on this p
 catch: the repository is public, and merging to `master` deploys to production.
 
 With my own credentials, an agent could push straight to `master`, force-push, delete branches
-or ship half-finished content live. A prompt that asks it not to is a request, not a
-guarantee. I wanted the agent to be fast and the limits to live in configuration.
+or ship half-finished content live. Asking it not to in a prompt is only a request. I wanted
+the agent to be fast and the limits to live in configuration.
 
 *Rewritten on 2026-11-19 with the details the first version left out.*
 
 ## What an agent with my credentials could do
 
-Every risk below has at least one control that does not depend on the agent behaving:
+Each risk below has at least one control that works even if the agent misbehaves:
 
 | Risk | Control |
 |---|---|
@@ -24,8 +24,6 @@ Every risk below has at least one control that does not depend on the agent beha
 | Delete branches | The ruleset blocks deleting the protected branch; `gh repo delete` is denied |
 | Ship unfinished content | A pull request needs one approval and a passing build; draft posts are hidden in production |
 | Merge | `gh pr merge` is denied; the merge is mine |
-
-The rest of this post is how each control was built and where it went wrong.
 
 ## A bot account that can only ask
 
@@ -39,12 +37,12 @@ $ gh api repos/antjazl-studio/luis-portfolio --jq .permissions
 {"admin":false,"maintain":false,"pull":true,"push":false,"triage":false}
 ```
 
-The limit showed up the first time I used it wrong. I tried to create the repository in the
-organization while `gh` was still logged in as the bot, and the bot's token got a GraphQL
-permission error: it is not allowed to create repositories there. That was the point, so I
-switched to my owner account and created the repository myself.
+I found the limit by using it wrong. I tried to create the repository in the organization
+while `gh` was still logged in as the bot, and the bot's token got a GraphQL permission error:
+it cannot create repositories there. That is what I wanted, so I switched to my owner account
+and created the repository myself.
 
-The second surprise went the other way. The bot got "permission denied" pushing to its own
+The next surprise went the other way. The bot got "permission denied" pushing to its own
 fork. I fixed it by switching accounts with `gh auth switch` and running `gh auth setup-git`.
 With two accounts on one machine, every command runs as someone, and it is easy to run it as
 the wrong one.
@@ -52,12 +50,12 @@ the wrong one.
 ## The tool refuses identity and publishing, so I wrote that down
 
 Claude Code's auto mode declined to run two commands on its own: `gh auth switch` ("Identity
-Not Given") and `gh pr create` ("Create Public Surface"). Switching identity and publishing
-something public are decisions it leaves to a human. I ran both myself with the `!` prefix,
-which runs a command inside the session.
+Not Given") and `gh pr create` ("Create Public Surface"). It leaves switching identity and
+publishing something public to a human. I ran both myself with the `!` prefix, which runs a
+command inside the session.
 
-Then I turned that behavior into a policy in `.claude/settings.json`, so it is the same on
-every run (trimmed):
+Then I copied that behavior into `.claude/settings.json`, so every run follows the same policy
+(trimmed):
 
 ```json
 "allow": [
@@ -109,8 +107,7 @@ Kit, was the default branch, `master` was not covered. The fix was to make `mast
 default branch.
 
 The ruleset is named `protect-master`, but it protects the default branch, whichever that is.
-A ruleset can look right and still point at the wrong branch. Read what it targets, not what
-it is called.
+Check the condition, because the name will not tell you which branch it covers.
 
 ## CI, previews and a deliberate bit of friction
 
@@ -128,8 +125,7 @@ the preview build. It is friction. I keep it because the alternative is that any
 a public repository could get code built on my Vercel account.
 
 The preview is also where drafts live. The blog hides posts marked `draft: true` only when
-`VERCEL_ENV` is `production`, so previews show them. This rewrite went through the same
-route: I read it in the preview before it replaced the live version.
+`VERCEL_ENV` is `production`, so previews show them.
 
 ## Specs, a constitution and a supervisor that asks only what is mine to decide
 
@@ -138,8 +134,8 @@ analyze, implement. A constitution holds the rules every spec must follow, inclu
 every visible string exists in English and Spanish, and it can only be changed through its own
 command.
 
-I do not drive each step. An `sdd-supervisor` skill runs the pipeline and decides alone only
-the small things. This is its escalation policy (trimmed):
+I do not drive each step. An `sdd-supervisor` skill runs the pipeline and decides only the
+small things by itself. This is its escalation policy (trimmed):
 
 ```
 ASK the owner:
@@ -155,7 +151,7 @@ DECIDE YOURSELF and log the decision in the hand-off:
 A second agent, `sdd-reviewer`, reviews specs and diffs. It has read, search and shell tools,
 and its instructions say it never edits files.
 
-On the chat widget (feature 008) this loop paid for itself:
+On the chat widget (feature 008) this loop paid off:
 
 - The analysis report flagged 2 CRITICAL and 2 HIGH issues before any code existed. The report
   is not stored in the repository.
@@ -169,17 +165,17 @@ On the chat widget (feature 008) this loop paid for itself:
   and desktop.
 
 The first commit of the feature is at 21:42 and the pull request was merged at 23:27 (UTC-5).
-That is about an hour and three quarters from first commit to merge; the thinking before the first commit is
-not in the history.
+That is about an hour and three quarters from first commit to merge. The thinking before the
+first commit is not in the history.
 
 ## When the agent is wrong: a syntax error and a latency assumption
 
-**A syntax error, committed.** During 008 the reviewer flagged a low-severity issue: the stream
+A syntax error, committed. During 008 the reviewer flagged a low-severity issue: the stream
 parser dropped a final line with no trailing newline. The supervisor's first fix had a syntax
 error, a string literal broken across two lines, and it committed before running lint
-because its command chain was not gated on lint. Lint and the build caught it. The supervisor
-reported the slip itself, fixed it and amended the commit a minute and a half later, before
-anything was pushed. The broken commit never reached a remote branch. This is the real diff
+because nothing in its command chain waited for lint to pass. Lint and the build caught it.
+The supervisor reported the slip itself, fixed it and amended the commit a minute and a half
+later, before anything was pushed. The broken commit never reached a remote branch. This is the real diff
 between the two commits, in `src/hooks/useChat.ts`:
 
 ```diff
@@ -189,10 +185,10 @@ between the two commits, in `src/hooks/useChat.ts`:
 +  for (const event of tail.events) apply(event);
 ```
 
-Remembering to run lint is a habit. A hook would make it a rule, and I have not added that
-hook yet.
+Running lint first depends on someone remembering. A hook would enforce it, and I have not
+added that hook yet.
 
-**A fact the agent could not know.** The plan for the chat widget assumed answers arrive in
+A fact the agent could not know. The plan for the chat widget assumed answers arrive in
 about 3 seconds. The real agent calls a tool for 3 to 10 seconds and then streams, and full
 answers take 10 to 45 seconds. A total timeout would have cut off normal answers, so the widget
 uses a 30-second idle timeout and no total timeout. I should have given the agent the real
@@ -202,11 +198,12 @@ latency before it planned.
 
 What I would change:
 
-1. **Gate commits on lint with a hook** from day one, instead of trusting the agent to remember.
-2. **Version helper scripts.** I had a small PowerShell helper that checked out `master`, pulled
-   `upstream`, pushed the fork's `master` and deleted the merged branch. It was never committed,
-   so it got lost.
-3. **Give the agent real-world facts early**, such as latency, instead of letting a plan guess.
+1. Block commits until lint passes, with a hook, from day one, instead of trusting the agent
+   to remember.
+2. Version the helper scripts. I had a small PowerShell helper that checked out `master`,
+   pulled `upstream`, pushed the fork's `master` and deleted the merged branch. I never
+   committed it, so it got lost.
+3. Give the agent real-world facts early, such as latency, instead of letting a plan guess.
 
 What you can copy for your own project:
 
@@ -219,5 +216,4 @@ What you can copy for your own project:
 - Let the agent ask you only what is yours to decide: taste, facts about you and anything
   public or irreversible.
 
-None of this stops the agent from proposing a bad change. That is what the review is for. The
-agent speeds up the work; the limits, the specs and the person who merges keep it under control.
+None of this stops the agent from proposing a bad change. Review is what catches that.
