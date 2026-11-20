@@ -1,5 +1,5 @@
 ---
-title: "Barreras en la configuración, no en los prompts: dejar que un agente de IA trabaje en mi portafolio público"
+title: "Dejar que un agente de IA trabaje en mi portafolio público sin confiar en él"
 summary: "Cómo un agente de IA trabaja en este portafolio público sin poder hacer push, fusionar ni borrar: una cuenta bot de solo lectura, reglas de denegación, un ruleset de ramas, CI, vistas previas y revisión humana, con los errores del camino."
 date: 2026-11-05
 ---
@@ -10,8 +10,6 @@ portafolio. El problema: el repositorio es público y fusionar a `master` despli
 Con mis propias credenciales, un agente podría hacer push directo a `master`, un force-push,
 borrar ramas o publicar contenido a medio terminar. Pedírselo en un prompt es solo una petición.
 Quería un agente rápido y con los límites en la configuración.
-
-*Reescrito el 2026-11-19 con los detalles que la primera versión dejó fuera.*
 
 ## Qué podría hacer un agente con mis credenciales
 
