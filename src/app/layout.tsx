@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar }           from "@/components/Navbar";
 import { Footer }           from "@/components/Footer";
 import { ChatWidget }       from "@/components/ChatWidget";
+import { Analytics }        from "@vercel/analytics/next";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { getVisiblePosts } from "@/lib/blog";
 
@@ -48,6 +49,7 @@ export default function RootLayout({
           <Footer />
           <ChatWidget />
         </LanguageProvider>
+        <Analytics />
       </body>
     </html>
   );
