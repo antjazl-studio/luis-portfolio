@@ -8,14 +8,14 @@ Estoy migrando hacia la ingeniería de IA y quería que un agente hiciera trabaj
 portafolio. El problema: el repositorio es público y fusionar a `master` despliega a producción.
 
 Con mis propias credenciales, un agente podría hacer push directo a `master`, un force-push,
-borrar ramas o publicar contenido a medio terminar. Un prompt que le pide que no lo haga es una
-petición, no una garantía. Quería un agente rápido y con los límites en la configuración.
+borrar ramas o publicar contenido a medio terminar. Pedírselo en un prompt es solo una petición.
+Quería un agente rápido y con los límites en la configuración.
 
 *Reescrito el 2026-11-19 con los detalles que la primera versión dejó fuera.*
 
 ## Qué podría hacer un agente con mis credenciales
 
-Cada riesgo de la tabla tiene al menos un control que no depende de que el agente se porte bien:
+Cada riesgo de la tabla tiene al menos un control que funciona aunque el agente se porte mal:
 
 | Riesgo | Control |
 |---|---|
@@ -24,8 +24,6 @@ Cada riesgo de la tabla tiene al menos un control que no depende de que el agent
 | Borrar ramas | El ruleset bloquea borrar la rama protegida; `gh repo delete` está denegado |
 | Publicar contenido sin terminar | Un pull request necesita una aprobación y un build exitoso; los borradores del blog se ocultan en producción |
 | Fusionar | `gh pr merge` está denegado; fusionar me toca a mí |
-
-El resto del artículo cuenta cómo se construyó cada control y dónde falló.
 
 ## Una cuenta bot que solo puede pedir
 
@@ -39,12 +37,12 @@ $ gh api repos/antjazl-studio/luis-portfolio --jq .permissions
 {"admin":false,"maintain":false,"pull":true,"push":false,"triage":false}
 ```
 
-El límite apareció la primera vez que lo usé mal. Intenté crear el repositorio en la
-organización mientras `gh` seguía con la sesión del bot, y el token del bot recibió un error de
-permisos de GraphQL: no tiene permiso para crear repositorios ahí. Justamente esa era la idea,
-así que cambié a mi cuenta de propietario y creé el repositorio yo mismo.
+Descubrí el límite usándolo mal. Intenté crear el repositorio en la organización mientras `gh`
+seguía con la sesión del bot, y el token del bot recibió un error de permisos de GraphQL: no
+puede crear repositorios ahí. Eso era lo que quería, así que cambié a mi cuenta de propietario
+y creé el repositorio yo mismo.
 
-La segunda sorpresa fue la contraria. El bot recibió "permission denied" al hacer push a su
+La siguiente sorpresa fue la contraria. El bot recibió "permission denied" al hacer push a su
 propio fork. Lo resolví cambiando de cuenta con `gh auth switch` y ejecutando
 `gh auth setup-git`. Con dos cuentas en una misma máquina, cada comando se ejecuta como alguien,
 y es fácil ejecutarlo como la equivocada.
@@ -52,12 +50,12 @@ y es fácil ejecutarlo como la equivocada.
 ## La herramienta se niega a decidir identidad y publicación, así que lo dejé escrito
 
 El modo automático de Claude Code se negó a ejecutar por su cuenta dos comandos: `gh auth switch`
-("Identity Not Given") y `gh pr create` ("Create Public Surface"). Cambiar de identidad y publicar
-algo público son decisiones que deja a una persona. Ejecuté ambos yo mismo con el prefijo `!`,
-que corre un comando dentro de la sesión.
+("Identity Not Given") y `gh pr create` ("Create Public Surface"). Deja en manos de una persona
+cambiar de identidad y publicar algo público. Ejecuté ambos yo mismo con el prefijo `!`, que
+corre un comando dentro de la sesión.
 
-Después convertí ese comportamiento en una política en `.claude/settings.json`, para que sea igual
-en cada ejecución (recortado):
+Después copié ese comportamiento a `.claude/settings.json`, para que cada ejecución siga la
+misma política (recortado):
 
 ```json
 "allow": [
@@ -108,8 +106,8 @@ rama por defecto, sea cual sea". Mientras `chore/adopt-speckit`, la rama donde a
 era la rama por defecto, `master` no estaba cubierta. La solución fue convertir `master` en la
 rama por defecto.
 
-El ruleset se llama `protect-master`, pero protege la rama por defecto, sea cual sea. Un ruleset
-puede verse bien y apuntar a la rama equivocada. Lee a qué apunta, no cómo se llama.
+El ruleset se llama `protect-master`, pero protege la rama por defecto, sea cual sea. Revisa la
+condición, porque el nombre no te dice qué rama cubre.
 
 ## CI, vistas previas y una fricción deliberada
 
@@ -129,8 +127,6 @@ Vercel.
 
 La vista previa también es donde viven los borradores. El blog oculta las publicaciones con
 `draft: true` solo cuando `VERCEL_ENV` es `production`, así que las vistas previas las muestran.
-Esta reescritura siguió el mismo camino: la leí en la vista previa antes de que reemplazara la
-versión publicada.
 
 ## Especificaciones, una constitución y un supervisor que solo me pregunta lo que me toca decidir
 
@@ -139,8 +135,8 @@ tasks, analyze, implement. Una constitución reúne las reglas que toda especifi
 cumplir, incluida la de que todo texto visible exista en inglés y en español, y solo se puede
 cambiar con su propio comando.
 
-No conduzco cada paso. Una skill, `sdd-supervisor`, ejecuta el proceso y decide por sí sola solo
-las cosas pequeñas. Esta es su política de escalamiento (recortada):
+No conduzco cada paso. Una skill, `sdd-supervisor`, ejecuta el proceso y solo decide por sí
+sola las cosas pequeñas. Esta es su política de escalamiento (recortada):
 
 ```
 ASK the owner:
@@ -156,7 +152,7 @@ DECIDE YOURSELF and log the decision in the hand-off:
 Un segundo agente, `sdd-reviewer`, revisa especificaciones y diffs. Tiene herramientas de lectura,
 búsqueda y shell, y sus instrucciones dicen que nunca edita archivos.
 
-En el widget de chat (funcionalidad 008) este ciclo se pagó solo:
+En el widget de chat (funcionalidad 008) este ciclo valió la pena:
 
 - El informe de análisis marcó 2 problemas CRITICAL y 2 HIGH antes de que existiera código. El
   informe no está guardado en el repositorio.
@@ -170,16 +166,16 @@ En el widget de chat (funcionalidad 008) este ciclo se pagó solo:
   100/100 en móvil y escritorio.
 
 El primer commit de la funcionalidad es de las 21:42 y el pull request se fusionó a las 23:27
-(UTC-5). Son casi una hora y tres cuartos entre el primer commit y la fusión; el trabajo de
+(UTC-5). Son casi una hora y tres cuartos entre el primer commit y la fusión. El trabajo de
 pensar antes del primer commit no queda en el historial.
 
 ## Cuando el agente se equivoca: un error de sintaxis y una suposición de latencia
 
-**Un error de sintaxis, commiteado.** Durante la 008, el revisor marcó un problema de severidad
+Un error de sintaxis, commiteado. Durante la 008, el revisor marcó un problema de severidad
 baja: el parser del stream perdía una última línea sin salto de línea final. La primera
 corrección del supervisor tenía un error de sintaxis, una cadena de texto partida en dos líneas, y
-la commiteó antes de ejecutar lint porque su cadena de comandos no dependía de lint. Lint y el
-build lo detectaron. El supervisor reportó el descuido por sí mismo, lo corrigió y enmendó el
+la commiteó antes de ejecutar lint porque nada en su cadena de comandos esperaba a que lint
+pasara. Lint y el build lo detectaron. El supervisor reportó el descuido por sí mismo, lo corrigió y enmendó el
 commit minuto y medio después, antes de subir nada. El commit roto nunca llegó a una rama remota.
 Este es el diff real entre los dos commits, en `src/hooks/useChat.ts`:
 
@@ -190,10 +186,10 @@ Este es el diff real entre los dos commits, en `src/hooks/useChat.ts`:
 +  for (const event of tail.events) apply(event);
 ```
 
-Acordarse de ejecutar lint es un hábito. Un hook lo convertiría en regla, y todavía no he
-agregado ese hook.
+Ejecutar lint primero depende de que alguien se acuerde. Un hook lo haría cumplir, y todavía
+no he agregado ese hook.
 
-**Un dato que el agente no podía saber.** El plan del widget de chat suponía que las respuestas
+Un dato que el agente no podía saber. El plan del widget de chat suponía que las respuestas
 llegan en unos 3 segundos. El agente real llama a una herramienta durante 3 a 10 segundos y luego
 transmite la respuesta, y las respuestas completas tardan de 10 a 45 segundos. Un tiempo límite
 total habría cortado respuestas normales, así que el widget usa un tiempo límite de inactividad de
@@ -203,12 +199,12 @@ total habría cortado respuestas normales, así que el widget usa un tiempo lím
 
 Qué cambiaría:
 
-1. **Condicionar los commits a lint con un hook** desde el primer día, en vez de confiar en que el
-   agente se acuerde.
-2. **Versionar los scripts de ayuda.** Tenía un pequeño script de PowerShell que cambiaba a
+1. Bloquear los commits hasta que lint pase, con un hook, desde el primer día, en vez de confiar
+   en que el agente se acuerde.
+2. Versionar los scripts de ayuda. Tenía un pequeño script de PowerShell que cambiaba a
    `master`, traía `upstream`, subía el `master` del fork y borraba la rama ya fusionada. Nunca lo
    commiteé y se perdió.
-3. **Darle al agente los datos del mundo real desde el principio**, como la latencia, en lugar de
+3. Darle al agente los datos del mundo real desde el principio, como la latencia, en lugar de
    dejar que el plan los adivine.
 
 Qué puedes copiar para tu propio proyecto:
@@ -222,6 +218,4 @@ Qué puedes copiar para tu propio proyecto:
 - Deja que el agente te pregunte solo lo que te toca decidir: gusto, datos sobre ti y cualquier
   cosa pública o irreversible.
 
-Nada de esto impide que el agente proponga un mal cambio. Para eso está la revisión. El agente
-acelera el trabajo; los límites, las especificaciones y la persona que fusiona lo mantienen bajo
-control.
+Nada de esto impide que el agente proponga un mal cambio. Eso lo detecta la revisión.
