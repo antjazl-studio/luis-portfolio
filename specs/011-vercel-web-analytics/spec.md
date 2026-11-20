@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-20
 
-**Status**: Draft
+**Status**: Implemented (verified locally; owner checks pending, see verification.md)
 
 **Input**: User description: "Add Vercel Web Analytics (page views only) to the portfolio so the owner can see aggregate, anonymous visit counts for the production site, with no visible change for visitors."
 

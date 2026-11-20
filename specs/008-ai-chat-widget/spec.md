@@ -87,7 +87,7 @@ On any site address other than the production site (for example a preview deploy
 
 ### User Story 5 - Bilingual and private by default (Priority: P2)
 
-Every visible and accessible string of the widget exists in English and Spanish and follows the site's language switch. Nothing about the conversation is stored: no cookies, no browser storage, no analytics, no logs from the site. Closing the page or starting a new conversation discards everything.
+Every visible and accessible string of the widget exists in English and Spanish and follows the site's language switch. Nothing about the conversation is stored: no cookies, no browser storage, no analytics, no logs from the site. Closing the page or starting a new conversation discards everything. *(Scope clarified on 2026-11-20 by `specs/011-vercel-web-analytics`, agent decision: "analytics" here means analytics inside the widget or about the conversation. Site-level anonymous page-view analytics was added by feature 011 and does not contradict this, because the widget writes no cookie or storage and never changes the page address, so a page view never contains conversation content. The requirement itself is unchanged.)*
 
 **Why this priority**: Both are binding (constitution Principle VI; privacy stated by the owner) but they are properties of the other stories rather than a separate flow.
 
@@ -127,7 +127,7 @@ Every visible and accessible string of the widget exists in English and Spanish 
 - **FR-009**: Answer text MUST appear progressively as it arrives. A "Searching Luis's profile…" status MUST be shown when the service reports a lookup is in progress.
 - **FR-010**: When the service sends a replacement text, the previously shown partial answer MUST be discarded and only the replacement shown.
 - **FR-011**: The widget MUST send the entire conversation so far on every turn, with the visitor's message last, and MUST keep the conversation only in the memory of the open page.
-- **FR-012**: The widget MUST NOT write conversation content or any identifier to cookies, local or session storage, or any other persistent store, and MUST NOT include analytics or send conversation content anywhere except to the agent service.
+- **FR-012**: The widget MUST NOT write conversation content or any identifier to cookies, local or session storage, or any other persistent store, and MUST NOT include analytics or send conversation content anywhere except to the agent service. *(Widget scope; see the 2026-11-20 clarification in `specs/011-vercel-web-analytics`: site-level page-view analytics is separate and carries no conversation content.)*
 - **FR-013**: The input MUST show a character counter against the limit of 2000 characters per message and MUST block sending when the text is empty or exceeds the limit.
 - **FR-014**: When the conversation reaches 20 messages, the widget MUST stop accepting input, explain why, and offer "Start a new conversation", which clears everything and returns to the starter state.
 - **FR-015**: Assistant answers MUST render simple markdown (bold, lists, links) as formatted text. Raw HTML MUST never be rendered or executed. Links MUST open in a new tab with no access granted to the opener, and only web links (http/https) and email links MUST be clickable.
@@ -160,7 +160,7 @@ Every visible and accessible string of the widget exists in English and Spanish 
 - **SC-004**: Home page Lighthouse Performance and Accessibility remain at 90 or above, and each drops by no more than 3 points compared with the baseline taken before this feature (best of 3 runs for both).
 - **SC-005**: With the agent service unreachable, 100% of site pages render and work as before, and the widget shows a readable message as soon as the browser reports the failure (connection refused, DNS or CORS failure), within 10 seconds of a send attempt. A connection that stays open but silent is handled by the idle timeout (FR-026), not by this criterion.
 - **SC-006**: 0 raw-HTML or script payloads placed in an assistant answer are executed or rendered as elements across the test set of hostile samples.
-- **SC-007**: 0 cookies and 0 browser-storage entries are created by using the widget through a full conversation.
+- **SC-007**: 0 cookies and 0 browser-storage entries are created by using the widget through a full conversation. *(Unchanged by feature 011: the widget still creates none; the site-wide check is in `specs/011-vercel-web-analytics/verification.md`.)*
 - **SC-008**: 100% of widget strings exist in both languages, and switching language never loses the conversation.
 - **SC-009**: At 360px width the open panel and the closed launcher plus WhatsApp button cause no horizontal overflow and no overlap between the two floating buttons. *(Arrangement superseded on 2026-11-17 by `specs/009-launcher-redesign`: one dock with an assistant segment and a WhatsApp segment; owner decision.)*
 - **SC-010**: On a non-production address, 0 requests are sent to the agent service and the message "Assistant available on luisjacho.dev" (or Spanish equivalent) is shown on opening.
@@ -177,4 +177,4 @@ Every visible and accessible string of the widget exists in English and Spanish 
 - Bot protection (Turnstile) is a separate future feature; this feature does not add it and must not preclude it.
 - Messages in a conversation are plain text from the visitor; the visitor's text is shown as plain text (never interpreted as markdown or HTML).
 - No new top-level folders or runtime dependencies that duplicate the existing stack are needed; formatting of answers can reuse the markdown handling already in the project (to be confirmed in planning).
-- Out of scope: Turnstile or other bot protection, any change to the agent service or its contract, saving or exporting conversations, analytics, accounts, voice or attachments, and a dedicated full-page chat route.
+- Out of scope: Turnstile or other bot protection, any change to the agent service or its contract, saving or exporting conversations, analytics inside the widget (site-level page views are feature 011), accounts, voice or attachments, and a dedicated full-page chat route.

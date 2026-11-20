@@ -5,6 +5,7 @@
 - Lenguaje: TypeScript
 - Estilos: Tailwind CSS
 - Animaciones: Framer Motion
+- Analítica: `@vercel/analytics` (solo page views, ver sección Analytics)
 
 ## Convenciones
 - Componentes funcionales solamente
@@ -76,7 +77,14 @@ Reglas de gobierno completas en `.specify/memory/constitution.md`.
   (sin eso producción muestra "servicio no disponible"). Es una variable de build: cambiarla exige un nuevo build.
 - Solo `luisjacho.dev`, `www.luisjacho.dev`, `localhost` y `127.0.0.1` hablan con el servicio; en cualquier otro
   origen (previews) el panel muestra "Assistant available on luisjacho.dev" y no envía nada.
-- Nada se persiste (sin cookies ni storage); la conversación vive solo en memoria de la página.
+- El widget no persiste nada (sin cookies ni storage); la conversación vive solo en memoria de la página. Esta regla es del widget; la analítica de page views del sitio es independiente (ver Analytics).
+
+## Analytics
+- Vercel Web Analytics, solo page views: `<Analytics />` de `@vercel/analytics/next` al final de `<body>` en `src/app/layout.tsx`, sin props.
+- Plan Hobby: no hay eventos personalizados; no llamar nunca a `track()` ni agregar eventos.
+- El propietario lo activa en el dashboard de Vercel (pestaña Analytics, botón Enable); sin eso el script devuelve 404 y no se cuenta nada (el sitio funciona igual).
+- El sitio no escribe cookies ni storage por la analítica. Según la documentación de Vercel, los visitantes se identifican con un hash de la petición que se descarta a las 24 horas, sin cookies de terceros.
+- Es independiente del widget de chat: solo se registra la ruta de la página, nunca contenido de la conversación (el widget no cambia la URL). Detalle en `specs/011-vercel-web-analytics`.
 
 ## Tema (CSS variables en globals.css)
 | Variable        | Valor     | Uso                        |
