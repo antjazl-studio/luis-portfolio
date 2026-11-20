@@ -2,7 +2,7 @@
 title: "Escribir a mano el loop de un agente de IA antes de usar un framework"
 summary: "Cómo funciona el asistente de IA de este portafolio: un loop escrito a mano con el SDK de openai, por qué envía el perfil completo en vez de usar RAG y embeddings, garantías movidas del prompt al código y dos maneras en que mi eval me mintió."
 date: 2026-11-20
-draft: true
+draft: false
 ---
 
 Cuando un reclutador le pregunta al asistente de este portafolio qué he hecho con Azure, todo lo que diga sobre mí tiene que salir de mi perfil. Un modelo que adivina es un bug que no puedo publicar. Una de sus suposiciones fue un correo electrónico armado con mi nombre.

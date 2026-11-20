@@ -2,7 +2,7 @@
 title: "Writing an AI agent loop by hand before using a framework"
 summary: "How the AI assistant on this portfolio works: a hand-written loop with the openai SDK, why it sends the whole profile instead of using RAG and embeddings, guarantees moved from the prompt into code, and two ways my eval lied to me."
 date: 2026-11-20
-draft: true
+draft: false
 ---
 
 When a recruiter asks the assistant on this portfolio what I have done with Azure, everything it says about me has to come from my profile. A model that guesses is a bug I cannot ship. One of its guesses was an email address built from my name.
