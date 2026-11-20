@@ -1,5 +1,5 @@
 ---
-title: "Guardrails in config, not prompts: letting an AI agent work on my public portfolio"
+title: "Letting an AI agent work on my public portfolio without trusting it"
 summary: "How an AI agent works on this public portfolio without being able to push, merge or delete: a read-only bot account, deny rules, a branch ruleset, CI, previews and human review, plus the mistakes along the way."
 date: 2026-11-05
 ---
@@ -10,8 +10,6 @@ catch: the repository is public, and merging to `master` deploys to production.
 With my own credentials, an agent could push straight to `master`, force-push, delete branches
 or ship half-finished content live. Asking it not to in a prompt is only a request. I wanted
 the agent to be fast and the limits to live in configuration.
-
-*Rewritten on 2026-11-19 with the details the first version left out.*
 
 ## What an agent with my credentials could do
 
