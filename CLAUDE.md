@@ -83,8 +83,8 @@ Reglas de gobierno completas en `.specify/memory/constitution.md`.
 - Vercel Web Analytics, solo page views: `<Analytics />` de `@vercel/analytics/next` al final de `<body>` en `src/app/layout.tsx`, sin props.
 - Plan Hobby: no hay eventos personalizados; no llamar nunca a `track()` ni agregar eventos.
 - El propietario lo activa en el dashboard de Vercel (pestaña Analytics, botón Enable); sin eso el script devuelve 404 y no se cuenta nada (el sitio funciona igual).
-- El sitio no escribe cookies ni storage por la analítica. Según la documentación de Vercel, los visitantes se identifican con un hash de la petición que se descarta a las 24 horas, sin cookies de terceros.
-- Es independiente del widget de chat: solo se registra la ruta de la página, nunca contenido de la conversación (el widget no cambia la URL). Detalle en `specs/011-vercel-web-analytics`.
+- Según la documentación de Vercel, los visitantes se identifican con un hash de la petición que se descarta a las 24 horas, sin cookies de terceros. En las pruebas locales (el paquete y un script de depuración) el sitio no escribió cookies ni storage; el propietario lo confirma en el preview (`specs/011-vercel-web-analytics/verification.md`, O3).
+- Es independiente del widget de chat: no se registra contenido de la conversación, porque el widget no cambia la URL. Vercel documenta otros datos anónimos por visita (referrer, país, dispositivo, navegador). Detalle en `specs/011-vercel-web-analytics`.
 
 ## Tema (CSS variables en globals.css)
 | Variable        | Valor     | Uso                        |
