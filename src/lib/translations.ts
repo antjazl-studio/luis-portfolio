@@ -266,7 +266,7 @@ const translations: Record<Language, Translation> = {
     // metadata itself stays English (accepted Principle VI deviation, owner 2026-11-06).
     meta: {
       home: "Luis Jacho Zambrano",
-      blog: "Blog — Luis Jacho Zambrano",
+      blog: "Blog | Luis Jacho Zambrano",
     },
     a11y: {
       skip:     "Skip to main content",
@@ -432,7 +432,7 @@ const translations: Record<Language, Translation> = {
     },
     meta: {
       home: "Luis Jacho Zambrano",
-      blog: "Blog — Luis Jacho Zambrano",
+      blog: "Blog | Luis Jacho Zambrano",
     },
     a11y: {
       skip:     "Saltar al contenido principal",

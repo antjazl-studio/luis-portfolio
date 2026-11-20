@@ -3,7 +3,7 @@ import { BlogIndex } from "@/components/BlogIndex";
 import { getVisiblePosts } from "@/lib/blog";
 
 export const metadata: Metadata = {
-  title: "Blog — Luis Jacho Zambrano",
+  title: "Blog | Luis Jacho Zambrano",
   description: "Notes on how I build and ship software.",
 };
 
